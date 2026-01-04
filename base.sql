@@ -1,4 +1,11 @@
-﻿CREATE DATABASE DocShareSimpleDb;
+﻿IF DB_ID('DocShareSimpleDb') IS NOT NULL
+BEGIN
+    ALTER DATABASE DocShareSimpleDb SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE DocShareSimpleDb;
+END
+GO
+
+CREATE DATABASE DocShareSimpleDb;
 GO
 USE DocShareSimpleDb;
 GO
@@ -9,7 +16,12 @@ CREATE TABLE Users (
     Email VARCHAR(100) NOT NULL UNIQUE,
     PasswordHash VARCHAR(255) NOT NULL, 
     FullName NVARCHAR(100),
-    CreatedAt DATETIME DEFAULT GETDATE()
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    RefreshToken varchar(256),
+    RefreshTokenExpiryTime datetime,
+    Role varchar(50) default 'User' CHECK(Role in (N'User','Admin')),
+    AvartarUrl varchar(100),
+    IsActivate tinyint DEFAULT 1 CHECK (IsActivate IN (0, 1))
 );
 GO
 

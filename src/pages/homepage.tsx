@@ -1,13 +1,13 @@
 import React from 'react';
 import DashboardLayout from '../layouts/dashboardlayout';
-import NewsCard from '../components/newscard';
+import NewsCard from '../components/homepage/newscard';
 
 const HomePage: React.FC = () => {
   return (
     <DashboardLayout>
       <section className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <h1 className="text-[#111318] dark:text-white tracking-tight text-3xl font-bold leading-tight md:text-4xl max-w-[720px]">
+          <h1 className="text-black  text-3xl font-bold md:text-4xl max-w-[720px]">
             Chào mừng trở lại, cùng khám phá!
           </h1>
           <p className="text-[#616f89] text-base font-normal leading-normal max-w-[720px]">
