@@ -10,58 +10,66 @@ export class ApiError extends Error {
     this.name = "ApiError";
   }
 }
-async function request<T>(
-  endpoint: string,
-  options: RequestInit = {}
-): Promise<T> {
-  const token = localStorage.getItem("accessToken");
-  const defaultHeaders: HeadersInit = {
+import axios from "axios";
+
+const axiosInstance = axios.create({
+  baseURL: BASE_URL,
+  headers: {
     "Content-Type": "application/json",
-    ...(token && { Authorization: `Bearer ${token}` }),
-  };
-
-  const config = {
-    ...options,
-    headers: {
-      ...defaultHeaders,
-      ...options.headers,
-    },
-  };
-
-  try {
-    const response = await fetch(`${BASE_URL}${endpoint}`, config);
-    if (response.status === 204) {
-      return null as T;
+  },
+  withCredentials: true,
+});
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
-    if (!response.ok) {
-      const errorBody = await response.json().catch(() => ({}));
-      let errorMessage = errorBody.message;
-      if (!errorMessage) {
-        const errorsData = errorBody.errors || errorBody;
-        if (typeof errorsData === "object" && errorsData !== null) {
-          const firstValidationError = Object.values(errorsData)
-            .flat()
-            .find((item) => typeof item === "string");
-          if (firstValidationError) {
-            errorMessage = firstValidationError;
-          }
-        }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      if (originalRequest.url.includes("/refresh-token")) {
+        return Promise.reject(error);
       }
-      errorMessage = errorMessage || `Lỗi HTTP: ${response.status}`;
-      throw new ApiError(response.status, errorMessage as string, errorBody);
+      originalRequest._retry = true;
+      try {
+        const response = await axiosInstance.post(`${BASE_URL}/refresh-token`);
+
+        const { accessToken: newAccessToken } = response.data;
+        localStorage.setItem("accessToken", newAccessToken);
+
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        return axiosInstance(originalRequest);
+      } catch (refreshError) {
+        localStorage.removeItem("accessToken");
+        return Promise.reject(refreshError);
+      }
     }
-    return (await response.json()) as T;
-  } catch (error: string | unknown) {
-    console.error("API Error:", error);
-    throw error;
+
+    return Promise.reject(error);
   }
-}
+);
 
 export const apiClient = {
-  get: <T>(endpoint: string) => request<T>(endpoint, { method: "GET" }),
-  post: <T>(endpoint: string, body: object) =>
-    request<T>(endpoint, { method: "POST", body: JSON.stringify(body) }),
-  put: <T>(endpoint: string, body: object) =>
-    request<T>(endpoint, { method: "PUT", body: JSON.stringify(body) }),
-  delete: <T>(endpoint: string) => request<T>(endpoint, { method: "DELETE" }),
+  get: <T>(url: string) => axiosInstance.get<T>(url).then((res) => res.data),
+  post: <T>(url: string, data: object = {}) =>
+    axiosInstance.post<T>(url, data).then((res) => res.data),
+  put: <T>(url: string, data: object) =>
+    axiosInstance.put<T>(url, data).then((res) => res.data),
+  delete: <T>(url: string) =>
+    axiosInstance.delete<T>(url).then((res) => res.data),
+  postForm: <T>(url: string, data: FormData) =>
+    axiosInstance
+      .post<T>(url, data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then((res) => res.data),
 };

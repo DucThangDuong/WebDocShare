@@ -22,7 +22,7 @@ export const StatsCard: React.FC<StatsCardProps> = ({
         </span>
       </div>
       <div className="text-2xl font-bold text-black">
-        {value} {subValue && <span className="text-sm text-[#616f89] font-normal">/{subValue}</span>}
+        {value} {subValue && <span className="text-sm text-[#616f89] font-normal"> / {subValue}</span>}
       </div>
       {description && <p className="text-xs text-[#616f89]">{description}</p>}
       {progress !== undefined && (

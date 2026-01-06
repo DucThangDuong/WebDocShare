@@ -1,65 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DashboardLayout from "../layouts/dashboardlayout";
 import { StatsCard } from "../components/myfile/statscard";
 import { FileTable } from "../components/myfile/filetable";
-import { RecentFileCard } from "../components/myfile/recentfile";
+// import { RecentFileCard } from "../components/myfile/recentfile";
 import { UploadModal } from "../components/myfile/uploadmodal";
-import type { FileData, RecentFile } from "../interfaces/Types";
+import type { FileData, UserStorageFile } from "../interfaces/Types";
+import { apiClient } from "../services/apiClient";
+import { useStore } from "../zustand/store";
 
 const FilesPage: React.FC = () => {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-  const files: FileData[] = [
-    {
-      id: "1",
-      name: "Bao_cao_tai_chinh_2023.pdf",
-      date: "15 Thg 12, 2023",
-      size: "2.4 MB",
-      type: "pdf",
-    },
-    {
-      id: "2",
-      name: "Hop_dong_lao_dong_NV01.pdf",
-      date: "20 Thg 11, 2023",
-      size: "1.1 MB",
-      type: "pdf",
-    },
-    {
-      id: "3",
-      name: "Huong_dan_su_dung.pdf",
-      date: "10 Thg 11, 2023",
-      size: "5.8 MB",
-      type: "pdf",
-    },
-    {
-      id: "4",
-      name: "Ke_hoach_marketing_Q4.pdf",
-      date: "05 Thg 11, 2023",
-      size: "3.2 MB",
-      type: "pdf",
-    },
-  ];
+  const { files, setFiles, userStorageFiles, setUserStorageFiles } = useStore();
 
-  const recentFiles: RecentFile[] = [
-    {
-      id: "1",
-      name: "Thiet_ke_Banner.png",
-      actionTime: "Đã chỉnh sửa 2 giờ trước",
-      type: "image",
-    },
-    {
-      id: "2",
-      name: "Slide_Thuyet_trinh.pdf",
-      actionTime: "Đã mở 5 giờ trước",
-      type: "pdf",
-    },
-    {
-      id: "3",
-      name: "Bang_luong_T11.xlsx",
-      actionTime: "Đã tải lên hôm qua",
-      type: "excel",
-    },
-  ];
+  useEffect(() => {
+    const fetchFiles = apiClient.get<FileData[]>("/documents");
+    const fetchUserStoragefiles = apiClient.get<UserStorageFile>(
+      "/user/filedocs?skip=0&take=10"
+    );
+    Promise.all([fetchFiles, fetchUserStoragefiles])
+      .then(([filesData, userStorageFilesData]) => {
+        setFiles(filesData);
+        setUserStorageFiles(userStorageFilesData);
+      })
+      .catch((error) => {
+        console.error("Error fetching files or user storage files:", error);
+      });
+  }, [setFiles, setUserStorageFiles]);
 
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+  };
   return (
     <DashboardLayout>
       <div className="flex flex-1 overflow-hidden ">
@@ -85,34 +59,55 @@ const FilesPage: React.FC = () => {
                 </button>
               </div>
             </section>
-
-            {/* Stats Grid */}
+            {/* thông tin documents */}
             <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <StatsCard
                 title="Tổng dung lượng"
                 icon="cloud_queue"
                 iconColorClass="text-primary bg-primary/10"
-                value="2.4 GB"
-                subValue=" 10 GB"
-                progress={24}
+                subValue={
+                  userStorageFiles
+                    ? formatFileSize(userStorageFiles.storageLimit)
+                    : "0 Bytes"
+                }
+                value={
+                  userStorageFiles
+                    ? formatFileSize(userStorageFiles.usedStorage)
+                    : "0 Bytes "
+                }
+                progress={
+                  userStorageFiles
+                    ? Math.round(
+                        (userStorageFiles.usedStorage /
+                          userStorageFiles.storageLimit) *
+                          100
+                      )
+                    : 0
+                }
               />
               <StatsCard
                 title="Tổng số tệp"
                 icon="description"
                 iconColorClass="text-purple-600 bg-purple-100"
-                value="128"
+                value={
+                  userStorageFiles
+                    ? userStorageFiles.totalCount.toString()
+                    : "0"
+                }
                 description="Đã tải lên trong tháng này: 12"
               />
               <StatsCard
                 title="Thùng rác"
                 icon="delete_outline"
                 iconColorClass="text-red-600 bg-red-100"
-                value="3"
+                value={
+                  userStorageFiles ? userStorageFiles.trash.toString() : "0"
+                }
                 description="Tự động xóa sau 30 ngày"
               />
             </section>
 
-            {/* Files Table Section */}
+            {/* danh sách documents */}
             <section className="bg-white border border-[#dbdfe6] rounded-xl  shadow-sm">
               <div className="px-6 py-4 border-b border-[#dbdfe6] flex items-center justify-between">
                 <h3 className="font-bold text-lg text-[#111318]">
@@ -133,27 +128,10 @@ const FilesPage: React.FC = () => {
               </div>
 
               <FileTable files={files} />
-
-              <div className="px-6 py-4 border-t border-[#dbdfe6] flex items-center justify-between">
-                <p className="text-sm text-[#616f89]">
-                  Hiển thị 1 đến 4 trong số 128 tệp
-                </p>
-                <div className="flex items-center gap-2">
-                  <button
-                    className="px-3 py-1 rounded border border-[#dbdfe6] text-[#616f89] hover:bg-gray-50 text-sm disabled:opacity-50"
-                    disabled
-                  >
-                    Trước
-                  </button>
-                  <button className="px-3 py-1 rounded border border-[#dbdfe6] text-[#616f89] hover:bg-gray-50 text-sm">
-                    Sau
-                  </button>
-                </div>
-              </div>
             </section>
 
             {/* Recent Files Section */}
-            <section className="flex flex-col gap-4">
+            {/* <section className="flex flex-col gap-4">
               <h2 className="text-[#111318] text-xl font-bold leading-tight">
                 Gần đây
               </h2>
@@ -162,12 +140,13 @@ const FilesPage: React.FC = () => {
                   <RecentFileCard key={file.id} file={file} />
                 ))}
               </div>
-            </section>
+            </section> */}
           </div>
         </main>
+        {/* html tải documennt lên */}
         <UploadModal
           isOpen={isUploadModalOpen}
-          onClose={() => setIsUploadModalOpen(false)} 
+          onClose={() => setIsUploadModalOpen(false)}
         />
       </div>
     </DashboardLayout>

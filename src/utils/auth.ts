@@ -9,12 +9,18 @@ export const isLoggedIn = (): boolean => {
   return !!token;
 };
 
-export const logout = () => {
-  localStorage.removeItem("accessToken");
-  localStorage.removeItem("user");
-  window.location.href = "/login";
+export const logout = async () => {
+  try {
+    await apiClient.post("/logout");
+  } catch (error) {
+    console.error("Lỗi khi gọi API logout:", error);
+  } finally {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("user");
+    window.location.href = "/login";
+  }
 };
 
 export const getMe = () => {
-  return apiClient.get<UserProfile>("/me");
+  return apiClient.get<UserProfile>("/user/privateprofile");
 };

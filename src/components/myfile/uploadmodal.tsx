@@ -1,5 +1,12 @@
-import React, { useState } from "react";
-
+import React, { useState, useRef } from "react";
+import type {
+  FileMetaData,
+  FileItem,
+  FileData,
+  UserStorageFile,
+} from "../../interfaces/Types";
+import { apiClient } from "../../services/apiClient";
+import { useStore } from "../../zustand/store";
 interface UploadModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -9,18 +16,158 @@ export const UploadModal: React.FC<UploadModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [uploadProgress] = useState(45);
+  const [fileList, setFileList] = useState<FileItem[]>([]);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const [tempEditData, setTempEditData] = useState<FileMetaData | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { setFiles, setUserStorageFiles } = useStore();
+
+  // --- LOGIC XỬ LÝ FILE ---
+  // thêm file vào danh sách khi chọn file
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    // kiểm tra file có phải là pdf?
+    if (files && files.length > 0) {
+      const newFiles: FileItem[] = [];
+      Array.from(files).forEach((file) => {
+        if (file.type !== "application/pdf") return;
+        newFiles.push({
+          id: file.name + Date.now() + Math.random(),
+          file: file,
+          progress: 0,
+          metaData: {
+            title: file.name.replace(".pdf", ""),
+            description: "",
+            tags: "",
+            status: "Public",
+          },
+        });
+      });
+
+      setFileList((prev) => [...prev, ...newFiles]);
+
+      // Giả lập progress
+      newFiles.forEach((item, index) => {
+        setTimeout(() => {
+          setFileList((current) =>
+            current.map((f) => (f.id === item.id ? { ...f, progress: 100 } : f))
+          );
+        }, 500 + index * 200);
+      });
+    }
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+  // tải tất cả file lên server
+  const handleUploadFiles = async () => {
+    if (fileList.length === 0) return;
+    try {
+      for (const item of fileList) {
+        const formData = new FormData();
+        formData.append("File", item.file);
+        formData.append("Title", item.metaData.title || item.file.name);
+        formData.append("Description", item.metaData.description);
+        formData.append("Tags", item.metaData.tags.trim() == "" ? "A" : item.metaData.tags);
+        formData.append("Status", item.metaData.status);
+        await apiClient.postForm("/document", formData);
+        const fetchFiles = apiClient.get<FileData[]>("/documents");
+        const fetchUserStoragefiles = apiClient.get<UserStorageFile>(
+          "/user/filedocs?skip=0&take=10"
+        );
+        Promise.all([fetchFiles, fetchUserStoragefiles])
+          .then(([filesData, userStorageFilesData]) => {
+            setFiles(filesData);
+            setUserStorageFiles(userStorageFilesData);
+          })
+          .catch((error) => {
+            console.error("Error fetching files or user storage files:", error);
+          });
+          setExpandedIndex(null);
+          setTempEditData(null);
+          setFileList([]);
+      }
+      onClose();
+    } catch (error) {
+      console.error("Lỗi upload:", error);
+      alert("Có lỗi xảy ra khi tải lên.");
+    }
+  };
+  // xóa file khỏi danh sách
+  const handleRemoveFile = (e: React.MouseEvent, indexToRemove: number) => {
+    e.stopPropagation();
+    setFileList((prev) => prev.filter((_, index) => index !== indexToRemove));
+    if (expandedIndex === indexToRemove) {
+      setExpandedIndex(null);
+      setTempEditData(null);
+    } else if (expandedIndex !== null && expandedIndex > indexToRemove) {
+      setExpandedIndex(expandedIndex - 1);
+    }
+  };
+
+  // --- LOGIC CHỈNH SỬA & LƯU/HỦY ---
+
+  // Khi bấm vào file để mở form
+  const handleStartEdit = (index: number) => {
+    if (expandedIndex === index) {
+      // Đang mở mà bấm lại -> coi như Hủy (Đóng lại)
+      handleCancelEdit();
+    } else {
+      // Mở file mới -> Copy dữ liệu hiện tại vào Temp để sửa
+      setExpandedIndex(index);
+      setTempEditData({ ...fileList[index].metaData });
+    }
+  };
+
+  // Khi sửa input (cập nhật vào Temp)
+  const handleInputChange = (field: keyof FileMetaData, value: string) => {
+    if (tempEditData) {
+      setTempEditData({ ...tempEditData, [field]: value });
+    }
+  };
+
+  // Khi bấm LƯU
+  const handleSaveEdit = () => {
+    if (expandedIndex !== null && tempEditData) {
+      setFileList((prev) => {
+        const newList = [...prev];
+        // Cập nhật dữ liệu từ Temp vào List chính thức
+        newList[expandedIndex] = {
+          ...newList[expandedIndex],
+          metaData: tempEditData,
+        };
+        return newList;
+      });
+      // Đóng form
+      setExpandedIndex(null);
+      setTempEditData(null);
+    }
+  };
+
+  // Khi bấm HỦY
+  const handleCancelEdit = () => {
+    // Chỉ cần đóng form, không cập nhật gì cả
+    setExpandedIndex(null);
+    setTempEditData(null);
+  };
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+  };
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      {/* Modal Content Wrapper */}
       <div
         className="w-full max-w-[800px] bg-white rounded-xl shadow-2xl border border-[#e5e7eb] overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200"
-        onClick={(e) => e.stopPropagation()} 
+        onClick={(e) => e.stopPropagation()}
       >
-        {/* Header Modal */}
+        {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#f0f2f4]">
           <h2 className="text-[#111318] text-xl font-bold leading-tight">
             Tải lên tài liệu mới
@@ -33,18 +180,20 @@ export const UploadModal: React.FC<UploadModalProps> = ({
           </button>
         </div>
 
-        {/* Scrollable Body */}
+        {/* Body */}
         <div className="overflow-y-auto p-6 flex flex-col gap-6">
-          {/* Heading description */}
           <p className="text-[#616f89] text-base font-normal -mt-2">
             Chỉ hỗ trợ định dạng PDF, kích thước tối đa 50MB.
           </p>
 
-          {/* Drag & Drop Zone */}
+          {/* Vùng nhận file pdf */}
           <div className="group relative flex flex-col items-center gap-4 rounded-xl border-2 border-dashed border-[#dbdfe6] bg-[#f9fafb] hover:bg-primary/5 hover:border-primary/50 transition-all duration-300 px-6 py-10 cursor-pointer">
             <input
+              ref={fileInputRef}
               type="file"
               accept=".pdf"
+              multiple
+              onChange={handleFileChange}
               className="absolute inset-0 opacity-0 cursor-pointer z-10"
             />
             <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2 group-hover:scale-110 transition-transform">
@@ -54,113 +203,172 @@ export const UploadModal: React.FC<UploadModalProps> = ({
             </div>
             <div className="flex flex-col items-center gap-1 text-center">
               <p className="text-[#111318] text-lg font-bold">
-                Kéo và thả tệp của bạn vào đây
+                Kéo thả nhiều tệp vào đây
               </p>
               <p className="text-[#616f89] text-sm">
-                hoặc chọn tệp từ máy tính
+                hoặc nhấn để chọn từ máy tính
               </p>
             </div>
-            <button className="mt-2 flex items-center justify-center rounded-lg h-9 px-5 bg-white border border-[#dbdfe6] text-[#111318] text-sm font-medium shadow-sm group-hover:border-primary group-hover:text-primary transition-all">
-              Chọn tệp
-            </button>
           </div>
 
-          {/* Selected File List */}
-          <div className="flex flex-col gap-3">
-            <h3 className="text-sm font-semibold text-[#111318] uppercase tracking-wider">
-              Tệp đang chọn
-            </h3>
-            <div className="flex items-center gap-4 bg-[#f6f6f8] rounded-lg p-3 border border-[#f0f2f4] relative">
-              <div className="text-[#eb3b3b] flex items-center justify-center rounded-lg bg-white shrink-0 size-12 shadow-sm">
-                <span className="material-symbols-outlined text-[28px]">
-                  picture_as_pdf
-                </span>
-              </div>
-              <div className="flex flex-col justify-center flex-1 min-w-0 gap-1">
-                <div className="flex justify-between items-center">
-                  <p className="text-[#111318] text-sm font-medium line-clamp-1">
-                    bao_cao_tai_chinh_q1_2024.pdf
-                  </p>
-                  <button className="text-[#616f89] hover:text-red-500 p-1 rounded-full hover:bg-red-50 transition-colors">
-                    <span className="material-symbols-outlined text-[20px]">
-                      close
-                    </span>
-                  </button>
-                </div>
-                {/* Progress Bar */}
-                <div className="flex flex-col gap-1.5 w-full">
-                  <div className="w-full h-1.5 rounded-full bg-[#dbdfe6] overflow-hidden">
+          {/* Danh sách file */}
+          {fileList.length > 0 && (
+            <div className="flex flex-col gap-3 animate-in slide-in-from-top-2 duration-300">
+              <h3 className="text-sm font-semibold text-[#111318] uppercase tracking-wider mb-1">
+                Danh sách tệp ({fileList.length})
+              </h3>
+              {/* vòng lặp hiện các file đã up lên */}
+              {fileList.map((item, index) => {
+                const isExpanded = expandedIndex === index;
+
+                return (
+                  <div
+                    key={item.id}
+                    className="flex flex-col gap-0 transition-all"
+                  >
+                    {/* FILE CARD */}
                     <div
-                      className="h-full rounded-full bg-primary transition-all duration-500"
-                      style={{ width: `${uploadProgress}%` }}
-                    ></div>
-                  </div>
-                  <div className="flex justify-between text-xs text-[#616f89]">
-                    <span>5.2 MB / 12.5 MB</span>
-                    <span>{uploadProgress}% • Đang tải lên...</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+                      onClick={() => handleStartEdit(index)}
+                      className={`flex items-center gap-4 rounded-lg p-3 border cursor-pointer relative transition-colors
+                        ${
+                          isExpanded
+                            ? "bg-primary/5 border-primary ring-1 ring-primary rounded-b-none border-b-0"
+                            : "bg-[#f6f6f8] border-[#f0f2f4] hover:border-primary/50"
+                        }
+                      `}
+                    >
+                      {/* icon file */}
+                      <div className="text-[#eb3b3b] flex items-center justify-center rounded-lg bg-white size-12 shadow-sm">
+                        <span className="material-symbols-outlined text-[28px]">
+                          picture_as_pdf
+                        </span>
+                      </div>
+                      {/* thông tin file */}
+                      <div className="flex flex-col justify-center flex-1 min-w-0 gap-1">
+                        {/* tên file */}
+                        <div className="flex justify-between items-center">
+                          <p className="text-[#111318] text-sm font-medium line-clamp-1">
+                            {item.metaData.title || item.file.name}
+                          </p>
+                          <button
+                            onClick={(e) => handleRemoveFile(e, index)}
+                            className="text-[#616f89] hover:text-red-500 p-1 rounded-full hover:bg-red-50 transition-colors z-20"
+                          >
+                            <span className="material-symbols-outlined text-[20px]">
+                              close
+                            </span>
+                          </button>
+                        </div>
+                        {/* tiến trình */}
+                        <div className="flex flex-col gap-1.5 w-full">
+                          <div className="w-full h-1.5 rounded-full bg-[#dbdfe6] overflow-hidden">
+                            <div
+                              className="h-full rounded-full bg-primary transition-all duration-500"
+                              style={{ width: `${item.progress}%` }}
+                            ></div>
+                          </div>
+                          <div className="flex justify-between text-xs text-[#616f89]">
+                            <span>{formatFileSize(item.file.size)}</span>
+                            <span>{item.progress}%</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
-          <div className="border-t border-[#f0f2f4] w-full"></div>
+                    {/* khi mà click vào file thì hiện form chỉnh sửa */}
+                    {isExpanded && tempEditData && (
+                      <div className="border border-t-0 border-primary/30 rounded-b-lg bg-white p-4 animate-in slide-in-from-top-1 duration-200 shadow-sm flex flex-col gap-4">
+                        <div className="grid gap-4 md:grid-cols-2">
+                          {/* chỉnh title */}
+                          <div className="flex flex-col gap-2 md:col-span-2">
+                            <label className="text-black text-xs font-bold uppercase ">
+                              Tiêu đề tệp
+                            </label>
+                            <input
+                              type="text"
+                              value={tempEditData.title}
+                              onChange={(e) =>
+                                handleInputChange("title", e.target.value)
+                              }
+                              className="form-input w-full rounded-lg border border-[#dbdfe6] bg-white text-[#111318] px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary"
+                            />
+                          </div>
+                          {/* chỉnh mô tả */}
+                          <div className="flex flex-col gap-2 md:col-span-2">
+                            <label className="text-[#111318] text-sm font-medium">
+                              Mô tả
+                            </label>
+                            <textarea
+                              rows={2}
+                              value={tempEditData.description}
+                              onChange={(e) =>
+                                handleInputChange("description", e.target.value)
+                              }
+                              className="form-textarea w-full rounded-lg border border-[#dbdfe6] bg-white text-[#111318] px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary resize-none"
+                              placeholder="Ghi chú..."
+                            ></textarea>
+                          </div>
+                          {/* chỉnh tag */}
+                          <div className="flex flex-col gap-2">
+                            <label className="text-[#111318] text-sm font-medium">
+                              Thẻ phân loại
+                            </label>
+                            <input
+                              type="text"
+                              value={tempEditData.tags}
+                              onChange={(e) =>
+                                handleInputChange("tags", e.target.value)
+                              }
+                              className="form-input w-full rounded-lg border border-[#dbdfe6] bg-white text-[#111318] px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary"
+                              placeholder="VD: Tài chính..."
+                            />
+                          </div>
+                          {/* chỉnh quyền */}
+                          <div className="flex flex-col gap-2">
+                            <label className="text-[#111318] text-sm font-medium">
+                              Quyền
+                            </label>
+                            <select
+                              value={tempEditData.status}
+                              onChange={(e) =>
+                                handleInputChange("status", e.target.value)
+                              }
+                              className="form-select w-full rounded-lg border border-[#dbdfe6] bg-white text-black px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary"
+                            >
+                              <option value="Private">Riêng tư</option>
+                              <option value="Public">Công khai</option>
+                            </select>
+                          </div>
+                        </div>
 
-          {/* Metadata Form */}
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="flex flex-col gap-2 md:col-span-2">
-              <label className="text-[#111318] text-sm font-medium">
-                Tiêu đề tệp <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                className="form-input w-full rounded-lg border border-[#dbdfe6] bg-white text-[#111318] px-3 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-gray-400"
-                placeholder="Nhập tiêu đề hiển thị"
-                defaultValue="Báo cáo tài chính Quý 1 2024"
-              />
+                        {/* hành động lưu các chỉnh sửa */}
+                        <div className="flex items-center justify-end gap-3 pt-2 border-t border-dashed border-gray-200">
+                          <button
+                            onClick={handleCancelEdit}
+                            className="px-4 py-2 rounded-lg text-xs font-bold text-[#616f89] hover:bg-gray-100 hover:text-red-500 transition-colors"
+                          >
+                            Hủy bỏ
+                          </button>
+                          <button
+                            onClick={handleSaveEdit}
+                            className="px-4 py-2 rounded-lg text-xs font-bold text-white bg-primary hover:bg-blue-700 transition-colors shadow-sm flex items-center gap-1"
+                          >
+                            <span className="material-symbols-outlined text-[16px]">
+                              check
+                            </span>
+                            Lưu thay đổi
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
-            <div className="flex flex-col gap-2 md:col-span-2">
-              <label className="text-[#111318] text-sm font-medium">
-                Mô tả{" "}
-                <span className="text-[#616f89] font-normal">(Tùy chọn)</span>
-              </label>
-              <textarea
-                rows={3}
-                className="form-textarea w-full rounded-lg border border-[#dbdfe6] bg-white text-[#111318] px-3 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-gray-400 resize-none"
-                placeholder="Thêm ghi chú về tài liệu này..."
-              ></textarea>
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-[#111318] text-sm font-medium">
-                Thẻ phân loại
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <span className="material-symbols-outlined text-gray-400 text-[18px]">
-                    label
-                  </span>
-                </div>
-                <input
-                  type="text"
-                  className="form-input w-full rounded-lg border border-[#dbdfe6] bg-white text-[#111318] pl-9 pr-3 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-gray-400"
-                  placeholder="VD: Tài chính, 2024..."
-                />
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-[#111318] text-sm font-medium">
-                Quyền truy cập
-              </label>
-              <select className="form-select w-full rounded-lg border border-[#dbdfe6] bg-white text-[#111318] px-3 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary">
-                <option>Riêng tư (Chỉ mình tôi)</option>
-                <option>Công khai trong tổ chức</option>
-                <option>Chia sẻ với người cụ thể</option>
-              </select>
-            </div>
-          </div>
+          )}
         </div>
 
-        {/* Footer Actions */}
+        {/* Footer hành động cho danh sách  */}
         <div className="flex items-center justify-end gap-3 px-6 py-4 bg-[#f9fafb] border-t border-[#dbdfe6]">
           <button
             onClick={onClose}
@@ -168,11 +376,15 @@ export const UploadModal: React.FC<UploadModalProps> = ({
           >
             Hủy bỏ
           </button>
-          <button className="flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold text-white bg-primary hover:bg-blue-700 shadow-sm transition-all transform active:scale-95">
+          <button
+            disabled={fileList.length === 0}
+            className="flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold text-white bg-primary hover:bg-blue-700 shadow-sm transition-all transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={handleUploadFiles}
+          >
             <span className="material-symbols-outlined text-[20px]">
               upload
             </span>
-            Tải lên
+            Tải lên tất cả ({fileList.length})
           </button>
         </div>
       </div>

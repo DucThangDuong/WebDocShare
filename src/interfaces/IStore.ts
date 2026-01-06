@@ -2,5 +2,5 @@ export interface UserProfile {
   id: string;
   username: string;
   email: string;
-  avatar?: string;
+  avatarurl?: string;
 }

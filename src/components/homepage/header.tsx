@@ -31,7 +31,7 @@ const Header: React.FC = () => {
         </div>
 
         {/* tim kiem */}
-        <div className="flex flex-1 max-w-[600px]">
+        <div className="flex flex-1 max-w-[600px] border border-[#dbdfe6] rounded-lg ">
           <label className="flex flex-col w-full h-10">
             <div className="flex w-full flex-1 items-stretch rounded-lg h-full bg-white focus-within:ring-2 focus-within:ring-primary/50 transition-all">
               <div className="text-[#616f89] flex items-center justify-center pl-4 rounded-l-lg border-r-0">
@@ -58,9 +58,9 @@ const Header: React.FC = () => {
               </div>
 
               <div className="w-10 h-10 rounded-lg overflow-hidden border border-[#dbdfe6]">
-                {user.avatar ? (
+                {user.avatarurl ? (
                   <img
-                    src={user.avatar}
+                    src={user.avatarurl}
                     alt="Avatar"
                     className="w-full h-full object-cover"
                   />

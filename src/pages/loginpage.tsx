@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import LoginLayout from "../layouts/loginlayout";
 import { apiClient } from "../services/apiClient";
 import { InputField } from "../components/inputfield";
+import { useStore } from "../zustand/store";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -10,18 +11,19 @@ const LoginPage: React.FC = () => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { NavItemActivate } = useStore();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
     try {
-      const data = await apiClient.post<{ accessToken: string; user: object }>(
-        "/login",
-        { email, password }
-      );
+      const data = await apiClient.post<{ accessToken: string }>("/login", {
+        email,
+        password,
+      });
       localStorage.setItem("accessToken", data.accessToken);
-      navigate("/");
+      navigate(NavItemActivate || "/");
     } catch {
       setError("Đăng nhập thất bại. Vui lòng thử lại.");
     } finally {

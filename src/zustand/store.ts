@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { UserProfile } from "../interfaces/IStore";
+import type { FileData, UserStorageFile } from "../interfaces/Types";
 
 interface StoreState {
   isLogin: boolean;
@@ -8,6 +9,10 @@ interface StoreState {
   setUser: (user: UserProfile | null) => void;
   NavItemActivate: string;
   setNavItemActivate: (item: string) => void;
+  files: FileData[];
+  setFiles: (files: FileData[]) => void;
+  userStorageFiles: UserStorageFile | null;
+  setUserStorageFiles: (userStorageFiles: UserStorageFile) => void;
 }
 
 export const useStore = create<StoreState>((set) => ({
@@ -17,4 +22,8 @@ export const useStore = create<StoreState>((set) => ({
   setUser: (user) => set({ user }),
   NavItemActivate: "/",
   setNavItemActivate: (item) => set({ NavItemActivate: item }),
+  files: [],
+  setFiles: (files) => set({ files }),
+  userStorageFiles: null,
+  setUserStorageFiles: (userStorageFiles) => set({ userStorageFiles }),
 }));
