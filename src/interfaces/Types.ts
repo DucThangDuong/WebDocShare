@@ -21,10 +21,10 @@ export interface FileMetaData {
 export interface FileItem {
   id: string;
   file: File;
-  progress: number;
-  metaData: FileMetaData; 
+  uploadStatus: "pending" | "uploading" | "success" | "error";
+  metaData: FileMetaData;
 }
-export interface UserStorageFile{
+export interface UserStorageFile {
   storageLimit: number;
   usedStorage: number;
   totalCount: number;

@@ -16,48 +16,56 @@ export const UploadModal: React.FC<UploadModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [fileList, setFileList] = useState<FileItem[]>([]);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const [tempEditData, setTempEditData] = useState<FileMetaData | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { setFiles, setUserStorageFiles } = useStore();
+  const {
+    fileList,
+    setFileList,
+    setFiles,
+    setUserStorageFiles,
+    signalRConnectionId,
+    updateFileStatus,
+  } = useStore();
 
-  // --- LOGIC XỬ LÝ FILE ---
   // thêm file vào danh sách khi chọn file
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    // kiểm tra file có phải là pdf?
-    if (files && files.length > 0) {
-      const newFiles: FileItem[] = [];
-      Array.from(files).forEach((file) => {
-        if (file.type !== "application/pdf") return;
-        newFiles.push({
-          id: file.name + Date.now() + Math.random(),
-          file: file,
-          progress: 0,
-          metaData: {
-            title: file.name.replace(".pdf", ""),
-            description: "",
-            tags: "",
-            status: "Public",
-          },
-        });
-      });
+    if (!files || files.length === 0) return;
+    const newFilesArray: FileItem[] = Array.from(files)
+      .filter((file) => file.type === "application/pdf")
+      .map((file) => ({
+        id: file.name + Date.now() + Math.random(),
+        file: file,
+        uploadStatus: "uploading",
+        metaData: {
+          title: file.name.replace(".pdf", ""),
+          description: "",
+          tags: "",
+          status: "Public",
+        },
+      }));
+    setFileList([...fileList, ...newFilesArray]);
 
-      setFileList((prev) => [...prev, ...newFiles]);
+    newFilesArray.forEach((newFile) => {
+      const formData = new FormData();
+      formData.append("File", newFile.file);
+      formData.append("SignalRConnectionID", signalRConnectionId || "");
+      formData.append("Title", newFile.id);
 
-      // Giả lập progress
-      newFiles.forEach((item, index) => {
-        setTimeout(() => {
-          setFileList((current) =>
-            current.map((f) => (f.id === item.id ? { ...f, progress: 100 } : f))
-          );
-        }, 500 + index * 200);
-      });
-    }
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+      apiClient.postForm("/document/check", formData).then(
+        (response) => {
+          if (response.status !== 200) {
+            updateFileStatus(newFile.id, "error");
+          }
+        },
+        () => {
+          updateFileStatus(newFile.id, "error");
+        }
+      );
+    });
+
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
   // tải tất cả file lên server
   const handleUploadFiles = async () => {
@@ -68,7 +76,10 @@ export const UploadModal: React.FC<UploadModalProps> = ({
         formData.append("File", item.file);
         formData.append("Title", item.metaData.title || item.file.name);
         formData.append("Description", item.metaData.description);
-        formData.append("Tags", item.metaData.tags.trim() == "" ? "A" : item.metaData.tags);
+        formData.append(
+          "Tags",
+          item.metaData.tags.trim() == "" ? "A" : item.metaData.tags
+        );
         formData.append("Status", item.metaData.status);
         await apiClient.postForm("/document", formData);
         const fetchFiles = apiClient.get<FileData[]>("/documents");
@@ -83,9 +94,9 @@ export const UploadModal: React.FC<UploadModalProps> = ({
           .catch((error) => {
             console.error("Error fetching files or user storage files:", error);
           });
-          setExpandedIndex(null);
-          setTempEditData(null);
-          setFileList([]);
+        setExpandedIndex(null);
+        setTempEditData(null);
+        setFileList([]);
       }
       onClose();
     } catch (error) {
@@ -96,7 +107,8 @@ export const UploadModal: React.FC<UploadModalProps> = ({
   // xóa file khỏi danh sách
   const handleRemoveFile = (e: React.MouseEvent, indexToRemove: number) => {
     e.stopPropagation();
-    setFileList((prev) => prev.filter((_, index) => index !== indexToRemove));
+    const newListFile = fileList.filter((_, index) => index !== indexToRemove);
+    setFileList(newListFile);
     if (expandedIndex === indexToRemove) {
       setExpandedIndex(null);
       setTempEditData(null);
@@ -129,15 +141,12 @@ export const UploadModal: React.FC<UploadModalProps> = ({
   // Khi bấm LƯU
   const handleSaveEdit = () => {
     if (expandedIndex !== null && tempEditData) {
-      setFileList((prev) => {
-        const newList = [...prev];
-        // Cập nhật dữ liệu từ Temp vào List chính thức
-        newList[expandedIndex] = {
-          ...newList[expandedIndex],
-          metaData: tempEditData,
-        };
-        return newList;
-      });
+      const newList = [...fileList];
+      newList[expandedIndex] = {
+        ...newList[expandedIndex],
+        metaData: tempEditData,
+      };
+      setFileList(newList);
       // Đóng form
       setExpandedIndex(null);
       setTempEditData(null);
@@ -260,16 +269,45 @@ export const UploadModal: React.FC<UploadModalProps> = ({
                           </button>
                         </div>
                         {/* tiến trình */}
-                        <div className="flex flex-col gap-1.5 w-full">
-                          <div className="w-full h-1.5 rounded-full bg-[#dbdfe6] overflow-hidden">
-                            <div
-                              className="h-full rounded-full bg-primary transition-all duration-500"
-                              style={{ width: `${item.progress}%` }}
-                            ></div>
-                          </div>
-                          <div className="flex justify-between text-xs text-[#616f89]">
-                            <span>{formatFileSize(item.file.size)}</span>
-                            <span>{item.progress}%</span>
+                        <div className="flex flex-col gap-1 w-full mt-1">
+                          <div className="flex items-center justify-between text-xs">
+                            {/* Dung lượng file */}
+                            <span className="text-[#616f89] font-medium">
+                              {formatFileSize(item.file.size)}
+                            </span>
+                            {/* Trạng thái Upload */}
+                            <div className="flex items-center gap-1.5">
+                              {item.uploadStatus === "pending" && (
+                                <span className="text-gray-500 font-medium flex items-center gap-1">
+                                  <span className="w-2 h-2 rounded-full bg-gray-300"></span>
+                                  Sẵn sàng
+                                </span>
+                              )}
+                              {item.uploadStatus === "uploading" && (
+                                <span className="text-blue-600 font-medium flex items-center gap-1 animate-pulse">
+                                  <span className="material-symbols-outlined text-[14px] animate-spin">
+                                    progress_activity
+                                  </span>
+                                  Đang xử lý...
+                                </span>
+                              )}
+                              {item.uploadStatus === "success" && (
+                                <span className="text-green-600 font-bold flex items-center gap-1">
+                                  <span className="material-symbols-outlined text-[16px]">
+                                    check_circle
+                                  </span>
+                                  Thành công
+                                </span>
+                              )}
+                              {item.uploadStatus === "error" && (
+                                <span className="text-red-500 font-bold flex items-center gap-1">
+                                  <span className="material-symbols-outlined text-[16px]">
+                                    error
+                                  </span>
+                                  Lỗi
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>

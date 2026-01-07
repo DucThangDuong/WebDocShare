@@ -71,5 +71,4 @@ export const apiClient = {
       .post<T>(url, data, {
         headers: { "Content-Type": "multipart/form-data" },
       })
-      .then((res) => res.data),
 };
