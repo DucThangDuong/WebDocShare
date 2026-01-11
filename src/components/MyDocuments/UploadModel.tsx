@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import type {
-  FileMetaData,
+  FileDocument,
   FileItem,
   FileData,
   UserStorageFile,
@@ -17,7 +17,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
   onClose,
 }) => {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-  const [tempEditData, setTempEditData] = useState<FileMetaData | null>(null);
+  const [tempEditData, setTempEditData] = useState<FileDocument | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const {
     fileList,
@@ -64,7 +64,6 @@ export const UploadModal: React.FC<UploadModalProps> = ({
         }
       );
     });
-
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
   // tải tất cả file lên server
@@ -76,10 +75,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
         formData.append("File", item.file);
         formData.append("Title", item.metaData.title || item.file.name);
         formData.append("Description", item.metaData.description);
-        formData.append(
-          "Tags",
-          item.metaData.tags.trim() == "" ? "A" : item.metaData.tags
-        );
+        formData.append("Tags", item.metaData.tags.trim());
         formData.append("Status", item.metaData.status);
         await apiClient.postForm("/document", formData);
         const fetchFiles = apiClient.get<FileData[]>("/documents");
@@ -132,7 +128,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
   };
 
   // Khi sửa input (cập nhật vào Temp)
-  const handleInputChange = (field: keyof FileMetaData, value: string) => {
+  const handleInputChange = (field: keyof FileDocument, value: string) => {
     if (tempEditData) {
       setTempEditData({ ...tempEditData, [field]: value });
     }
@@ -358,7 +354,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
                                 handleInputChange("tags", e.target.value)
                               }
                               className="form-input w-full rounded-lg border border-[#dbdfe6] bg-white text-[#111318] px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary"
-                              placeholder="VD: Tài chính..."
+                              placeholder="VD: #C#,#SQL,...."
                             />
                           </div>
                           {/* chỉnh quyền */}
@@ -415,7 +411,10 @@ export const UploadModal: React.FC<UploadModalProps> = ({
             Hủy bỏ
           </button>
           <button
-            disabled={fileList.length === 0}
+            disabled={
+              fileList.length === 0 ||
+              fileList.some((e) => e.uploadStatus == "success") != true
+            }
             className="flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold text-white bg-primary hover:bg-blue-700 shadow-sm transition-all transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleUploadFiles}
           >

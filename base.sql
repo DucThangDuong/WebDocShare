@@ -58,6 +58,9 @@ CREATE TABLE Documents (
     
     CreatedAt DATETIME DEFAULT GETDATE(),
     UpdatedAt DATETIME DEFAULT GETDATE(),
+    ViewCount INT NOT NULL DEFAULT 0,
+    LikeCount INT NOT NULL DEFAULT 0,
+    DislikeCount INT NOT NULL DEFAULT 0,
 
     CONSTRAINT FK_Docs_User FOREIGN KEY (UploaderId) REFERENCES Users(Id),
     CONSTRAINT FK_Docs_Category FOREIGN KEY (CategoryId) REFERENCES Categories(Id) ON DELETE SET NULL
@@ -106,7 +109,7 @@ BEGIN
 END;
 GO
 
-CREATE INDEX IX_Documents_FileHash ON Documents(FileHash);
+
 CREATE INDEX IX_Tags_Slug ON Tags(Slug);
 CREATE INDEX IX_Documents_IsDeleted ON Documents(IsDeleted); 
 CREATE INDEX IX_Documents_UploaderId ON Documents(UploaderId);

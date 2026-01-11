@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import DashboardLayout from "../layouts/dashboardlayout";
-import { StatsCard } from "../components/myfile/statscard";
-import { FileTable } from "../components/myfile/filetable";
+import DashboardLayout from "../layouts/DocumentDetailLayout";
+import { StatsCard } from "../components/MyDocuments/statscard";
+import { FileTable } from "../components/MyDocuments/DocumentList";
 // import { RecentFileCard } from "../components/myfile/recentfile";
-import { UploadModal } from "../components/myfile/uploadmodal";
+import { UploadModal } from "../components/MyDocuments/UploadModel";
 import type { FileData, UserStorageFile } from "../interfaces/Types";
 import { apiClient } from "../services/apiClient";
 import { useStore } from "../zustand/store";
@@ -13,9 +13,10 @@ const FilesPage: React.FC = () => {
   const { files, setFiles, userStorageFiles, setUserStorageFiles } = useStore();
 
   useEffect(() => {
-    const fetchFiles = apiClient.get<FileData[]>("/documents");
+    const fetchFiles = apiClient.get<FileData[]>("/documents?skip=0&take=10");
+    
     const fetchUserStoragefiles = apiClient.get<UserStorageFile>(
-      "/user/filedocs?skip=0&take=10"
+      "/user/filedocs"
     );
     Promise.all([fetchFiles, fetchUserStoragefiles])
       .then(([filesData, userStorageFilesData]) => {

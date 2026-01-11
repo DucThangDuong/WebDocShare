@@ -6,15 +6,16 @@ import {
   Outlet,
 } from "react-router-dom";
 
-import HomePage from "./pages/homepage";
-import LoginPage from "./pages/loginpage";
-import RegisterPage from "./pages/registerpage";
-import FilePage from "./pages/filepage";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import FilePage from "./pages/MyDocumentsPage";
+import ShowFile from "./pages/DocumentDetailPage";
 import { isLoggedIn } from "./utils/auth";
 import { useEffect, useState } from "react";
 import { useStore } from "./zustand/store";
 import { apiClient } from "./services/apiClient";
-import type { UserProfile } from "./interfaces/IStore";
+import type { UserProfilePublic } from "./interfaces/Types";
 const ProtectedRoute = () => {
   const isAuth = isLoggedIn();
   if (!isAuth) {
@@ -23,16 +24,11 @@ const ProtectedRoute = () => {
   return <Outlet />;
 };
 const GuestRoute = () => {
-  // Lấy thông tin user từ store (hoặc check localStorage nếu muốn nhanh)
   const user = useStore((state) => state.user);
   const token = localStorage.getItem("accessToken");
-
-  // Nếu đã có user HOẶC có token -> Đá về trang chủ ngay lập tức
   if (user || token) {
     return <Navigate to="/" replace />;
   }
-
-  // Nếu chưa đăng nhập -> Cho phép hiển thị trang con (Login/Register)
   return <Outlet />;
 };
 function App() {
@@ -43,7 +39,9 @@ function App() {
       try {
         const token = localStorage.getItem("accessToken");
         if (token) {
-          const userData: UserProfile = await apiClient.get("/user/privateprofile");
+          const userData: UserProfilePublic = await apiClient.get(
+            "/user/privateprofile"
+          );
           setUser(userData);
           setIsLogin(true);
         } else {
@@ -52,7 +50,9 @@ function App() {
           );
 
           localStorage.setItem("accessToken", data.accessToken);
-          const userData: UserProfile = await apiClient.get("/user/privateprofile");
+          const userData: UserProfilePublic = await apiClient.get(
+            "/user/privateprofile"
+          );
           setUser(userData);
           setIsLogin(true);
         }
@@ -85,6 +85,7 @@ function App() {
         </Route>
         <Route path="/kham-pha" element={<div>Trang khám phá</div>} />
         <Route path="/settings" element={<div>Trang cài đặt</div>} />
+        <Route path="/PDFfile/:docId" element={<ShowFile />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/files" element={<FilePage />} />
           <Route path="*" element={<Navigate to="/login" replace />} />

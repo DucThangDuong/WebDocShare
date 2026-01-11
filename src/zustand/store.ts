@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { UserProfile } from "../interfaces/IStore";
+import type { UserProfilePublic } from "../interfaces/Types";
 import type { FileData, FileItem, UserStorageFile } from "../interfaces/Types";
 
 interface StoreState {
@@ -7,8 +7,8 @@ interface StoreState {
   isLogin: boolean;
   setIsLogin: (isLogin: boolean) => void;
   // thông tin user
-  user: UserProfile | null;
-  setUser: (user: UserProfile | null) => void;
+  user: UserProfilePublic | null;
+  setUser: (user: UserProfilePublic | null) => void;
   // item nav hiện tại được active
   NavItemActivate: string;
   setNavItemActivate: (item: string) => void;

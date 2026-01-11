@@ -4,6 +4,7 @@ import LoginLayout from "../layouts/loginlayout";
 import { apiClient } from "../services/apiClient";
 import { InputField } from "../components/inputfield";
 import { useStore } from "../zustand/store";
+import type { UserLogin } from "../interfaces/Types";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -17,11 +18,12 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
+    const userlogin: UserLogin = { email, password };
     try {
-      const data = await apiClient.post<{ accessToken: string }>("/login", {
-        email,
-        password,
-      });
+      const data = await apiClient.post<{ accessToken: string }>(
+        "/login",
+        userlogin
+      );
       localStorage.setItem("accessToken", data.accessToken);
       navigate(NavItemActivate || "/");
     } catch {

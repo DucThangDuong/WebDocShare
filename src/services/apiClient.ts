@@ -67,8 +67,9 @@ export const apiClient = {
   delete: <T>(url: string) =>
     axiosInstance.delete<T>(url).then((res) => res.data),
   postForm: <T>(url: string, data: FormData) =>
-    axiosInstance
-      .post<T>(url, data, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
+    axiosInstance.post<T>(url, data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    }),
+  getFile: (url: string) =>
+    axiosInstance.get(url, { responseType: "blob" }).then((res) => res.data),
 };

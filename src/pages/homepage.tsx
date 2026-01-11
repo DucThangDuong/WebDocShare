@@ -1,6 +1,6 @@
 import React from 'react';
-import DashboardLayout from '../layouts/dashboardlayout';
-import NewsCard from '../components/homepage/newscard';
+import DashboardLayout from '../layouts/HomeLayout';
+import NewsCard from '../components/Home/newscard';
 
 const HomePage: React.FC = () => {
   return (

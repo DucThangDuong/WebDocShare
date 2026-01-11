@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import RegisterLayout from "../layouts/registerlayout";
 import { apiClient, ApiError } from "../services/apiClient";
 import { InputField } from "../components/inputfield";
+import type { UserRegister } from "../interfaces/Types";
 
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
@@ -18,20 +19,18 @@ const RegisterPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-
     if (password !== confirmPassword) {
       setError("Mật khẩu xác nhận không khớp.");
       return;
     }
-
     setIsLoading(true);
-
+    const userregister: UserRegister = {
+      username: displayName,
+      email: email,
+      password: password,
+    };
     try {
-      await apiClient.post("/register", {
-        username: displayName,
-        email: email,
-        password: password,
-      });
+      await apiClient.post("/register", userregister);
       navigate("/login");
     } catch (err) {
       if (err instanceof ApiError) {

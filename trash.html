@@ -1,35 +1,22 @@
 <!DOCTYPE html>
-
-<html class="dark" lang="vi">
+<html class="light" lang="vi">
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Chi tiết thuật toán - AlgoVisual</title>
+    <title>Chi tiết tài liệu PDF</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-      rel="stylesheet"
-    />
-    <script>
+    <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
         theme: {
           extend: {
             colors: {
-              primary: "#0d7ff2",
-              "background-light": "#f5f7f8",
-              "background-dark": "#101922",
+              primary: "#135bec",
+              "background-light": "#f8f9fb",
+              "background-dark": "#101622",
             },
             fontFamily: {
-              display: ["Space Grotesk", "sans-serif"],
+              display: ["Inter", "sans-serif"],
             },
             borderRadius: {
               DEFAULT: "0.25rem",
@@ -41,394 +28,357 @@
         },
       };
     </script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
     <style>
-      .material-symbols-outlined {
-        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
-        font-size: 20px;
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
       }
     </style>
   </head>
-  <body class="font-display bg-background-light dark:bg-background-dark">
-    <div class="relative flex h-auto min-h-screen w-full flex-col">
-      <!-- TopNavBar -->
-      <header
-        class="sticky top-0 z-50 flex items-center justify-center whitespace-nowrap border-b border-solid border-gray-200/10 bg-background-light/80 px-4 py-3 backdrop-blur-sm dark:bg-background-dark/80"
+  <body
+    class="font-display bg-background-light dark:bg-background-dark text-[#111318] dark:text-white min-h-screen flex flex-col"
+  >
+    <header
+      class="h-16 flex items-center justify-between px-6 border-b border-[#e2e8f0] dark:border-gray-800 bg-white dark:bg-[#1a202c] shrink-0 sticky top-0 z-50"
+    >
+      <div class="flex items-center gap-4 min-w-[200px]">
+        <a
+          class="flex items-center justify-center p-2 rounded-lg bg-primary/10 text-primary"
+          href="#"
+        >
+          <span class="material-symbols-outlined">description</span>
+        </a>
+        <h1
+          class="text-sm font-bold leading-tight tracking-tight text-[#111318] dark:text-white"
+        >
+          Báo cáo tài chính Q3.pdf
+        </h1>
+      </div>
+      <div
+        class="hidden md:flex items-center gap-2 bg-[#f1f5f9] dark:bg-gray-800 p-1 rounded-lg"
       >
-        <div class="flex w-full max-w-7xl items-center justify-between">
-          <div class="flex items-center gap-8">
-            <div class="flex items-center gap-3 text-gray-800 dark:text-white">
-              <div class="size-6 text-primary">
-                <svg
-                  fill="none"
-                  viewbox="0 0 48 48"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    clip-rule="evenodd"
-                    d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z"
-                    fill="currentColor"
-                    fill-rule="evenodd"
-                  ></path>
-                </svg>
-              </div>
-              <h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">
-                AlgoVisual
+        <button
+          class="size-8 flex items-center justify-center rounded hover:bg-white dark:hover:bg-gray-700 shadow-sm transition-all text-gray-600 dark:text-gray-300"
+        >
+          <span class="material-symbols-outlined text-[20px]"
+            >chevron_left</span
+          >
+        </button>
+        <div class="flex items-center px-2 gap-1 text-sm font-medium">
+          <input
+            class="w-8 text-center bg-transparent border-none p-0 focus:ring-0 text-[#111318] dark:text-white font-bold"
+            type="text"
+            value="1"
+          />
+          <span class="text-gray-400">/</span>
+          <span class="text-gray-600 dark:text-gray-300">45</span>
+        </div>
+        <button
+          class="size-8 flex items-center justify-center rounded hover:bg-white dark:hover:bg-gray-700 shadow-sm transition-all text-gray-600 dark:text-gray-300"
+        >
+          <span class="material-symbols-outlined text-[20px]"
+            >chevron_right</span
+          >
+        </button>
+      </div>
+      <div class="flex items-center gap-3">
+        <div
+          class="hidden lg:flex items-center gap-1 border-r border-gray-200 dark:border-gray-700 pr-3 mr-1"
+        >
+          <button
+            class="p-2 rounded-lg hover:bg-gray-100 text-gray-600"
+            title="Thu nhỏ"
+          >
+            <span class="material-symbols-outlined text-[20px]">remove</span>
+          </button>
+          <span class="text-xs font-semibold w-12 text-center">100%</span>
+          <button
+            class="p-2 rounded-lg hover:bg-gray-100 text-gray-600"
+            title="Phóng to"
+          >
+            <span class="material-symbols-outlined text-[20px]">add</span>
+          </button>
+        </div>
+        <button
+          class="flex h-9 items-center gap-2 px-4 rounded-full bg-primary text-white hover:bg-blue-700 transition-colors shadow-sm text-sm font-medium"
+        >
+          <span class="material-symbols-outlined text-[18px]">download</span>
+          <span>Tải xuống</span>
+        </button>
+      </div>
+    </header>
+    <main
+      class="flex-1 w-full max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 p-4 md:p-6 lg:p-8"
+    >
+      <div class="flex-1 flex flex-col gap-6">
+        <div
+          class="w-full bg-gray-200 dark:bg-gray-800 rounded-xl overflow-hidden shadow-2xl border border-black/5 ring-1 ring-black/5"
+        >
+        main 
+        </div>
+        <div
+          class="bg-white dark:bg-[#1a202c] rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-800"
+        >
+          <div
+            class="flex flex-col md:flex-row md:items-center justify-between gap-4"
+          >
+            <div class="flex flex-col gap-2">
+              <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+                Báo cáo tài chính Q3.pdf
               </h2>
-            </div>
-            <nav class="hidden items-center gap-8 md:flex">
-              <a
-                class="text-sm font-medium text-gray-600 transition-colors hover:text-primary dark:text-gray-300 dark:hover:text-primary"
-                href="#"
-                >Sắp xếp</a
-              >
-              <a
-                class="text-sm font-medium text-gray-600 transition-colors hover:text-primary dark:text-gray-300 dark:hover:text-primary"
-                href="#"
-                >Tìm kiếm</a
-              >
-              <a
-                class="text-sm font-medium text-gray-600 transition-colors hover:text-primary dark:text-gray-300 dark:hover:text-primary"
-                href="#"
-                >Đồ thị</a
-              >
-              <a
-                class="text-sm font-medium text-gray-600 transition-colors hover:text-primary dark:text-gray-300 dark:hover:text-primary"
-                href="#"
-                >Cấu trúc dữ liệu</a
-              >
-            </nav>
-          </div>
-          <div class="flex flex-1 items-center justify-end gap-4">
-            <label class="relative hidden h-10 w-full max-w-64 sm:flex">
-              <div
-                class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 dark:text-gray-400"
-              >
-                <span class="material-symbols-outlined">search</span>
-              </div>
-              <input
-                class="w-full rounded-lg border border-gray-200 bg-white/[.55] py-2 pl-10 pr-4 text-sm text-gray-800 placeholder:text-gray-500 focus:border-primary focus:ring-primary dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:placeholder:text-gray-400"
-                placeholder="Search algorithms..."
-                type="text"
-              />
-            </label>
-            <button
-              class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-            >
-              <span class="material-symbols-outlined">dark_mode</span>
-            </button>
-          </div>
-        </div>
-      </header>
-      <main class="flex w-full flex-1 justify-center px-4 py-8 sm:px-6 lg:px-8">
-        <div class="w-full max-w-7xl">
-          <div class="flex flex-wrap gap-2 px-4 pb-8">
-            <a
-              class="text-sm font-medium text-gray-500 transition-colors hover:text-primary dark:text-gray-400 dark:hover:text-primary"
-              href="#"
-              >Trang chủ</a
-            >
-            <span class="text-sm font-medium text-gray-500 dark:text-gray-400"
-              >/</span
-            >
-            <a
-              class="text-sm font-medium text-gray-500 transition-colors hover:text-primary dark:text-gray-400 dark:hover:text-primary"
-              href="#"
-              >Sắp xếp</a
-            >
-            <span class="text-sm font-medium text-gray-500 dark:text-gray-400"
-              >/</span
-            >
-            <span class="text-sm font-medium text-gray-800 dark:text-white"
-              >Sắp xếp nổi bọt</span
-            >
-          </div>
-          <div class="grid grid-cols-1 gap-12 lg:grid-cols-12">
-            <aside class="lg:col-span-3">
-              <div class="sticky top-28">
-                <h3
-                  class="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400"
-                >
-                  Nội dung
-                </h3>
-                <nav class="flex flex-col gap-1">
-                  <a
-                    class="rounded-lg bg-primary/20 px-3 py-2 text-sm font-semibold text-primary"
-                    href="#description"
-                    >Mô tả</a
+              <div class="flex items-center gap-4 text-sm text-gray-500">
+                <div class="flex items-center gap-2">
+                  <img
+                    alt="Avatar"
+                    class="w-8 h-8 rounded-full border border-gray-200"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTmNf-featuAJEE-5lIv6Gr7frDCMt8aHEoDhoJ9JyGiuNirXwtgOcEr1xtWCkERsTZk7tZuIjJD1mYY4vi8dKwJdgpu7Zq2nsyemOjDIq8G9-0RevKrk0WqfrMowfHRbWb_9Od0_CW7Y2-m0yBW8BT7RGjl_LV9wf50HHw_xwmZ_BcrPQSzWlWfN56IKC_HSfqB-InVWMprAjlB9-AEQvci4RZuOByUnR8pAXkIioz89Eo1_ADtAlX-wlygj538_5M5f6vYm_vsw"
+                  />
+                  <span class="font-semibold text-gray-900 dark:text-gray-200"
+                    >Nguyễn Văn A</span
                   >
-                  <a
-                    class="rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
-                    href="#code"
-                    >Mã nguồn</a
-                  >
-                  <a
-                    class="rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
-                    href="#complexity"
-                    >Độ phức tạp</a
-                  >
-                  <a
-                    class="rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
-                    href="#visualization"
-                    >Minh họa</a
-                  >
-                  <a
-                    class="rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
-                    href="#related"
-                    >Thuật toán liên quan</a
-                  >
-                </nav>
-              </div>
-            </aside>
-            <!-- Main Content -->
-            <div class="lg:col-span-9">
-              <!-- PageHeading -->
-              <div class="mb-10 flex flex-wrap justify-between gap-3 px-4">
-                <div class="flex flex-col gap-3">
-                  <h1
-                    class="text-4xl font-black leading-tight tracking-[-0.033em] text-gray-900 dark:text-white"
-                  >
-                    Sắp xếp Nổi bọt - Bubble Sort
-                  </h1>
-                  <p
-                    class="max-w-3xl text-base font-normal leading-normal text-gray-600 dark:text-gray-400"
-                  >
-                    Một thuật toán sắp xếp đơn giản hoạt động bằng cách lặp đi
-                    lặp lại qua danh sách, so sánh các phần tử liền kề và hoán
-                    đổi chúng nếu chúng sai thứ tự.
-                  </p>
                 </div>
+                <div class="h-4 w-px bg-gray-300"></div>
+                <div class="flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[18px]"
+                    >visibility</span
+                  >
+                  <span>12,450 lượt xem</span>
+                </div>
+                <div class="h-4 w-px bg-gray-300"></div>
+                <span>Đăng ngày 15/10/2023</span>
               </div>
-              <!-- Content Sections -->
-              <div class="flex flex-col gap-12">
-                <section id="description">
-                  <h2
-                    class="px-4 pb-3 pt-5 text-[22px] font-bold leading-tight tracking-[-0.015em] text-gray-900 dark:text-white"
+            </div>
+            <div class="flex items-center gap-2">
+              <div
+                class="flex items-center bg-gray-100 dark:bg-gray-800 rounded-full p-1"
+              >
+                <button
+                  class="flex items-center gap-2 px-4 py-2 hover:bg-white dark:hover:bg-gray-700 rounded-full transition-all text-sm font-medium"
+                >
+                  <span class="material-symbols-outlined text-[20px]"
+                    >thumb_up</span
                   >
-                    Mô tả chi tiết
-                  </h2>
-                  <p
-                    class="px-4 pb-3 pt-1 text-base font-normal leading-relaxed text-gray-700 dark:text-gray-300"
+                  <span>1.2k</span>
+                </button>
+                <div class="w-px h-4 bg-gray-300 dark:bg-gray-600 mx-1"></div>
+                <button
+                  class="flex items-center gap-2 px-4 py-2 hover:bg-white dark:hover:bg-gray-700 rounded-full transition-all text-sm font-medium"
+                >
+                  <span class="material-symbols-outlined text-[20px]"
+                    >thumb_down</span
                   >
-                    Sắp xếp nổi bọt hoạt động bằng cách duyệt qua mảng từ phần
-                    tử đầu tiên đến phần tử cuối cùng, so sánh từng cặp phần tử
-                    liền kề. Nếu phần tử đứng trước lớn hơn phần tử đứng sau,
-                    chúng sẽ được hoán đổi vị trí. Quá trình này được lặp lại
-                    cho đến khi không còn sự hoán đổi nào xảy ra trong một lượt
-                    duyệt, điều này cho thấy mảng đã được sắp xếp hoàn chỉnh.
-                  </p>
-                  <p
-                    class="px-4 pb-3 pt-1 text-base font-normal leading-relaxed text-gray-700 dark:text-gray-300"
-                  >
-                    Tên "nổi bọt" xuất phát từ cách các phần tử nhỏ hơn hoặc lớn
-                    hơn (tùy thuộc vào thứ tự sắp xếp) dần dần "nổi" lên đầu
-                    danh sách. Mặc dù đơn giản để hiểu và thực hiện, Bubble Sort
-                    không hiệu quả đối với các danh sách lớn và thường hoạt động
-                    kém hơn so với các thuật toán sắp xếp nâng cao hơn như
-                    quicksort, heapsort, hoặc merge sort.
-                  </p>
-                </section>
-                <section id="code">
-                  <h2
-                    class="px-4 pb-3 pt-5 text-[22px] font-bold leading-tight tracking-[-0.015em] text-gray-900 dark:text-white"
-                  >
-                    Mã nguồn
-                  </h2>
-                  <div
-                    class="mx-4 overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800"
-                  >
-                    <div
-                      class="flex border-b border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900/50"
-                    >
-                      <button
-                        class="border-b-2 border-primary px-4 py-2 text-sm font-semibold text-primary"
-                      >
-                        Python
-                      </button>
-                      <button
-                        class="px-4 py-2 text-sm font-medium text-gray-500 transition-colors hover:text-gray-800 dark:text-gray-400 dark:hover:text-white"
-                      >
-                        JavaScript
-                      </button>
-                      <button
-                        class="px-4 py-2 text-sm font-medium text-gray-500 transition-colors hover:text-gray-800 dark:text-gray-400 dark:hover:text-white"
-                      >
-                        C++
-                      </button>
-                    </div>
-                    <div class="relative bg-[#1E1E1E] p-4">
-                      <button
-                        class="absolute right-4 top-4 flex items-center gap-2 rounded-lg bg-white/10 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-white/20"
-                      >
-                        <span class="material-symbols-outlined !text-[16px]"
-                          >content_copy</span
-                        >
-                        Copy
-                      </button>
-                      <pre><code class="text-sm text-white">def bubble_sort(arr):
-    n = len(arr)
-    # Traverse through all array elements
-    for i in range(n):
-        swapped = False
-        # Last i elements are already in place
-        for j in range(0, n-i-1):
-            # Traverse the array from 0 to n-i-1
-            # Swap if the element found is greater than the next element
-            if arr[j] &gt; arr[j+1]:
-                arr[j], arr[j+1] = arr[j+1], arr[j]
-                swapped = True
-        if not swapped:
-            break</code></pre>
-                    </div>
-                  </div>
-                </section>
-                <section id="complexity">
-                  <h2
-                    class="px-4 pb-4 pt-5 text-[22px] font-bold leading-tight tracking-[-0.015em] text-gray-900 dark:text-white"
-                  >
-                    Độ phức tạp
-                  </h2>
-                  <div
-                    class="mx-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
-                  >
-                    <div
-                      class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900/50"
-                    >
-                      <p
-                        class="text-sm font-medium text-gray-500 dark:text-gray-400"
-                      >
-                        Time (Best)
-                      </p>
-                      <p
-                        class="mt-1 text-lg font-bold text-gray-800 dark:text-white"
-                      >
-                        O(n)
-                      </p>
-                    </div>
-                    <div
-                      class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900/50"
-                    >
-                      <p
-                        class="text-sm font-medium text-gray-500 dark:text-gray-400"
-                      >
-                        Time (Average)
-                      </p>
-                      <p
-                        class="mt-1 text-lg font-bold text-gray-800 dark:text-white"
-                      >
-                        O(n²)
-                      </p>
-                    </div>
-                    <div
-                      class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900/50"
-                    >
-                      <p
-                        class="text-sm font-medium text-gray-500 dark:text-gray-400"
-                      >
-                        Time (Worst)
-                      </p>
-                      <p
-                        class="mt-1 text-lg font-bold text-gray-800 dark:text-white"
-                      >
-                        O(n²)
-                      </p>
-                    </div>
-                    <div
-                      class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900/50"
-                    >
-                      <p
-                        class="text-sm font-medium text-gray-500 dark:text-gray-400"
-                      >
-                        Space
-                      </p>
-                      <p
-                        class="mt-1 text-lg font-bold text-gray-800 dark:text-white"
-                      >
-                        O(1)
-                      </p>
-                    </div>
-                  </div>
-                  <p
-                    class="px-4 pt-4 text-base font-normal leading-relaxed text-gray-700 dark:text-gray-300"
-                  >
-                    Độ phức tạp về không gian là O(1) vì nó là một thuật toán
-                    sắp xếp tại chỗ, chỉ yêu cầu một lượng bộ nhớ bổ sung không
-                    đổi. Trường hợp tốt nhất xảy ra khi mảng đã được sắp xếp,
-                    chỉ cần một lượt duyệt duy nhất để xác nhận.
-                  </p>
-                </section>
-                <section id="visualization">
-                  <h2
-                    class="px-4 pb-4 pt-5 text-[22px] font-bold leading-tight tracking-[-0.015em] text-gray-900 dark:text-white"
-                  >
-                    Minh họa trực quan
-                  </h2>
-                  <div
-                    class="mx-4 flex flex-col items-center justify-center gap-4 overflow-hidden rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900/50"
-                  >
-                    <img
-                      class="max-w-xs rounded-lg"
-                      data-alt="Animation of bubble sort algorithm showing numbers being swapped."
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8eFI63tCBxbbfID0JCde-Rury1PJcirKnWvbk1PnIMpCtUCsMjvJR7wFipUP2E8OhfOsB20RjhO96omGc-pU4OVOk3GJfKF6Uisji_Ujeii8ynbUbUU45rF5-H7ZqYgu1NBNujgpjH9CBCr0ztHhPpSTROzSSw08C4JmDraWf9zeKK8bBiX8X2RPhcdW5y0Z7nLqrAlI1PLbkjrk63YaK2koLR_HEjAJ1KmbgtL3pK-PPhxwekmqqVHrpmGPJ2o3s9a53_-VgoQdw"
-                    />
-                    <div class="flex items-center gap-3">
-                      <button
-                        class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-                      >
-                        <span class="material-symbols-outlined">replay</span>
-                      </button>
-                      <button
-                        class="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white transition-colors hover:bg-primary/90"
-                      >
-                        <span class="material-symbols-outlined !text-[28px]"
-                          >play_arrow</span
-                        >
-                      </button>
-                      <button
-                        class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-                      >
-                        <span class="material-symbols-outlined">skip_next</span>
-                      </button>
-                    </div>
-                  </div>
-                </section>
-                <section id="related">
-                  <h2
-                    class="px-4 pb-4 pt-5 text-[22px] font-bold leading-tight tracking-[-0.015em] text-gray-900 dark:text-white"
-                  >
-                    Thuật toán liên quan
-                  </h2>
-                  <div class="mx-4 flex flex-col gap-3">
-                    <a
-                      class="rounded-lg border border-transparent p-3 transition-colors hover:border-gray-200 hover:bg-white dark:hover:border-gray-800 dark:hover:bg-gray-900/50"
-                      href="#"
-                    >
-                      <h4 class="font-semibold text-gray-800 dark:text-white">
-                        Insertion Sort
-                      </h4>
-                      <p class="text-sm text-gray-600 dark:text-gray-400">
-                        Một thuật toán đơn giản khác xây dựng mảng đã sắp xếp
-                        cuối cùng tại một thời điểm.
-                      </p>
-                    </a>
-                    <a
-                      class="rounded-lg border border-transparent p-3 transition-colors hover:border-gray-200 hover:bg-white dark:hover:border-gray-800 dark:hover:bg-gray-900/50"
-                      href="#"
-                    >
-                      <h4 class="font-semibold text-gray-800 dark:text-white">
-                        Selection Sort
-                      </h4>
-                      <p class="text-sm text-gray-600 dark:text-gray-400">
-                        Một thuật toán sắp xếp tại chỗ chia danh sách thành hai
-                        phần: đã sắp xếp và chưa sắp xếp.
-                      </p>
-                    </a>
-                  </div>
-                </section>
+                  <span>45</span>
+                </button>
+              </div>
+              <button
+                class="p-2.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500"
+              >
+                <span class="material-symbols-outlined text-[22px]">share</span>
+              </button>
+            </div>
+          </div>
+          <div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-800">
+            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+              Tài liệu tổng hợp các chỉ số tài chính quan trọng trong quý 3 năm
+              2023, bao gồm phân tích doanh thu, chi phí vận hành và lợi nhuận
+              gộp của tập đoàn. Báo cáo cũng đưa ra các dự báo triển vọng cho
+              quý 4 sắp tới.
+            </p>
+          </div>
+        </div>
+      </div>
+      <aside class="w-full lg:w-80 shrink-0 space-y-6">
+        <h3
+          class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2"
+        >
+          <span class="material-symbols-outlined text-primary"
+            >auto_awesome</span
+          >
+          Tài liệu liên quan
+        </h3>
+        <div class="flex flex-col gap-4">
+          <div
+            class="group flex gap-3 cursor-pointer p-2 rounded-xl hover:bg-white dark:hover:bg-gray-800 transition-all hover:shadow-sm border border-transparent hover:border-gray-100"
+          >
+            <div
+              class="w-24 h-32 shrink-0 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 relative"
+            >
+              <div
+                class="w-full h-full bg-cover bg-center"
+                style="
+                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAZKU8pam8LAYG2u6kjBXCmtAalDvgqQG5tf74Sn9wZTUJ1-rF2fS20_M5xv5_OZFBwKWGnfJgJenfyLTDn2FPvLxVlJ65Uy5Lo6bR_PvX-6EkCySQTubd-Y241FvdGSoTT_s1NBV2GmhC3jTAmq2KI1E34DUPp-WIbTY3Lcy6Wq-iLoiwLLEz3HSsO89fAf2kyQ54vuW07MIhKyBIy2kqQ51UJz0xv97stbrEtRi-hmwtd3vSWgUY8mxLgCMqfRM9TlXHvJMP3d5c');
+                "
+              ></div>
+              <div
+                class="absolute bottom-0 right-0 bg-black/60 text-white text-[10px] px-1 rounded-tl-md"
+              >
+                PDF
+              </div>
+            </div>
+            <div class="flex flex-col gap-1 py-1">
+              <h4
+                class="text-sm font-bold text-gray-800 dark:text-gray-200 line-clamp-2 leading-snug group-hover:text-primary transition-colors"
+              >
+                Phân tích thị trường Bất động sản Q2/2023
+              </h4>
+              <span class="text-xs text-gray-500">Trần Thị B</span>
+              <div
+                class="flex items-center gap-2 mt-auto text-[11px] text-gray-400 font-medium"
+              >
+                <span>8.5k views</span>
+                <span>•</span>
+                <span>28 trang</span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="group flex gap-3 cursor-pointer p-2 rounded-xl hover:bg-white dark:hover:bg-gray-800 transition-all hover:shadow-sm border border-transparent hover:border-gray-100"
+          >
+            <div
+              class="w-24 h-32 shrink-0 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 relative"
+            >
+              <div
+                class="w-full h-full bg-cover bg-center"
+                style="
+                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDoz93d6WS7EYsgjdzarXPWTJn25wX-50pVC3Yqig6u35pCMA6f8XOa3k4DvHTQLJfV8wvSgfy2YZ4-FHYlA9S_1unjcFXsKcDjRbSe65lTVF3M4AMJ_94O7piXwn5Ut6u1vz8rOiU1ztoY1ybmHSDGS5t8QmRUkk3Z4ZNC5roebIW0ANCoMkiiXhQJ4RNhrq3CAV90Ipg1xMRu1v6k_AystQIi8KMCfcXs735P9nYxuug1j4tseKYk9iTJLmZCh0kGUgrl-UvGs9s');
+                "
+              ></div>
+              <div
+                class="absolute bottom-0 right-0 bg-black/60 text-white text-[10px] px-1 rounded-tl-md"
+              >
+                PDF
+              </div>
+            </div>
+            <div class="flex flex-col gap-1 py-1">
+              <h4
+                class="text-sm font-bold text-gray-800 dark:text-gray-200 line-clamp-2 leading-snug group-hover:text-primary transition-colors"
+              >
+                Cẩm nang đầu tư chứng khoán cho người mới
+              </h4>
+              <span class="text-xs text-gray-500">Lê Văn C</span>
+              <div
+                class="flex items-center gap-2 mt-auto text-[11px] text-gray-400 font-medium"
+              >
+                <span>15k views</span>
+                <span>•</span>
+                <span>120 trang</span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="group flex gap-3 cursor-pointer p-2 rounded-xl hover:bg-white dark:hover:bg-gray-800 transition-all hover:shadow-sm border border-transparent hover:border-gray-100"
+          >
+            <div
+              class="w-24 h-32 shrink-0 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 relative"
+            >
+              <div
+                class="w-full h-full bg-cover bg-center"
+                style="
+                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAUKougApCmyHyaYHdA8aB_TmBvHsOyqM4IEnmq1pvjUNvbhPslkmwtgraZ1-V8z-UwjFVH-woRfG7aA-mlUJBf3x4DnAq1aZaIvbbaukfQRXKYIY-jBvTZf9QcnfmMqRrzA50c3dFvISNC6tjPF175lA1_GeWh3jWCPNJoEU1S2ldLQd2EFJ-jariOGT-0Y9yXQG8ajOsdn5XYtGi1biktz42IR0x_Zd38oG-FEwfPpDX_oFi6MLlsdUfkSI5C_TGoxRgWwYz7c8E');
+                "
+              ></div>
+              <div
+                class="absolute bottom-0 right-0 bg-black/60 text-white text-[10px] px-1 rounded-tl-md"
+              >
+                PDF
+              </div>
+            </div>
+            <div class="flex flex-col gap-1 py-1">
+              <h4
+                class="text-sm font-bold text-gray-800 dark:text-gray-200 line-clamp-2 leading-snug group-hover:text-primary transition-colors"
+              >
+                Báo cáo Xu hướng Công nghệ 2024
+              </h4>
+              <span class="text-xs text-gray-500">Tech Insider</span>
+              <div
+                class="flex items-center gap-2 mt-auto text-[11px] text-gray-400 font-medium"
+              >
+                <span>21k views</span>
+                <span>•</span>
+                <span>54 trang</span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="group flex gap-3 cursor-pointer p-2 rounded-xl hover:bg-white dark:hover:bg-gray-800 transition-all hover:shadow-sm border border-transparent hover:border-gray-100"
+          >
+            <div
+              class="w-24 h-32 shrink-0 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 relative"
+            >
+              <div
+                class="w-full h-full bg-cover bg-center"
+                style="
+                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCu5V904AVztPjooD7Ut6YvqXOffM-rYSMdxmAbwsjMQDZAWqCt-gwmKHBeRe0XLw3kYNVc5MAlOo6BIB4mtlsgTQEWYtdpg62_NkeetsRTuAjGGMK1hitV7Fl_3rviWZyhYLBJLrsZwN553qoXUtzfKg79OMNUZc58bhCPBwH1x_3lJuSo5NlGfUkEhsqoN8Uq0-uHmAqWy1y7viGFJJYjJmXx0T7AUmEoPkIBPBiv2u51qhpsF-5qJju_UYKPKqomn2X6iYf1qs8');
+                "
+              ></div>
+              <div
+                class="absolute bottom-0 right-0 bg-black/60 text-white text-[10px] px-1 rounded-tl-md"
+              >
+                PDF
+              </div>
+            </div>
+            <div class="flex flex-col gap-1 py-1">
+              <h4
+                class="text-sm font-bold text-gray-800 dark:text-gray-200 line-clamp-2 leading-snug group-hover:text-primary transition-colors"
+              >
+                Kế hoạch kinh doanh mẫu cho Startup
+              </h4>
+              <span class="text-xs text-gray-500">Phạm Minh Đ</span>
+              <div
+                class="flex items-center gap-2 mt-auto text-[11px] text-gray-400 font-medium"
+              >
+                <span>4.2k views</span>
+                <span>•</span>
+                <span>15 trang</span>
               </div>
             </div>
           </div>
         </div>
-      </main>
-    </div>
+        <button
+          class="w-full py-3 rounded-xl border border-dashed border-gray-300 dark:border-gray-700 text-sm font-semibold text-gray-500 hover:text-primary hover:border-primary transition-all"
+        >
+          Xem thêm tài liệu
+        </button>
+      </aside>
+    </main>
+    <footer
+      class="bg-white dark:bg-[#1a202c] border-t border-gray-100 dark:border-gray-800 py-8 px-6 mt-12"
+    >
+      <div
+        class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4"
+      >
+        <div class="flex items-center gap-2 text-gray-500 text-sm">
+          <span class="material-symbols-outlined text-[18px]">copyright</span>
+          <span>2023 DocumentShare Platform</span>
+        </div>
+        <div class="flex items-center gap-6 text-sm font-medium text-gray-500">
+          <a class="hover:text-primary transition-colors" href="#"
+            >Điều khoản</a
+          >
+          <a class="hover:text-primary transition-colors" href="#">Bảo mật</a>
+          <a class="hover:text-primary transition-colors" href="#">Liên hệ</a>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>

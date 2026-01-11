@@ -54,7 +54,7 @@ export const FileTable: React.FC<FileTableProps> = ({ files }) => {
                 </div>
               </td>
               <td className="py-4 px-6 text-sm text-[#616f89] hidden md:table-cell">
-                {file.createdAt}
+                {file.createdAt.substring(0, 10)}
               </td>
               <td className="py-4 px-6 text-sm text-[#616f89] hidden sm:table-cell">
                 {formatFileSize(Number.parseInt(file.sizeInBytes) || 0)}
@@ -62,7 +62,7 @@ export const FileTable: React.FC<FileTableProps> = ({ files }) => {
               {/* hover vào thì hiện nút hành động */}
               <td className="py-4 px-6 text-right">
                 <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <ActionButton icon="visibility" title="Xem" />
+                  <ActionButton icon="visibility" title="Xem" url={`/PDFfile/${file.id}`} />
                   <ActionButton
                     icon="download"
                     title="Tải xuống"
@@ -83,10 +83,12 @@ const ActionButton = ({
   icon,
   title,
   hoverColor = "primary",
+  url,
 }: {
   icon: string;
   title: string;
   hoverColor?: string;
+  url?: string;
 }) => {
   const colorClass =
     hoverColor === "red"
@@ -100,7 +102,9 @@ const ActionButton = ({
       className={`p-2 text-[#616f89] ${colorClass} rounded-full transition-colors`}
       title={title}
     >
-      <span className="material-symbols-outlined text-[20px]">{icon}</span>
+      <a href={url}>
+        <span className="material-symbols-outlined text-[20px]">{icon}</span>
+      </a>
     </button>
   );
 };
