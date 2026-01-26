@@ -15,7 +15,10 @@ import { isLoggedIn } from "./utils/auth";
 import { useEffect, useState } from "react";
 import { useStore } from "./zustand/store";
 import { apiClient } from "./services/apiClient";
-import type { UserProfilePublic } from "./interfaces/Types";
+import type { UserProfilePrivate } from "./interfaces/Types";
+import UserProfile from "./pages/MyProfilePage";
+import AccountSettings from "./pages/AccountSettingPage";
+import "./App.css";
 const ProtectedRoute = () => {
   const isAuth = isLoggedIn();
   if (!isAuth) {
@@ -39,19 +42,18 @@ function App() {
       try {
         const token = localStorage.getItem("accessToken");
         if (token) {
-          const userData: UserProfilePublic = await apiClient.get(
-            "/user/privateprofile"
+          const userData: UserProfilePrivate = await apiClient.get(
+            "/user/privateprofile",
           );
           setUser(userData);
           setIsLogin(true);
         } else {
-          const data: { accessToken: string } = await apiClient.post(
-            "/refresh-token"
-          );
+          const data: { accessToken: string } =
+            await apiClient.post("/refresh-token");
 
           localStorage.setItem("accessToken", data.accessToken);
-          const userData: UserProfilePublic = await apiClient.get(
-            "/user/privateprofile"
+          const userData: UserProfilePrivate = await apiClient.get(
+            "/user/privateprofile",
           );
           setUser(userData);
           setIsLogin(true);
@@ -89,6 +91,8 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/files" element={<FilePage />} />
           <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route path="/myprofile" element={<UserProfile />} />
+          <Route path="/account-settings" element={<AccountSettings />} />
         </Route>
       </Routes>
     </BrowserRouter>

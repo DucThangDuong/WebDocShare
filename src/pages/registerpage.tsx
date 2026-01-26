@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import RegisterLayout from "../layouts/registerlayout";
-import { apiClient, ApiError } from "../services/apiClient";
+import { apiClient } from "../services/apiClient";
 import { InputField } from "../components/inputfield";
-import type { UserRegister } from "../interfaces/Types";
-
+import { ApiError, type UserRegister } from "../interfaces/Types";
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
 
@@ -25,23 +24,23 @@ const RegisterPage: React.FC = () => {
     }
     setIsLoading(true);
     const userregister: UserRegister = {
-      username: displayName,
+      fullname: displayName,
       email: email,
       password: password,
     };
     try {
-      await apiClient.post("/register", userregister);
+      await apiClient.postnodata("/register", userregister);
       navigate("/login");
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof ApiError) {
-        switch (err.status) {
+        const status = err.status;
+        const message = err.message || "Lỗi xảy ra";
+        switch (status) {
           case 409:
             setError("Email này đã được đăng ký. Bạn có muốn đăng nhập không?");
             break;
           case 400:
-            setError(
-              err.message || "Dữ liệu nhập không hợp lệ. Vui lòng kiểm tra lại."
-            );
+            setError(message);
             break;
           case 500:
             setError("Hệ thống đang bảo trì. Vui lòng thử lại sau.");
@@ -54,7 +53,7 @@ const RegisterPage: React.FC = () => {
         }
       } else {
         setError(
-          "Không thể kết nối đến máy chủ. Vui lòng kiểm tra đường truyền."
+          "Không thể kết nối đến máy chủ. Vui lòng kiểm tra đường truyền.",
         );
       }
     } finally {

@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../components/Home/header";
 import Sidebar from "../components/Home/sidebar";
 import type { LayoutProps } from "../interfaces/Types";
 const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   return (
     <div className="bg-background-light  text-[#111318] font-display h-screen flex flex-col overflow-hidden">
-      <Header />
+      <Header onMenuClick={() => setIsSidebarOpen(true)} />
       <div className="flex flex-1 overflow-hidden relative">
-        <Sidebar />
+        <Sidebar
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        />
         <main className="flex-1 h-full overflow-y-auto bg-background-light p-6 md:p-10 scroll-smooth">
           <div className="max-w-[1200px] mx-auto flex flex-col gap-10 pb-20">
             {children}

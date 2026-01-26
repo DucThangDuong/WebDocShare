@@ -52,7 +52,6 @@ export const UploadModal: React.FC<UploadModalProps> = ({
       formData.append("File", newFile.file);
       formData.append("SignalRConnectionID", signalRConnectionId || "");
       formData.append("Title", newFile.id);
-
       apiClient.postForm("/document/check", formData).then(
         (response) => {
           if (response.status !== 200) {

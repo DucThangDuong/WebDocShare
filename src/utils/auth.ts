@@ -1,5 +1,5 @@
 import { apiClient } from "../services/apiClient";
-import type { UserProfilePublic } from "../interfaces/Types";
+import type { UserProfilePrivate} from "../interfaces/Types";
 export const getToken = (): string | null => {
   return localStorage.getItem("accessToken");
 };
@@ -22,5 +22,5 @@ export const logout = async () => {
 };
 
 export const getMe = () => {
-  return apiClient.get<UserProfilePublic>("/user/privateprofile");
+  return apiClient.get<UserProfilePrivate>("/user/privateprofile");
 };

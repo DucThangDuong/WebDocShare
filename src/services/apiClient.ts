@@ -1,15 +1,5 @@
 const BASE_URL = import.meta.env.VITE_API_URL;
-export class ApiError extends Error {
-  status: number;
-  data: object | undefined;
-
-  constructor(status: number, message: string, data?: object) {
-    super(message);
-    this.status = status;
-    this.data = data;
-    this.name = "ApiError";
-  }
-}
+import { ApiError } from "../interfaces/Types";
 import axios from "axios";
 
 const axiosInstance = axios.create({
@@ -27,17 +17,17 @@ axiosInstance.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    const status: number = error.response ? error.response.status : null;
+    if (status === 401 && !originalRequest._retry) {
       if (originalRequest.url.includes("/refresh-token")) {
-        return Promise.reject(error);
+        return Promise.reject(status);
       }
       originalRequest._retry = true;
       try {
@@ -55,7 +45,21 @@ axiosInstance.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
+);
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response) {
+      const status = error.response.status;
+      const message = error.response.data?.message || "Lỗi không xác định";
+      return Promise.reject(new ApiError(status, message, error.response.data));
+    } else if (error.request) {
+      return Promise.reject(new ApiError(0, "Không thể kết nối đến máy chủ."));
+    } else {
+      return Promise.reject(new Error(error.message));
+    }
+  },
 );
 
 export const apiClient = {
@@ -66,10 +70,18 @@ export const apiClient = {
     axiosInstance.put<T>(url, data).then((res) => res.data),
   delete: <T>(url: string) =>
     axiosInstance.delete<T>(url).then((res) => res.data),
+  patch: <T>(url: string, data: object) =>
+    axiosInstance.patch<T>(url, data).then((res) => res.data),
   postForm: <T>(url: string, data: FormData) =>
     axiosInstance.post<T>(url, data, {
       headers: { "Content-Type": "multipart/form-data" },
     }),
   getFile: (url: string) =>
     axiosInstance.get(url, { responseType: "blob" }).then((res) => res.data),
+  postnodata: <T>(url: string, data: object = {}) =>
+    axiosInstance.post<T>(url, data),
+  patchForm: <T>(url: string, data: FormData) =>
+    axiosInstance.patch<T>(url, data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    }),
 };

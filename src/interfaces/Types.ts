@@ -37,12 +37,17 @@ export interface UserProfilePublic {
   email: string;
   avatarurl?: string;
 }
+export interface UserProfilePrivate extends UserProfilePublic {
+  email: string;
+  storagelimit: number;
+  usedstorage: number;
+}
 export interface UserLogin {
   email: string;
   password: string;
 }
 export interface UserRegister {
-  username: string;
+  fullname: string;
   email: string;
   password: string;
 }
@@ -56,7 +61,24 @@ export interface DocumentInfor {
   createdAt: string;
   fullName: string;
   avatarUrl: string;
-  viewCount:number;
-  likeCount:number;
-  dislikeCount:number;
+  viewCount: number;
+  likeCount: number;
+  dislikeCount: number;
+}
+export class ApiError extends Error {
+  status: number;
+  data: object | undefined;
+
+  constructor(status: number, message: string, data?: object) {
+    super(message);
+    this.status = status;
+    this.data = data;
+    Object.setPrototypeOf(this, ApiError.prototype);
+  }
+}
+export interface UserUpdate{
+  fullname?: string;
+  avatar?: FormData;
+  email?: string;
+  password?: string;
 }

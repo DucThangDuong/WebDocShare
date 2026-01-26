@@ -20,9 +20,9 @@ CREATE TABLE Users (
     RefreshToken VARCHAR(256),
     RefreshTokenExpiryTime DATETIME,
     Role VARCHAR(50) DEFAULT 'User' CHECK(Role IN ('User','Admin')),
-    AvatarUrl VARCHAR(255),
+    AvatarUrl VARCHAR(255) DEFAULT 'default-avatar.jpg',
     IsActive BIT DEFAULT 1,
-    StorageLimit BIGINT NOT NULL DEFAULT 5368709120, -- 5GB
+    StorageLimit BIGINT NOT NULL DEFAULT 5368709120, 
     UsedStorage BIGINT NOT NULL DEFAULT 0
 );
 GO
@@ -46,7 +46,7 @@ CREATE TABLE Documents (
     Title NVARCHAR(200) NOT NULL,
     Description NVARCHAR(MAX),
     
-    FileUrl VARCHAR(500) NOT NULL,
+    FileUrl NVARCHAR(500) NOT NULL,
     SizeInBytes BIGINT NOT NULL, 
     
     UploaderId INT NOT NULL,
@@ -108,7 +108,6 @@ BEGIN
     INNER JOIN DELETED d ON u.Id = d.UploaderId;
 END;
 GO
-
 
 CREATE INDEX IX_Tags_Slug ON Tags(Slug);
 CREATE INDEX IX_Documents_IsDeleted ON Documents(IsDeleted); 

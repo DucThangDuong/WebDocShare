@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer components {
+  .nav-item {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors cursor-pointer select-none;
+  }
+  .nav-item-active {
+    @apply bg-primary/10 text-primary font-semibold;
+  }
+  .nav-item-inactive {
+    @apply text-[#616f89] hover:bg-[#f0f2f4] hover:text-[#111318];
+  }
+  .btn-change {
+    @apply flex items-center gap-2 bg-green-500 hover:bg-green-700  
+    px-6 py-2.5 rounded-lg font-bold text-sm  transition-all transform active:scale-95;
+  }
+  .btn-edit {
+    @apply flex items-center justify-center gap-2 bg-cyan-500 hover:bg-cyan-700
+     text-white font-bold py-3 px-4 rounded-xl transition-all hover:shadow-lg;
+  }
+  .btn-cancel {
+    @apply flex items-center justify-center gap-2 bg-gray-500 hover:bg-gray-600
+     text-white font-bold py-2 px-4 rounded-xl transition-all shadow-md;
+  }
+}

@@ -11,7 +11,7 @@ export const SignalRProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [fileStatuses] = useState({});
-  const { updateFileStatus, setSignalRConnectionId } = useStore();
+  const { updateFileStatus } = useStore();
   const connectionRef = useRef<signalR.HubConnection | null>(null);
 
   useEffect(() => {
@@ -23,6 +23,7 @@ export const SignalRProvider: React.FC<{ children: React.ReactNode }> = ({
       .withAutomaticReconnect()
       .build();
     connectionRef.current = connection;
+
     connection.on("ReceiveScanResult", (data) => {
       if (data.status === "Safe") {
         updateFileStatus(data.docIdDto, "success");
@@ -32,9 +33,6 @@ export const SignalRProvider: React.FC<{ children: React.ReactNode }> = ({
     });
     connection
       .start()
-      .then(() => {
-        setSignalRConnectionId(connection.connectionId);
-      })
       .catch((err) => console.error("SignalR Connection Error: ", err));
     return () => {
       if (connectionRef.current) {
