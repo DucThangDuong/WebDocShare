@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+const Minio_url = import.meta.env.VITE_MinIO_URL;
+import React, { useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { isLoggedIn, logout } from "../../utils/auth";
 import { getMe } from "../../utils/auth";
@@ -10,7 +11,10 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   const { user, isLogin, setUser, setIsLogin } = useStore((state) => state);
-
+  const avatarSrc = useMemo(() => {
+    if (!user?.avatarurl) return null;
+    return `${Minio_url}/avatar-storage/${user.avatarurl}?v=${new Date().getTime()}`;
+  }, [user]);
   useEffect(() => {
     setIsLogin(isLoggedIn());
     const fetchProfile = async () => {
@@ -74,7 +78,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
               >
                 {user.avatarurl ? (
                   <img
-                    src={`http://localhost:9000/avatar-storage/${user.avatarurl}?v=${new Date().getTime()}`}
+                    src={avatarSrc || ""}
                     alt="Avatar"
                     className="w-full h-full object-cover"
                   />

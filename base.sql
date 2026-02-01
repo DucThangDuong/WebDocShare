@@ -76,7 +76,30 @@ CREATE TABLE DocumentTags (
     CONSTRAINT FK_DocTags_Tag FOREIGN KEY (TagId) REFERENCES Tags(Id) ON DELETE CASCADE
 );
 GO
+CREATE TABLE DocumentVotes (
+    UserId INT NOT NULL,
+    DocumentId BIGINT NOT NULL,
+    IsLike BIT NOT NULL, 
+    VotedAt DATETIME DEFAULT GETDATE(),
+    PRIMARY KEY (UserId, DocumentId), 
 
+    CONSTRAINT FK_Votes_User FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE NO ACTION,
+    CONSTRAINT FK_Votes_Doc FOREIGN KEY (DocumentId) REFERENCES Documents(Id) ON DELETE CASCADE
+);
+GO
+CREATE TABLE SavedDocuments (
+    UserId INT NOT NULL,
+    DocumentId BIGINT NOT NULL,
+    SavedAt DATETIME DEFAULT GETDATE(),
+    PRIMARY KEY (UserId, DocumentId),
+
+    CONSTRAINT FK_Saved_User FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE NO ACTION,
+    CONSTRAINT FK_Saved_Doc FOREIGN KEY (DocumentId) REFERENCES Documents(Id) ON DELETE CASCADE
+);
+GO
+
+--==============================Trigger===============================
+--cập nhật storage người dùng khi upload dữ liệu lên
 CREATE TRIGGER trg_UpdateUsedStorage_OnInsert
 ON Documents
 AFTER INSERT
@@ -95,7 +118,7 @@ BEGIN
     END
 END;
 GO
-
+-- cập nhật storage khi người dùng xóa
 CREATE TRIGGER trg_UpdateUsedStorage_OnDelete
 ON Documents
 AFTER DELETE
@@ -108,7 +131,26 @@ BEGIN
     INNER JOIN DELETED d ON u.Id = d.UploaderId;
 END;
 GO
-
+-- cập nhật like/dislike/not
+CREATE TRIGGER trg_UpdateVoteCounts
+ON DocumentVotes
+AFTER INSERT, UPDATE, DELETE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @AffectedDocs TABLE (DocId BIGINT);
+    INSERT INTO @AffectedDocs (DocId)
+    SELECT DocumentId FROM INSERTED
+    UNION
+    SELECT DocumentId FROM DELETED;
+    UPDATE d
+    SET 
+        d.LikeCount = (SELECT COUNT(*) FROM DocumentVotes v WHERE v.DocumentId = d.Id AND v.IsLike = 1),
+        d.DislikeCount = (SELECT COUNT(*) FROM DocumentVotes v WHERE v.DocumentId = d.Id AND v.IsLike = 0)
+    FROM Documents d
+    INNER JOIN @AffectedDocs ad ON d.Id = ad.DocId;
+END;
+GO
 CREATE INDEX IX_Tags_Slug ON Tags(Slug);
 CREATE INDEX IX_Documents_IsDeleted ON Documents(IsDeleted); 
 CREATE INDEX IX_Documents_UploaderId ON Documents(UploaderId);

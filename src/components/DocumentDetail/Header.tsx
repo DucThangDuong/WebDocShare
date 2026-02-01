@@ -11,7 +11,7 @@ export const Header: React.FC<HeaderProps> = ({
   isDownloading = false,
 }) => {
   return (
-    <header className="h-16 flex items-center justify-between px-4 border-b bg-white z-20 shadow-sm top-0 left-0 sticky">
+    <header className="h-16 flex items-center justify-between px-4 border-b bg-white z-20 shadow-sm">
       <div className="flex items-center gap-4 min-w-[200px]">
         <div className="flex items-center justify-center p-2 rounded-lg bg-blue-50 text-blue-600">
           <span className="material-symbols-outlined">description</span>

@@ -26,7 +26,7 @@ const UserProfilePage: React.FC = () => {
     <HomeLayout>
       <div className="bg-background-light font-display text-text-main antialiased min-h-screen flex flex-col">
         <main className="flex-grow w-full max-w-[1280px] mx-auto px-4 md:px-8 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="grid grid-cols-12 gap-8 items-start ">
             {/* Cột trái */}
             <ProfileSidebar />
 
@@ -34,8 +34,8 @@ const UserProfilePage: React.FC = () => {
             <div className="lg:col-span-8 xl:col-span-9 flex flex-col gap-6">
               <UserStats />
               <div className="bg-white rounded-2xl shadow-soft border border-gray-100 overflow-hidden">
-                <div className="border-b border-gray-100 px-6 md:px-8">
-                  <div className="flex gap-8 overflow-x-auto no-scrollbar">
+                <div className="border-b border-gray-100 px-6 ">
+                  <div className="flex gap-8 overflow-x-auto">
                     {[
                       { id: "posted", label: "Tài liệu đã đăng" },
                       { id: "saved", label: "Tài liệu đã lưu" },
@@ -44,7 +44,7 @@ const UserProfilePage: React.FC = () => {
                       <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`py-5 border-b-2 font-medium text-sm transition-colors  whitespace-nowrap ${
+                        className={`py-5 border-b-2 font-medium text-sm duration-300 transition-colors  whitespace-nowrap ${
                           activeTab === tab.id
                             ? "border-primary text-primary font-bold"
                             : "border-transparent text-text-secondary hover:text-text-main"

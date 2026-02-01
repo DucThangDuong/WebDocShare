@@ -1,3 +1,4 @@
+const Minio_url = import.meta.env.VITE_MinIO_URL;
 import React, { useState, useEffect } from "react";
 import { apiClient } from "../services/apiClient";
 import { useParams } from "react-router-dom";
@@ -38,7 +39,7 @@ const PDFDetailView: React.FC = () => {
       }
       setIsDownloading(true);
       const link = document.createElement("a");
-      link.href = `http://localhost:9000/pdf-storage/${pdfUrl}`;
+      link.href = `${Minio_url}/pdf-storage/${pdfUrl}`;
       link.setAttribute("download", docInfor?.title || "document.pdf");
       document.body.appendChild(link);
       link.click();
@@ -65,7 +66,7 @@ const PDFDetailView: React.FC = () => {
             <div className="w-full bg-white border border-gray-300 rounded-lg shadow-sm overflow-hidden h-[800px]">
               {pdfUrl ? (
                 <iframe
-                  src={`http://localhost:9000/pdf-storage/${pdfUrl}#toolbar=0`}
+                  src={`${Minio_url}/pdf-storage/${pdfUrl}#toolbar=0`}
                   title="PDF Viewer"
                   className="w-full h-full border-none"
                 />

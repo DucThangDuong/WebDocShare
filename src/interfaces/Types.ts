@@ -64,6 +64,8 @@ export interface DocumentInfor {
   viewCount: number;
   likeCount: number;
   dislikeCount: number;
+  isLiked: boolean | null;
+  isSaved: boolean | null;
 }
 export class ApiError extends Error {
   status: number;
