@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { useStore } from "../../zustand/store";
-import { apiClient } from "../../services/apiClient";
+import { apiClient } from "../../utils/apiClient";
 import { ApiError, type UserProfilePrivate } from "../../interfaces/Types";
 export const AccountSection: React.FC = () => {
   const { user, setUser } = useStore();

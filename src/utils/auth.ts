@@ -1,4 +1,4 @@
-import { apiClient } from "../services/apiClient";
+import { apiClient } from "./apiClient";
 import type { UserProfilePrivate} from "../interfaces/Types";
 export const getToken = (): string | null => {
   return localStorage.getItem("accessToken");

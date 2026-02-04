@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { apiClient } from "../../services/apiClient";
+import { apiClient } from "../../utils/apiClient";
 import { ApiError } from "../../interfaces/Types";
 
 interface InputFieldProps {
@@ -22,10 +22,7 @@ const InputField = ({
     <label className="block text-sm font-bold text-[#111818] mb-2">
       {label}
     </label>
-    <div
-      className="b-1 w-full flex justify-center items-center rounded-[5px] border border-black 
-              focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary px-2 py-[4px]"
-    >
+    <div className="input">
       <span className="material-symbols-outlined text-[20px]">{icon}</span>
       <input
         className=" text-l font-bold text-left  outline-none bg-transparent w-full p-1"
@@ -232,10 +229,7 @@ export const SecuritySection: React.FC = () => {
       ) : (
         <div className="bg-[#fcfdfd] border-t border-[#f0f4f4] px-6 py-4 flex flex-col items-start gap-3">
           <div className="font-bold text-sm text-[#111818]">Đổi mật khẩu</div>
-          <button
-            onClick={() => setEditPassWord(true)}
-            className="btn-edit "
-          >
+          <button onClick={() => setEditPassWord(true)} className="btn-edit ">
             <span className="material-symbols-outlined ">edit</span>
             Chỉnh sửa mật khẩu
           </button>

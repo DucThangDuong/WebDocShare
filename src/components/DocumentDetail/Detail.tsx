@@ -1,16 +1,17 @@
 const Minio_url = import.meta.env.VITE_MinIO_URL;
 import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import type { DocumentInfor } from "../../interfaces/Types";
-import { apiClient } from "../../services/apiClient";
+import { apiClient } from "../../utils/apiClient";
 
 export const Detail: React.FC<{ docInfor: DocumentInfor | null }> = ({
   docInfor,
 }) => {
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-
   const [voteState, setVoteState] = useState<boolean | null>(null);
   const [likeCount, setLikeCount] = useState<number>(0);
   const [dislikeCount, setDislikeCount] = useState<number>(0);
+
   useEffect(() => {
     if (docInfor) {
       const updateState = () => {
@@ -91,7 +92,7 @@ export const Detail: React.FC<{ docInfor: DocumentInfor | null }> = ({
   }
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+    <div className="card">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex flex-col gap-2">
           <h2 className="text-2xl font-bold text-gray-900">{docInfor.title}</h2>
@@ -126,11 +127,10 @@ export const Detail: React.FC<{ docInfor: DocumentInfor | null }> = ({
           <div className="flex items-center bg-gray-100 rounded-full p-1">
             <button
               onClick={() => handleVote(true)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full transition-colors ${
-                voteState === true
-                  ? "bg-primary/10 text-primary"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full transition-colors ${voteState === true
+                ? "bg-primary/10 text-primary"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
             >
               <span
                 className={`material-symbols-outlined text-[20px] ${voteState === true ? "fill" : ""}`}
@@ -145,11 +145,10 @@ export const Detail: React.FC<{ docInfor: DocumentInfor | null }> = ({
             {/* DISLIKE BUTTON */}
             <button
               onClick={() => handleVote(false)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full transition-colors ${
-                voteState === false
-                  ? "text-red-500 bg-red-50"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full transition-colors ${voteState === false
+                ? "text-red-500 bg-red-50"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
             >
               <span
                 className={`material-symbols-outlined text-[20px] ${voteState === false ? "fill" : ""}`}
@@ -164,11 +163,18 @@ export const Detail: React.FC<{ docInfor: DocumentInfor | null }> = ({
           </button>
         </div>
       </div>
+      <div className="flex flex-wrap gap-2 mt-4">
+        {docInfor.tags?.map((tag) => (
+          <span key={tag} className="text-gray-500 text-sm cursor-pointer hover:text-primary">
+            {"#" + tag + " "}
+          </span>
+        ))}
 
-      <div className="mt-6 pt-6 border-t border-gray-100">
-        <p className="text-gray-600 text-sm leading-relaxed">
-          {docInfor.description}
-        </p>
+        <div className="mt-6 pt-6 border-t border-gray-100">
+          <p className="text-gray-600 text-sm leading-relaxed">
+            {docInfor.description}
+          </p>
+        </div>
       </div>
     </div>
   );

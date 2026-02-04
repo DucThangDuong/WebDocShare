@@ -4,16 +4,16 @@ import { StatsCard } from "../components/MyDocuments/statscard";
 import { FileTable } from "../components/MyDocuments/DocumentList";
 import { UploadModal } from "../components/MyDocuments/UploadModel";
 import type { FileData, UserStorageFile } from "../interfaces/Types";
-import { apiClient } from "../services/apiClient";
+import { apiClient } from "../utils/apiClient";
 import { useStore } from "../zustand/store";
 
 const FilesPage: React.FC = () => {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const { files, setFiles, userStorageFiles, setUserStorageFiles } = useStore();
+  const [totalUpload, settotalupload] = useState<number | null>(0);
 
   useEffect(() => {
     const fetchFiles = apiClient.get<FileData[]>("/documents?skip=0&take=10");
-
     const fetchUserStoragefiles =
       apiClient.get<UserStorageFile>("/user/filedocs");
     Promise.all([fetchFiles, fetchUserStoragefiles])
@@ -25,6 +25,25 @@ const FilesPage: React.FC = () => {
         console.error("Error fetching files or user storage files:", error);
       });
   }, [setFiles, setUserStorageFiles]);
+  useEffect(() => {
+    if (files != null) {
+      const countFilesThisMonth = () => {
+        const now = new Date();
+        const currentMonth = now.getMonth();
+        const currentYear = now.getFullYear();
+        const total = files.filter((file) => {
+          if (!file.createdAt) return false;
+          const fileDate = new Date(file.createdAt);
+          return (
+            fileDate.getMonth() === currentMonth &&
+            fileDate.getFullYear() === currentYear
+          );
+        }).length;
+        settotalupload(total);
+      };
+      countFilesThisMonth();
+    }
+  }, [files]);
 
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return "0 Bytes";
@@ -90,7 +109,7 @@ const FilesPage: React.FC = () => {
               value={
                 userStorageFiles ? userStorageFiles.totalCount.toString() : "0"
               }
-              description="Đã tải lên trong tháng này: 12"
+              description={`Đã tải lên trong tháng này: ${totalUpload}`}
             />
             <StatsCard
               title="Thùng rác"
@@ -107,7 +126,7 @@ const FilesPage: React.FC = () => {
               <h3 className="font-bold text-lg text-[#111318]">
                 Danh sách tệp tin
               </h3>
-              <div className="flex gap-2">
+              {/* <div className="flex gap-2">
                 <button className="p-2 hover:bg-gray-100 rounded text-[#616f89]">
                   <span className="material-symbols-outlined text-[20px]">
                     view_list
@@ -118,7 +137,7 @@ const FilesPage: React.FC = () => {
                     grid_view
                   </span>
                 </button>
-              </div>
+              </div> */}
             </div>
 
             <FileTable files={files} />

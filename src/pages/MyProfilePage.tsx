@@ -3,7 +3,7 @@ import { ProfileSidebar } from "../components/MyProfile/Sidebar";
 import { UserStats } from "../components/MyProfile/UserStat";
 import HomeLayout from "../layouts/HomeLayout";
 import type { DocumentInfor } from "../interfaces/Types";
-import { apiClient } from "../services/apiClient";
+import { apiClient } from "../utils/apiClient";
 import { DocumentItem } from "../components/MyProfile/DocumentItem";
 const UserProfilePage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("posted");

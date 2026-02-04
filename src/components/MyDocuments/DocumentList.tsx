@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom"; // Dùng Link cho SPA mượt hơn
 import type { FileData, UserStorageFile } from "../../interfaces/Types";
-import { apiClient } from "../../services/apiClient";
+import { apiClient } from "../../utils/apiClient";
 import { useStore } from "../../zustand/store";
 interface FileTableProps {
   files: FileData[];
@@ -16,30 +16,12 @@ const formatFileSize = (bytes: number) => {
 };
 export const FileTable: React.FC<FileTableProps> = ({ files }) => {
   const { setFiles, setUserStorageFiles } = useStore();
-  const handleDownload = async (docId: string, fileName: string) => {
-    try {
-      const response = await apiClient.getFile(`/document/download/${docId}`);
-      const url = window.URL.createObjectURL(new Blob([response]));
-      const link = document.createElement("a");
-      link.href = url;
-      const downloadName = fileName.endsWith(".pdf")
-        ? fileName
-        : `${fileName}.pdf`;
-      link.setAttribute("download", downloadName);
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode?.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Lỗi tải file:", error);
-      alert("Không thể tải xuống tài liệu này.");
-    }
-  };
   const handlePatch = async (docId: string) => {
     try {
-      await apiClient.patch(`/document/${docId}`, { isDeleted: true });
+      await apiClient.patch(`/document/movetotrash/${docId}`, {
+        isDeleted: true,
+      });
       const fetchFiles = apiClient.get<FileData[]>("/documents?skip=0&take=10");
-
       const fetchUserStoragefiles =
         apiClient.get<UserStorageFile>("/user/filedocs");
       Promise.all([fetchFiles, fetchUserStoragefiles])
@@ -108,16 +90,16 @@ export const FileTable: React.FC<FileTableProps> = ({ files }) => {
                     url={`/PDFfile/${file.id}`}
                   />
                   <ActionButton
-                    icon="download"
-                    title="Tải xuống"
-                    hoverColor="green"
-                    action={() => handleDownload(file.id, file.title)}
-                  />
-                  <ActionButton
                     icon="delete"
                     title="Xóa"
                     hoverColor="red"
                     action={() => handlePatch(file.id)}
+                  />
+                  <ActionButton
+                    icon="more_vert"
+                    title="Chỉnh sửa"
+                    hoverColor="green"
+                    url={`/edit-document/${file.id}`}
                   />
                 </div>
               </td>

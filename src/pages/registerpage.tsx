@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import RegisterLayout from "../layouts/registerlayout";
-import { apiClient } from "../services/apiClient";
+import { apiClient } from "../utils/apiClient";
 import { InputField } from "../components/inputfield";
 import { ApiError, type UserRegister } from "../interfaces/Types";
 const RegisterPage: React.FC = () => {

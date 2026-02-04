@@ -1,6 +1,6 @@
 const Minio_url = import.meta.env.VITE_MinIO_URL;
 import React, { useState, useEffect } from "react";
-import { apiClient } from "../services/apiClient";
+import { apiClient } from "../utils/apiClient";
 import { useParams } from "react-router-dom";
 import type { DocumentInfor } from "../interfaces/Types";
 import { RelatedDoc } from "../components/DocumentDetail/RealatedDocument";

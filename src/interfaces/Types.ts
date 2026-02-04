@@ -66,6 +66,7 @@ export interface DocumentInfor {
   dislikeCount: number;
   isLiked: boolean | null;
   isSaved: boolean | null;
+  tags: string[] | null;
 }
 export class ApiError extends Error {
   status: number;
@@ -78,7 +79,7 @@ export class ApiError extends Error {
     Object.setPrototypeOf(this, ApiError.prototype);
   }
 }
-export interface UserUpdate{
+export interface UserUpdate {
   fullname?: string;
   avatar?: FormData;
   email?: string;

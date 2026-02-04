@@ -1,73 +1,97 @@
-# React + TypeScript + Vite
+# DocShare - Document Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to **DocShare**, a modern web application for managing, sharing, and viewing documents. This project is built with performance and user experience in mind, utilizing the latest web technologies.
 
-Currently, two official plugins are available:
+## 🚀 Technologies Used
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This project leverages a robust stack of modern technologies:
 
-## React Compiler
+### Core
+-   **[React](https://react.dev/)**: Library for building user interfaces.
+-   **[TypeScript](https://www.typescriptlang.org/)**: Statically typed superset of JavaScript for better developer experience and code quality.
+-   **[Vite](https://vitejs.dev/)**: Next-generation frontend tooling for fast development and building.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### State Management & Data Fetching
+-   **[Zustand](https://github.com/pmndrs/zustand)**: Small, fast, and scalable bearbones state-management solution.
+-   **[TanStack Query (React Query)](https://tanstack.com/query/latest)**: Powerful asynchronous state management for server state.
+-   **[Axios](https://axios-http.com/)**: Promise based HTTP client for the browser and node.js.
 
-## Expanding the ESLint configuration
+### Styling & UI
+-   **[Tailwind CSS](https://tailwindcss.com/)**: A utility-first CSS framework for rapid UI development.
+-   **[Lucide React](https://lucide.dev/)**: Beautiful & consistent icons.
+-   **Material Symbols**: Used for additional UI icons.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Features & Others
+-   **[React Router DOM](https://reactrouter.com/)**: Declarative routing for React applications.
+-   **[React PDF](https://github.com/wojtekmaj/react-pdf)**: Display PDF files in your React application.
+-   **[@microsoft/signalr](https://www.npmjs.com/package/@microsoft/signalr)**: Real-time web functionality.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 📂 Project Structure
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+d:/ts/docshare/
+├── src/
+│   ├── components/  # Reusable UI components
+│   ├── layouts/     # Page layout definitions (Dashboard, etc.)
+│   ├── pages/       # Application pages (Home, Login, MyDocuments, etc.)
+│   ├── interfaces/  # TypeScript type definitions
+│   ├── utils/       # Helper functions and API clients
+│   ├── zustand/     # Global state stores
+│   ├── App.tsx      # Main application component & Routing
+│   └── main.tsx     # Application entry point
+├── public/          # Static assets
+└── ...config files  # Vite, Tailwind, TypeScript configs
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🛠️ Installation & Setup
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Follow these steps to set up the project locally:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Prerequisites
+-   **Node.js**: Ensure you have Node.js installed (v16+ recommended).
+-   **npm** or **yarn**: Package manager.
+
+### Steps
+
+1.  **Clone the repository:**
+    ```bash
+    git clone <your-repo-url>
+    cd docshare
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    # or
+    yarn install
+    ```
+
+3.  **Configure Environment Variables:**
+    Create a `.env` file in the root directory and update it with your API endpoints:
+    ```env
+    VITE_API_URL=http://your-api-url.com/api
+    ```
+
+4.  **Run the development server:**
+    ```bash
+    npm run dev
+    # or
+    yarn dev
+    ```
+    The application will act at `http://localhost:5173` (default).
+
+5.  **Build for production:**
+    ```bash
+    npm run build
+    ```
+
+## 🌟 Key Features
+
+-   **User Authentication**: Secure Login and Registration.
+-   **Document Management**: Upload, view, and organize PDF documents.
+-   **Trash & Recovery**: Safely delete files to a trash bin and restore them if needed.
+-   **Edit Documents**: Update document titles and descriptions.
+-   **Profile Management**: Manage user settings and storage limits.
+
+---
+*Created by Antigravity Assistant*

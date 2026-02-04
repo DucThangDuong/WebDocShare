@@ -11,10 +11,11 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import FilePage from "./pages/MyDocumentsPage";
 import ShowFile from "./pages/DocumentDetailPage";
+import EditDocumentPage from "./pages/EditDocumentPage";
 import { isLoggedIn } from "./utils/auth";
 import { useEffect, useState } from "react";
 import { useStore } from "./zustand/store";
-import { apiClient } from "./services/apiClient";
+import { apiClient } from "./utils/apiClient";
 import type { UserProfilePrivate } from "./interfaces/Types";
 import UserProfile from "./pages/MyProfilePage";
 import AccountSettings from "./pages/AccountSettingPage";
@@ -93,6 +94,7 @@ function App() {
           <Route path="*" element={<Navigate to="/login" replace />} />
           <Route path="/myprofile" element={<UserProfile />} />
           <Route path="/account-settings" element={<AccountSettings />} />
+          <Route path="/edit-document/:docId" element={<EditDocumentPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

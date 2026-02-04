@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import LoginLayout from "../layouts/loginlayout";
-import { apiClient } from "../services/apiClient";
+import { apiClient } from "../utils/apiClient";
 import { InputField } from "../components/inputfield";
 import { useStore } from "../zustand/store";
 import type { UserLogin } from "../interfaces/Types";

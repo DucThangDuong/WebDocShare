@@ -72,16 +72,13 @@ export const apiClient = {
     axiosInstance.delete<T>(url).then((res) => res.data),
   patch: <T>(url: string, data: object) =>
     axiosInstance.patch<T>(url, data).then((res) => res.data),
+  
   postForm: <T>(url: string, data: FormData) =>
-    axiosInstance.post<T>(url, data, {
-      headers: { "Content-Type": "multipart/form-data" },
-    }),
+    axiosInstance.post<T>(url, data),
   getFile: (url: string) =>
     axiosInstance.get(url, { responseType: "blob" }).then((res) => res.data),
   postnodata: <T>(url: string, data: object = {}) =>
     axiosInstance.post<T>(url, data),
   patchForm: <T>(url: string, data: FormData) =>
-    axiosInstance.patch<T>(url, data, {
-      headers: { "Content-Type": "multipart/form-data" },
-    }),
+    axiosInstance.patch<T>(url, data),
 };
