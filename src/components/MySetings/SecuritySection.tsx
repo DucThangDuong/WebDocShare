@@ -22,10 +22,10 @@ const InputField = ({
     <label className="block text-sm font-bold text-[#111818] mb-2">
       {label}
     </label>
-    <div className="input">
+    <div className="input flex ">
       <span className="material-symbols-outlined text-[20px]">{icon}</span>
       <input
-        className=" text-l font-bold text-left  outline-none bg-transparent w-full p-1"
+        className=" text-l font-bold text-left outline-none bg-transparent w-full p-1"
         placeholder={placeholder}
         type={type}
         value={value}
@@ -135,11 +135,10 @@ export const SecuritySection: React.FC = () => {
           <div className="flex flex-col gap-6 max-w-2xl border-b-2 pb-4 border-[#f0f4f4]">
             {(error || success) && (
               <div
-                className={`p-3 rounded-lg text-sm font-medium flex items-center gap-2 ${
-                  error
-                    ? "bg-red-50 text-red-600 border border-red-200"
-                    : "bg-green-50 text-green-600 border border-green-200"
-                }`}
+                className={`p-3 rounded-lg text-sm font-medium flex items-center gap-2 ${error
+                  ? "bg-red-50 text-red-600 border border-red-200"
+                  : "bg-green-50 text-green-600 border border-green-200"
+                  }`}
               >
                 <span className="material-symbols-outlined text-[18px]">
                   {error ? "error" : "check_circle"}

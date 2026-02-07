@@ -28,7 +28,7 @@ export const AccountSection: React.FC = () => {
       if (selectedFile) {
         const formData = new FormData();
         formData.append("avatar", selectedFile);
-        await apiClient.patchForm("/user/update/avatar", formData);
+        await apiClient.patchFormdata("/user/update/avatar", formData);
       }
       if (newName !== user?.fullname) {
         await apiClient.patch("/user/update/profile", { Fullname: newName });
@@ -54,7 +54,7 @@ export const AccountSection: React.FC = () => {
           case 400:
             setError(
               error.message ||
-                "Dữ liệu nhập không hợp lệ. Vui lòng kiểm tra lại.",
+              "Dữ liệu nhập không hợp lệ. Vui lòng kiểm tra lại.",
             );
             break;
           case 409:
@@ -159,9 +159,8 @@ export const AccountSection: React.FC = () => {
         </button>
         {(Error || Success) && (
           <div
-            className={`mt-2 text-sm font-medium flex items-center gap-2 transition-all duration-500 ${
-              Error ? "text-red-600" : "text-green-600"
-            }`}
+            className={`mt-2 text-sm font-medium flex items-center gap-2 transition-all duration-500 ${Error ? "text-red-600" : "text-green-600"
+              }`}
           >
             <span className="material-symbols-outlined text-[20px]">
               {Error ? "error" : "check_circle"}

@@ -6,12 +6,18 @@ import { apiClient } from "../utils/apiClient";
 import type { DocumentInfor } from "../interfaces/Types";
 import EditForm from "../components/EditDocument/EditForm";
 import PreviewPanel from "../components/EditDocument/PreviewPanel";
+
 const EditDocumentPage: React.FC = () => {
   const { docId } = useParams<{ docId: string }>();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [document, setDocument] = useState<DocumentInfor | null>(null);
+
+  // File operation pending states
+  const [pendingFileDelete, setPendingFileDelete] = useState(false);
+  const [pendingNewFile, setPendingNewFile] = useState<File | null>(null);
+
   // Form State
   const [formData, setFormData] = useState({
     title: "",
@@ -19,6 +25,7 @@ const EditDocumentPage: React.FC = () => {
     status: "Public",
     tags: null as string[] | null,
   });
+
 
   useEffect(() => {
     const fetchDocument = async () => {
@@ -53,23 +60,59 @@ const EditDocumentPage: React.FC = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
+      // 1. Handle pending file delete
+      if (pendingFileDelete && document?.id) {
+        await apiClient.delete(`/document/${document.id}/fileUrl`, {});
+      }
+
+      // 2. Update document metadata
       const form = new FormData();
       form.append("Title", formData.title);
       form.append("Description", formData.description);
       form.append("Status", formData.status);
+      if (pendingNewFile && document?.id) {
+        form.append("File", pendingNewFile);
+      }
       if (formData.tags && Array.isArray(formData.tags)) {
-        formData.tags.forEach((tag, index) => {
-          form.append(`Tags[${index}]`, tag);
+        formData.tags.forEach((tag) => {
+          form.append(`Tags`, tag);
         });
       }
-
-      await apiClient.patchForm(`/document/${docId}`, form);
+      await apiClient.patchFormdata(`/document/${docId}`, form);
       navigate("/files");
     } catch (err) {
       console.error("Error updating document:", err);
+      alert("Có lỗi xảy ra khi lưu. Vui lòng thử lại.");
     } finally {
       setSaving(false);
     }
+  };
+
+  // File operation handlers
+  const handleMarkDelete = () => {
+    setPendingFileDelete(true);
+    setPendingNewFile(null); // Clear any pending new file
+  };
+
+  const handleCancelDelete = () => {
+    setPendingFileDelete(false);
+  };
+
+  const handleSelectNewFile = (file: File) => {
+    console.log("file", file);
+    setPendingNewFile(file);
+    setPendingFileDelete(false); // If selecting new file, don't delete
+  };
+
+  const handleCancelNewFile = () => {
+    setPendingNewFile(null);
+  };
+
+  const handleCancel = () => {
+    // Reset all pending changes and go back
+    setPendingFileDelete(false);
+    setPendingNewFile(null);
+    navigate(-1);
   };
 
   if (loading) {
@@ -111,14 +154,22 @@ const EditDocumentPage: React.FC = () => {
                   data={formData}
                   onChange={handleFieldChange}
                   onSave={handleSave}
-                  onCancel={() => navigate(-1)}
+                  onCancel={handleCancel}
                   saving={saving}
                 />
               </div>
 
               {/* Right Column: Preview Panel */}
               <div className="lg:col-span-4 flex flex-col gap-6">
-                <PreviewPanel document={document} />
+                <PreviewPanel
+                  document={document}
+                  pendingDelete={pendingFileDelete}
+                  pendingNewFile={pendingNewFile}
+                  onMarkDelete={handleMarkDelete}
+                  onCancelDelete={handleCancelDelete}
+                  onSelectNewFile={handleSelectNewFile}
+                  onCancelNewFile={handleCancelNewFile}
+                />
               </div>
             </div>
           </div>

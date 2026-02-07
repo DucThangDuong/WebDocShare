@@ -29,7 +29,6 @@ export const UploadModal: React.FC<UploadModalProps> = ({
     updateFileStatus,
   } = useStore();
 
-  // thêm file vào danh sách khi chọn file
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files || files.length === 0) return;
