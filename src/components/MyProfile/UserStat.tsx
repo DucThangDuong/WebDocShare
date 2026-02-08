@@ -1,25 +1,30 @@
 import React from "react";
+import { apiClient } from "../../utils/apiClient";
+import type { ResUserStatsDto } from "../../interfaces/Types";
 
 export const UserStats: React.FC = () => {
-  const stats = [
-    {
-      label: "Tài liệu đã đăng",
-      value: "124",
-      icon: "description",
-      color: "blue",
-    },
-    {
-      label: "Tài liệu đã lưu",
-      value: "45",
-      icon: "bookmark",
-      color: "purple",
-    },
-    { label: "Lượt thích", value: "1.2k", icon: "thumb_up", color: "orange" },
-  ];
+  const [stats, setStats] = React.useState<ResUserStatsDto | null>(null);
 
+  React.useEffect(() => {
+    const fetchStats = async () => {
+      const data = await apiClient.get<ResUserStatsDto>("/document/stats");
+      setStats(data);
+    };
+    fetchStats();
+  }, []);
+
+  if (!stats) {
+    return null;
+  }
+
+  const statItems = [
+    { icon: "upload_file", color: "blue", value: stats.uploadCount, label: "Tài liệu" },
+    { icon: "bookmark", color: "green", value: stats.savedCount, label: "Đã lưu" },
+    { icon: "thumb_up", color: "red", value: stats.totalLikesReceived, label: "lượt thích" },
+  ];
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      {stats.map((stat, idx) => (
+      {statItems.map((stat, idx) => (
         <div
           key={idx}
           className="bg-white p-5 rounded-2xl shadow-soft border border-gray-100 flex items-center gap-4"

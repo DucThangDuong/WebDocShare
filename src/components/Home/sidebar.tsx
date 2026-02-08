@@ -18,18 +18,16 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   return (
     <>
       <div
-        className={`fixed inset-0 z-30 bg-black/40 backdrop-blur-[2px] transition-opacity duration-300 ${
-          isOpen
+        className={`fixed inset-0 z-30 bg-black/40 backdrop-blur-[2px] transition-opacity duration-300 ${isOpen
             ? "opacity-100 visible"
             : "opacity-0 invisible pointer-events-none"
-        }`}
+          }`}
         onClick={onClose}
       />
 
       <aside
-        className={`fixed top-0 left-0 z-40 h-full w-[280px] bg-white border-r border-[#dbdfe6] shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col p-4 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed top-0 left-0 z-40 h-full w-[280px] bg-white border-r border-[#dbdfe6] shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col p-4 ${isOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold px-3">Menu</h2>
@@ -54,9 +52,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             <NavItem
               icon="explore"
               label="Khám phá"
-              url="/kham-pha"
-              active={NavItemActivate === "/kham-pha"}
-              onClick={() => handleItemClick("/kham-pha")}
+              url="/search"
+              active={NavItemActivate === "/search"}
+              onClick={() => handleItemClick("/search")}
             />
             <NavItem
               icon="category"
@@ -73,9 +71,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               onClick={() => handleItemClick("/yeu-thich")}
             />
           </nav>
-
           <div className="h-px bg-[#f0f2f4] w-full shrink-0"></div>
-
           <div>
             <p className="px-3 text-xs font-semibold text-[#616f89] uppercase tracking-wider mb-2">
               Thư viện
@@ -142,9 +138,8 @@ const NavItem = ({
       className={`nav-item ${active ? "nav-item-active" : "nav-item-inactive"}`}
     >
       <span
-        className={`material-symbols-outlined text-[24px] ${
-          !active && "group-hover:scale-110 transition-transform"
-        }`}
+        className={`material-symbols-outlined text-[24px] ${!active && "group-hover:scale-110 transition-transform"
+          }`}
       >
         {icon}
       </span>

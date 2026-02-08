@@ -5,7 +5,9 @@ import HomeLayout from "../layouts/HomeLayout";
 import type { DocumentInfor } from "../interfaces/Types";
 import { apiClient } from "../utils/apiClient";
 import { DocumentItem } from "../components/MyProfile/DocumentItem";
+import { useStore } from "../zustand/store";
 const UserProfilePage: React.FC = () => {
+  const { setNavItemActivate } = useStore();
   const [activeTab, setActiveTab] = useState<string>("posted");
   const [DOCUMENTS, setDOCUMENTS] = useState<DocumentInfor[]>([]);
   useEffect(() => {
@@ -19,7 +21,7 @@ const UserProfilePage: React.FC = () => {
         console.error("Error fetching documents:", error);
       }
     };
-
+    setNavItemActivate("");
     fetchDocuments();
   }, []);
   return (

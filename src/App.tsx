@@ -20,6 +20,7 @@ import type { UserProfilePrivate } from "./interfaces/Types";
 import UserProfile from "./pages/MyProfilePage";
 import AccountSettings from "./pages/AccountSettingPage";
 import "./App.css";
+import SearchPage from "./pages/SearchPage";
 const ProtectedRoute = () => {
   const isAuth = isLoggedIn();
   if (!isAuth) {
@@ -87,8 +88,8 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
         </Route>
         <Route path="/kham-pha" element={<div>Trang khám phá</div>} />
-        <Route path="/settings" element={<div>Trang cài đặt</div>} />
         <Route path="/PDFfile/:docId" element={<ShowFile />} />
+        <Route path="/search" element={<SearchPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/files" element={<FilePage />} />
           <Route path="*" element={<Navigate to="/login" replace />} />

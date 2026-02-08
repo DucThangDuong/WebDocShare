@@ -85,3 +85,8 @@ export interface UserUpdate {
   email?: string;
   password?: string;
 }
+export interface ResUserStatsDto {
+  uploadCount: number;
+  savedCount: number;
+  totalLikesReceived: number;
+}

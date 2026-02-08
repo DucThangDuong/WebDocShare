@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 
 export const Sidebar: React.FC<{
-  NavItemActivate: string;
-  setNavItemActivate: (item: string) => void;
-}> = ({ NavItemActivate, setNavItemActivate }) => {
+  AccountItemActivate: string;
+  setAccountItemActivate: (item: string) => void;
+}> = ({ AccountItemActivate, setAccountItemActivate }) => {
   return (
     <aside className="w-full lg:w-72 flex-shrink-0">
       <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#e5e7eb]">
@@ -11,30 +11,30 @@ export const Sidebar: React.FC<{
           <NavItem
             icon="person"
             label="Tài khoản"
-            active={NavItemActivate === "profile"}
+            active={AccountItemActivate === "profile"}
             url="#"
-            onClick={() => setNavItemActivate("profile")}
+            onClick={() => setAccountItemActivate("profile")}
           />
           <NavItem
             icon="shield"
             label="Bảo mật"
             url="#"
-            active={NavItemActivate === "security"}
-            onClick={() => setNavItemActivate("security")}
+            active={AccountItemActivate === "security"}
+            onClick={() => setAccountItemActivate("security")}
           />
           <NavItem
             icon="notifications"
             label="Thông báo"
             url="#"
-            active={NavItemActivate === "notifications"}
-            onClick={() => setNavItemActivate("notifications")}
+            active={AccountItemActivate === "notifications"}
+            onClick={() => setAccountItemActivate("notifications")}
           />
           <NavItem
             icon="lock"
             label="Quyền riêng tư"
             url="#"
-            active={NavItemActivate === "private"}
-            onClick={() => setNavItemActivate("private")}
+            active={AccountItemActivate === "private"}
+            onClick={() => setAccountItemActivate("private")}
           />
         </nav>
       </div>

@@ -46,25 +46,30 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
           <h2 className="text-xl font-bold cursor-pointer">BrandLogo</h2>
         </div>
 
-        <div className="hidden md:flex flex-1 max-w-[600px] border border-[#dbdfe6] rounded-lg">
-          <label className="flex flex-col w-full h-10">
-            <div className="flex w-full flex-1 items-stretch rounded-lg h-full bg-white focus-within:ring-2 focus-within:ring-primary/50 transition-all">
-              <div className="text-[#616f89] flex items-center justify-center pl-4 rounded-l-lg border-r-0">
-                <span className="material-symbols-outlined text-[20px]">
-                  search
-                </span>
-              </div>
-              <input
-                className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg rounded-l-none border-none bg-transparent focus:outline-0 focus:ring-0 h-full placeholder:text-[#616f89] px-4 pl-2 text-sm font-normal leading-normal text-[#111318]"
-                placeholder="Tìm kiếm nội dung, danh mục..."
-              />
-            </div>
-          </label>
+        <div className="input flex max-w-[400px]">
+          <div className="text-[#616f89] flex items-center justify-center pl-4 rounded-l-lg border-r-0">
+            <span className="material-symbols-outlined text-[20px]">
+              search
+            </span>
+          </div>
+          <input
+            className="text-l font-bold text-left outline-none bg-transparent w-full p-2"
+            placeholder="Tìm kiếm nội dung, danh mục..."
+          />
         </div>
 
         <div className="flex flex-1 justify-end gap-4">
           {isLogin && user ? (
             <div className="flex items-center gap-3">
+              <button
+                className="flex items-center justify-center h-10 w-10 rounded-lg hover:bg-gray-100 text-[#616f89] transition-colors"
+                title="Thông báo"
+              >
+                <span className="material-symbols-outlined relative">
+                  notifications
+                  <span className="absolute -top-1 font-bold right-0 h-2 w-2 rounded-full bg-red-700"></span>
+                </span>
+              </button>
               <div className="hidden md:flex flex-col items-end">
                 <span className="text-sm font-bold text-[#111318] leading-tight">
                   {user.fullname || "Người dùng"}

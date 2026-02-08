@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import DashboardLayout from "../layouts/HomeLayout";
@@ -6,8 +5,10 @@ import { apiClient } from "../utils/apiClient";
 import type { DocumentInfor } from "../interfaces/Types";
 import EditForm from "../components/EditDocument/EditForm";
 import PreviewPanel from "../components/EditDocument/PreviewPanel";
+import { useStore } from "../zustand/store";
 
 const EditDocumentPage: React.FC = () => {
+  const { setNavItemActivate } = useStore();
   const { docId } = useParams<{ docId: string }>();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -25,7 +26,6 @@ const EditDocumentPage: React.FC = () => {
     status: "Public",
     tags: null as string[] | null,
   });
-
 
   useEffect(() => {
     const fetchDocument = async () => {
@@ -51,6 +51,7 @@ const EditDocumentPage: React.FC = () => {
     if (docId) {
       fetchDocument();
     }
+    setNavItemActivate("");
   }, [docId]);
 
   const handleFieldChange = (field: string, value: any) => {

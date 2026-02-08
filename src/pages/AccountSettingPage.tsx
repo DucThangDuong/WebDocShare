@@ -4,7 +4,7 @@ import { AccountSection } from "../components/MySetings/AccountSection";
 import { SecuritySection } from "../components/MySetings/SecuritySection";
 import DashboardLayout from "../layouts/HomeLayout";
 const AccountSettings: React.FC = () => {
-  const [NavItemActivate, setNavItemActivate] = useState("profile");
+  const [AccountItemActivate, setAccountItemActivate] = useState("profile");
   return (
     <DashboardLayout>
       <div className="bg-[#f6f8f8] text-[#111818] min-h-screen flex flex-col font-display overflow-x-hidden">
@@ -17,12 +17,12 @@ const AccountSettings: React.FC = () => {
 
           <div className="flex flex-col lg:flex-row gap-8 px-4">
             <Sidebar
-              NavItemActivate={NavItemActivate}
-              setNavItemActivate={setNavItemActivate}
+              AccountItemActivate={AccountItemActivate}
+              setAccountItemActivate={setAccountItemActivate}
             />
             <div className="flex-1 flex flex-col gap-8">
-              {NavItemActivate === "profile" && <AccountSection />}
-              {NavItemActivate === "security" && <SecuritySection />}
+              {AccountItemActivate === "profile" && <AccountSection />}
+              {AccountItemActivate === "security" && <SecuritySection />}
             </div>
           </div>
         </main>
