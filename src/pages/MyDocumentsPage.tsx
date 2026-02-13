@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import DashboardLayout from "../layouts/HomeLayout";
-import { StatsCard } from "../components/MyDocuments/statscard";
+import { StatsCard } from "../components/MyDocuments/StatsCard";
 import { FileTable } from "../components/MyDocuments/DocumentList";
-import { UploadModal } from "../components/MyDocuments/UploadModel";
+import { UploadModal } from "../components/MyDocuments/UploadModal";
 import type { FileData, UserStorageFile } from "../interfaces/Types";
 import { apiClient } from "../utils/apiClient";
 import { useStore } from "../zustand/store";
@@ -15,7 +15,7 @@ const FilesPage: React.FC = () => {
   useEffect(() => {
     const fetchFiles = apiClient.get<FileData[]>("/documents?skip=0&take=10");
     const fetchUserStoragefiles =
-      apiClient.get<UserStorageFile>("/user/filedocs");
+      apiClient.get<UserStorageFile>("/user/storageDoc");
     Promise.all([fetchFiles, fetchUserStoragefiles])
       .then(([filesData, userStorageFilesData]) => {
         setFiles(filesData);
@@ -95,10 +95,10 @@ const FilesPage: React.FC = () => {
               progress={
                 userStorageFiles
                   ? Math.round(
-                      (userStorageFiles.usedStorage /
-                        userStorageFiles.storageLimit) *
-                        100,
-                    )
+                    (userStorageFiles.usedStorage /
+                      userStorageFiles.storageLimit) *
+                    100,
+                  )
                   : 0
               }
             />

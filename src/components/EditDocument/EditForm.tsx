@@ -7,7 +7,7 @@ interface EditFormProps {
     status: string;
     tags: string[] | null;
   };
-  onChange: (field: string, value: any) => void;
+  onChange: (field: string, value: string | string[]) => void;
   onSave: () => void;
   onCancel: () => void;
   saving: boolean;
@@ -123,7 +123,7 @@ const EditForm: React.FC<EditFormProps> = ({
             {(data.tags || []).map((tag, index) => (
               <span
                 key={index}
-                className="tag-chip bg-[#f6f8f8] dark:bg-gray-700 text-[#111818] dark:text-white dark:border-gray-600"
+                className="tag-chip bg-[#f6f8f8] text-[#111818] py-1"
               >
                 #{tag}
                 <button

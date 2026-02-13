@@ -18,12 +18,12 @@ export const FileTable: React.FC<FileTableProps> = ({ files }) => {
   const { setFiles, setUserStorageFiles } = useStore();
   const handlePatch = async (docId: string) => {
     try {
-      await apiClient.patch(`/document/movetotrash/${docId}`, {
+      await apiClient.patch(`/document/${docId}/movetotrash`, {
         isDeleted: true,
       });
       const fetchFiles = apiClient.get<FileData[]>("/documents?skip=0&take=10");
       const fetchUserStoragefiles =
-        apiClient.get<UserStorageFile>("/user/filedocs");
+        apiClient.get<UserStorageFile>("/user/documents");
       Promise.all([fetchFiles, fetchUserStoragefiles])
         .then(([filesData, userStorageFilesData]) => {
           setFiles(filesData);

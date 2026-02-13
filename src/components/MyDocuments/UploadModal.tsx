@@ -79,7 +79,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
         await apiClient.postForm("/document", formData);
         const fetchFiles = apiClient.get<FileData[]>("/documents");
         const fetchUserStoragefiles = apiClient.get<UserStorageFile>(
-          "/user/filedocs?skip=0&take=10",
+          "/user/storageDoc",
         );
         Promise.all([fetchFiles, fetchUserStoragefiles])
           .then(([filesData, userStorageFilesData]) => {

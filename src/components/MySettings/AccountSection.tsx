@@ -1,3 +1,4 @@
+const Minio_url = import.meta.env.VITE_MinIO_URL;
 import React, { useState, useRef } from "react";
 import { useStore } from "../../zustand/store";
 import { apiClient } from "../../utils/apiClient";
@@ -54,7 +55,7 @@ export const AccountSection: React.FC = () => {
           case 400:
             setError(
               error.message ||
-              "Dữ liệu nhập không hợp lệ. Vui lòng kiểm tra lại.",
+                "Dữ liệu nhập không hợp lệ. Vui lòng kiểm tra lại.",
             );
             break;
           case 409:
@@ -70,8 +71,10 @@ export const AccountSection: React.FC = () => {
     }
   };
   const displayAvatar = avatarPreview
-    ? `url("${avatarPreview}")`
-    : `url("http://localhost:9000/avatar-storage/${user?.avatarurl}?v=${new Date().getTime()}")`;
+    ? avatarPreview
+    : user?.isGoogle
+      ? user.avatarurl
+      : `${Minio_url}/avatar-storage/${user?.avatarurl}?v=${new Date().getTime()}`;
   return (
     <section className="bg-white rounded-2xl shadow-sm border border-[#e5e7eb] overflow-hidden">
       <div className="border-b border-[#f0f4f4] px-6 py-4">
@@ -131,7 +134,7 @@ export const AccountSection: React.FC = () => {
           <div className="relative group mb-4">
             <div
               className="w-52 h-52 rounded-full bg-cover bg-center shadow-md ring-4 ring-white transition-all duration-300"
-              style={{ backgroundImage: displayAvatar }}
+              style={{ backgroundImage: ` url("${displayAvatar}")` }}
             ></div>
             <input
               type="file"
@@ -159,8 +162,9 @@ export const AccountSection: React.FC = () => {
         </button>
         {(Error || Success) && (
           <div
-            className={`mt-2 text-sm font-medium flex items-center gap-2 transition-all duration-500 ${Error ? "text-red-600" : "text-green-600"
-              }`}
+            className={`mt-2 text-sm font-medium flex items-center gap-2 transition-all duration-500 ${
+              Error ? "text-red-600" : "text-green-600"
+            }`}
           >
             <span className="material-symbols-outlined text-[20px]">
               {Error ? "error" : "check_circle"}

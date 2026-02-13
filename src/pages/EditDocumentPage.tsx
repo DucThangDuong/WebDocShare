@@ -54,7 +54,7 @@ const EditDocumentPage: React.FC = () => {
     setNavItemActivate("");
   }, [docId]);
 
-  const handleFieldChange = (field: string, value: any) => {
+  const handleFieldChange = (field: string, value: string | string[] | null) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -92,7 +92,7 @@ const EditDocumentPage: React.FC = () => {
   // File operation handlers
   const handleMarkDelete = () => {
     setPendingFileDelete(true);
-    setPendingNewFile(null); // Clear any pending new file
+    setPendingNewFile(null);
   };
 
   const handleCancelDelete = () => {
@@ -102,7 +102,7 @@ const EditDocumentPage: React.FC = () => {
   const handleSelectNewFile = (file: File) => {
     console.log("file", file);
     setPendingNewFile(file);
-    setPendingFileDelete(false); // If selecting new file, don't delete
+    setPendingFileDelete(false);
   };
 
   const handleCancelNewFile = () => {
@@ -110,7 +110,6 @@ const EditDocumentPage: React.FC = () => {
   };
 
   const handleCancel = () => {
-    // Reset all pending changes and go back
     setPendingFileDelete(false);
     setPendingNewFile(null);
     navigate(-1);

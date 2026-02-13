@@ -41,16 +41,14 @@ const UserProfilePage: React.FC = () => {
                     {[
                       { id: "posted", label: "Tài liệu đã đăng" },
                       { id: "saved", label: "Tài liệu đã lưu" },
-                      { id: "activity", label: "Hoạt động gần đây" },
                     ].map((tab) => (
                       <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`py-5 border-b-2 font-medium text-sm duration-300 transition-colors  whitespace-nowrap ${
-                          activeTab === tab.id
-                            ? "border-primary text-primary font-bold"
-                            : "border-transparent text-text-secondary hover:text-text-main"
-                        }`}
+                        className={`py-5 border-b-2 font-medium text-sm duration-300 transition-colors  whitespace-nowrap ${activeTab === tab.id
+                          ? "border-primary text-primary font-bold"
+                          : "border-transparent text-text-secondary hover:text-text-main"
+                          }`}
                       >
                         {tab.label}
                       </button>

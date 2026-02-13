@@ -13,6 +13,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   const { user, isLogin, setUser, setIsLogin } = useStore((state) => state);
   const avatarSrc = useMemo(() => {
     if (!user?.avatarurl) return null;
+    if(user.isGoogle==true) return user.avatarurl;
     return `${Minio_url}/avatar-storage/${user.avatarurl}?v=${new Date().getTime()}`;
   }, [user]);
   useEffect(() => {

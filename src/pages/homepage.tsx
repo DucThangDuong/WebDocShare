@@ -1,6 +1,6 @@
 import React from 'react';
 import DashboardLayout from '../layouts/HomeLayout';
-import NewsCard from '../components/Home/newscard';
+import NewsCard from '../components/Home/NewsCard';
 
 const HomePage: React.FC = () => {
   return (
@@ -17,21 +17,21 @@ const HomePage: React.FC = () => {
 
         {/* Feature Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <FeatureCard 
-            icon="rocket_launch" 
-            title="Dự án mới" 
+          <FeatureCard
+            icon="rocket_launch"
+            title="Dự án mới"
             desc="Bắt đầu một hành trình sáng tạo mới ngay lập tức."
             colorClass="text-primary bg-primary/10 group-hover:bg-primary"
           />
-          <FeatureCard 
-            icon="monitoring" 
-            title="Thống kê" 
+          <FeatureCard
+            icon="monitoring"
+            title="Thống kê"
             desc="Xem xét hiệu suất và dữ liệu phân tích của bạn."
             colorClass="text-green-600 bg-green-500/10 group-hover:bg-green-600"
           />
-          <FeatureCard 
-            icon="groups" 
-            title="Cộng đồng" 
+          <FeatureCard
+            icon="groups"
+            title="Cộng đồng"
             desc="Kết nối với những người sáng tạo khác."
             colorClass="text-purple-600 bg-purple-500/10 group-hover:bg-purple-600"
           />
@@ -45,30 +45,30 @@ const HomePage: React.FC = () => {
           <a className="text-primary text-sm font-medium hover:underline" href="#">Xem tất cả</a>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-           <NewsCard 
-             image="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=500&q=60"
-             category="Công nghệ" categoryColor="blue" time="2 giờ trước"
-             title="Tương lai của AI trong thiết kế"
-             description="Khám phá cách trí tuệ nhân tạo đang thay đổi cách chúng ta làm việc."
-           />
-           <NewsCard 
-             image="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=500&q=60"
-             category="Đời sống" categoryColor="green" time="5 giờ trước"
-             title="Cân bằng công việc và cuộc sống"
-             description="Mẹo nhỏ giúp bạn làm việc hiệu quả mà không bị kiệt sức."
-           />
-           <NewsCard 
-             image="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=500&q=60"
-             category="Lập trình" categoryColor="purple" time="1 ngày trước"
-             title="Web 3.0 là gì?"
-             description="Tìm hiểu về thế hệ tiếp theo của internet và blockchain."
-           />
-           <NewsCard 
-             image="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=500&q=60"
-             category="Sáng tạo" categoryColor="orange" time="2 ngày trước"
-             title="Xu hướng màu sắc 2024"
-             description="Những bảng màu sẽ thống trị thiết kế trong năm tới."
-           />
+          <NewsCard
+            image="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=500&q=60"
+            category="Công nghệ" categoryColor="blue" time="2 giờ trước"
+            title="Tương lai của AI trong thiết kế"
+            description="Khám phá cách trí tuệ nhân tạo đang thay đổi cách chúng ta làm việc."
+          />
+          <NewsCard
+            image="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=500&q=60"
+            category="Đời sống" categoryColor="green" time="5 giờ trước"
+            title="Cân bằng công việc và cuộc sống"
+            description="Mẹo nhỏ giúp bạn làm việc hiệu quả mà không bị kiệt sức."
+          />
+          <NewsCard
+            image="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=500&q=60"
+            category="Lập trình" categoryColor="purple" time="1 ngày trước"
+            title="Web 3.0 là gì?"
+            description="Tìm hiểu về thế hệ tiếp theo của internet và blockchain."
+          />
+          <NewsCard
+            image="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=500&q=60"
+            category="Sáng tạo" categoryColor="orange" time="2 ngày trước"
+            title="Xu hướng màu sắc 2024"
+            description="Những bảng màu sẽ thống trị thiết kế trong năm tới."
+          />
         </div>
       </section>
 

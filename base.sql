@@ -15,6 +15,7 @@ CREATE TABLE Users (
     Username VARCHAR(50) NOT NULL UNIQUE,
     Email VARCHAR(100) NOT NULL UNIQUE,
     PasswordHash VARCHAR(255) NOT NULL, 
+    GoogleId VARCHAR(255),
     FullName NVARCHAR(100),
     CreatedAt DATETIME NOT NULL DEFAULT GETDATE(),
     RefreshToken VARCHAR(256),
@@ -22,6 +23,8 @@ CREATE TABLE Users (
     Role VARCHAR(50) DEFAULT 'User' CHECK(Role IN ('User','Admin')),
     AvatarUrl VARCHAR(255) DEFAULT 'default-avatar.jpg',
     IsActive BIT DEFAULT 1,
+
+
     StorageLimit BIGINT NOT NULL DEFAULT 5368709120, 
     UsedStorage BIGINT NOT NULL DEFAULT 0
 );
@@ -48,6 +51,8 @@ CREATE TABLE Documents (
     
     FileUrl NVARCHAR(500) NOT NULL,
     SizeInBytes BIGINT NOT NULL, 
+    Thumbnail NVARCHAR(500),
+    PageCount int ,
     
     UploaderId INT NOT NULL,
     CategoryId INT, 

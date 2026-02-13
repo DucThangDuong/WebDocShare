@@ -1,8 +1,10 @@
+const BASE_URL = import.meta.env.VITE_API_URL;
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import LoginLayout from "../layouts/loginlayout";
+import { GoogleLogin } from "@react-oauth/google";
+import LoginLayout from "../layouts/LoginLayout";
 import { apiClient } from "../utils/apiClient";
-import { InputField } from "../components/inputfield";
+import { InputField } from "../components/InputField";
 import { useStore } from "../zustand/store";
 import type { UserLogin } from "../interfaces/Types";
 
@@ -14,6 +16,25 @@ const LoginPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const { NavItemActivate } = useStore();
 
+  const handleGoogleExample = async (credential: string) => {
+    try {
+      setIsLoading(true);
+      const data = await apiClient.post<{ accessToken: string }>(
+        `${BASE_URL}/google-login`,
+        {
+          IdToken: credential,
+        },
+      );
+      localStorage.setItem("accessToken", data.accessToken);
+      navigate(NavItemActivate || "/");
+    } catch (err) {
+      console.log(err);
+      setError("Đăng nhập bằng Google thất bại.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -21,7 +42,7 @@ const LoginPage: React.FC = () => {
     const userlogin: UserLogin = { email, password };
     try {
       const data = await apiClient.post<{ accessToken: string }>(
-        "/login",
+        `${BASE_URL}/login`,
         userlogin
       );
       localStorage.setItem("accessToken", data.accessToken);
@@ -47,31 +68,19 @@ const LoginPage: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <button
-              className="flex items-center justify-center gap-3 h-12 rounded-lg border border-[#e5e7eb] hover:bg-gray-50 transition-colors"
-              type="button"
-            >
-              <img
-                alt="Google"
-                className="w-5 h-5"
-                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
+          <div className="grid grid-cols-1 gap-4">
+            <div className="flex justify-center">
+              <GoogleLogin
+                onSuccess={(credentialResponse) => {
+                  if (credentialResponse.credential) {
+                    handleGoogleExample(credentialResponse.credential);
+                  }
+                }}
+                onError={() => {
+                  setError("Đăng nhập bằng Google thất bại.");
+                }}
               />
-              <span className="text-sm font-medium text-black">Google</span>
-            </button>
-            <button
-              className="flex items-center justify-center gap-3 h-12 rounded-lg border border-[#e5e7eb] hover:bg-gray-50 transition-colors"
-              type="button"
-            >
-              <img
-                alt="Facebook"
-                className="w-5 h-5"
-                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg"
-              />
-              <span className="text-sm font-medium text-[#111318]">
-                Facebook
-              </span>
-            </button>
+            </div>
           </div>
 
           {error && (
@@ -130,10 +139,9 @@ const LoginPage: React.FC = () => {
             <button
               disabled={isLoading}
               className={`flex w-full items-center justify-center rounded-lg h-12 px-4 text-white text-base font-bold transition-all shadow-md mt-2 
-                ${
-                  isLoading
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-primary hover:bg-blue-700 hover:shadow-lg"
+                ${isLoading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-primary hover:bg-blue-700 hover:shadow-lg"
                 }`}
             >
               {isLoading ? (

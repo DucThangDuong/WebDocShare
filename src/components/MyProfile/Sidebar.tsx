@@ -2,14 +2,16 @@ const Minio_url = import.meta.env.VITE_MinIO_URL;
 import { useStore } from "../../zustand/store";
 export const ProfileSidebar = () => {
   const { user } = useStore();
-  const displayAvatar = `url("${Minio_url}/avatar-storage/${user?.avatarurl}?v=${new Date().getTime()}")`;
+  const displayAvatar = user?.isGoogle
+    ? user.avatarurl
+    : `${Minio_url}/avatar-storage/${user?.avatarurl}?v=${new Date().getTime()}`;
   return (
     <aside className="lg:col-span-4 xl:col-span-3 flex flex-col gap-6 ">
       <div className="bg-white rounded-2xl p-6 shadow-soft border border-gray-100 flex flex-col items-center text-center">
         <div className="relative group mb-4">
           <div
             className="w-32 h-32 rounded-full bg-cover bg-center shadow-md ring-4 ring-white transition-all duration-300"
-            style={{ backgroundImage: displayAvatar }}
+            style={{ backgroundImage: `url("${displayAvatar}")` }}
           ></div>
         </div>
 

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { apiClient } from "../utils/apiClient";
 import { useParams } from "react-router-dom";
 import type { DocumentInfor } from "../interfaces/Types";
-import { RelatedDoc } from "../components/DocumentDetail/RealatedDocument";
+import { RelatedDoc } from "../components/DocumentDetail/RelatedDocument";
 import { Detail } from "../components/DocumentDetail/Detail";
 import { Header } from "../components/DocumentDetail/Header";
 import DashboardLayout from "../layouts/HomeLayout";
@@ -38,15 +38,25 @@ const PDFDetailView: React.FC = () => {
         return;
       }
       setIsDownloading(true);
+      const fileUrl = `${Minio_url}/pdf-storage/${pdfUrl}`;
+      const response = await fetch(fileUrl);
+      if (!response.ok) throw new Error("Không thể tải file từ server");
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
-      link.href = `${Minio_url}/pdf-storage/${pdfUrl}`;
-      link.setAttribute("download", docInfor?.title || "document.pdf");
+      link.href = blobUrl;
+      const fileName = docInfor?.title
+        ? `${docInfor.title.replace(/\s+/g, "_")}.pdf`
+        : "document.pdf";
+
+      link.setAttribute("download", fileName);
       document.body.appendChild(link);
       link.click();
-
       link.parentNode?.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
     } catch (error) {
       console.error("Lỗi tải file:", error);
+      alert("Có lỗi xảy ra khi tải tệp tin. Vui lòng thử lại.");
     } finally {
       setIsDownloading(false);
     }

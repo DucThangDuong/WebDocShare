@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Sidebar } from "../components/MySetings/SideBar";
-import { AccountSection } from "../components/MySetings/AccountSection";
-import { SecuritySection } from "../components/MySetings/SecuritySection";
+import { Sidebar } from "../components/MySettings/SideBar";
+import { AccountSection } from "../components/MySettings/AccountSection";
+import { SecuritySection } from "../components/MySettings/SecuritySection";
 import DashboardLayout from "../layouts/HomeLayout";
 const AccountSettings: React.FC = () => {
   const [AccountItemActivate, setAccountItemActivate] = useState("profile");

@@ -41,6 +41,7 @@ export interface UserProfilePrivate extends UserProfilePublic {
   email: string;
   storagelimit: number;
   usedstorage: number;
+  isGoogle:boolean;
 }
 export interface UserLogin {
   email: string;
@@ -66,7 +67,14 @@ export interface DocumentInfor {
   dislikeCount: number;
   isLiked: boolean | null;
   isSaved: boolean | null;
+  thumbnail: string | null;
+  pageCount: number;
   tags: string[] | null;
+}
+export interface Tag {
+  id: number;
+  name: string;
+  slug: string;
 }
 export class ApiError extends Error {
   status: number;

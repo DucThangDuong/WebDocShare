@@ -1,9 +1,12 @@
+const BASE_URL = import.meta.env.VITE_API_URL;
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import RegisterLayout from "../layouts/registerlayout";
+import { GoogleLogin } from "@react-oauth/google";
+import RegisterLayout from "../layouts/RegisterLayout";
 import { apiClient } from "../utils/apiClient";
-import { InputField } from "../components/inputfield";
+import { InputField } from "../components/InputField";
 import { ApiError, type UserRegister } from "../interfaces/Types";
+
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
 
@@ -13,7 +16,27 @@ const RegisterPage: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null | React.ReactNode>(null);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const handleGoogleExample = async (credential: string) => {
+    try {
+      setIsLoading(true);
+      const data = await apiClient.post<{ accessToken: string }>(
+        `${BASE_URL}/google-login`,
+        {
+          IdToken: credential,
+        },
+      );
+      localStorage.setItem("accessToken", data.accessToken);
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+      setError("Đăng nhập bằng Google thất bại.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,14 +53,25 @@ const RegisterPage: React.FC = () => {
     };
     try {
       await apiClient.postnodata("/register", userregister);
-      navigate("/login");
+      setIsSuccess(true);
     } catch (err: unknown) {
       if (err instanceof ApiError) {
         const status = err.status;
         const message = err.message || "Lỗi xảy ra";
         switch (status) {
           case 409:
-            setError("Email này đã được đăng ký. Bạn có muốn đăng nhập không?");
+            setError(
+              <span>
+                Email này đã được đăng ký. Bạn có muốn{" "}
+                <Link
+                  to="/login"
+                  className="text-primary font-bold underline hover:text-primary/80 transition-colors"
+                >
+                  đăng nhập
+                </Link>{" "}
+                không?
+              </span>,
+            );
             break;
           case 400:
             setError(message);
@@ -60,6 +94,35 @@ const RegisterPage: React.FC = () => {
       setIsLoading(false);
     }
   };
+
+  if (isSuccess) {
+    return (
+      <RegisterLayout>
+        <div className="w-full max-w-[520px] bg-white rounded-xl shadow-sm border border-[#e5e7eb] p-6 md:p-8 text-center">
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <span className="material-symbols-outlined text-3xl text-green-600">
+              check_circle
+            </span>
+          </div>
+          <h1 className="text-[#111318] text-2xl font-black tracking-tight mb-3">
+            Đăng ký thành công!
+          </h1>
+          <p className="text-[#616f89] text-base mb-8">
+            Tài khoản của bạn đã được khởi tạo. Vui lòng đăng nhập để bắt đầu sử dụng dịch vụ.
+          </p>
+          <button
+            onClick={() => navigate("/login")}
+            className="w-full h-12 bg-primary text-white text-base font-bold rounded-lg hover:bg-blue-700 hover:shadow-lg transition-all shadow-md flex items-center justify-center gap-2"
+          >
+            <span>Đến trang đăng nhập</span>
+            <span className="material-symbols-outlined text-sm">
+              arrow_forward
+            </span>
+          </button>
+        </div>
+      </RegisterLayout>
+    );
+  }
 
   return (
     <RegisterLayout>
@@ -149,10 +212,9 @@ const RegisterPage: React.FC = () => {
             type="submit"
             disabled={isLoading}
             className={`mt-4 w-full h-12 text-white text-base font-bold rounded-lg transition-all shadow-md flex items-center justify-center gap-2
-              ${
-                isLoading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-primary hover:bg-blue-700 hover:shadow-lg"
+              ${isLoading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-primary hover:bg-blue-700 hover:shadow-lg"
               }`}
           >
             {isLoading ? (
@@ -180,29 +242,19 @@ const RegisterPage: React.FC = () => {
           <div className="flex-grow border-t border-[#e5e7eb]"></div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <button
-            className="flex items-center justify-center gap-3 h-12 rounded-lg border border-[#e5e7eb] hover:bg-gray-50 transition-colors"
-            type="button"
-          >
-            <img
-              alt="Google"
-              className="w-5 h-5"
-              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
+        <div className="grid grid-cols-1 gap-4">
+          <div className="flex justify-center">
+            <GoogleLogin
+              onSuccess={(credentialResponse) => {
+                if (credentialResponse.credential) {
+                  handleGoogleExample(credentialResponse.credential);
+                }
+              }}
+              onError={() => {
+                setError("Đăng nhập bằng Google thất bại.");
+              }}
             />
-            <span className="text-sm font-medium text-[#111318]">Google</span>
-          </button>
-          <button
-            className="flex items-center justify-center gap-3 h-12 rounded-lg border border-[#e5e7eb] hover:bg-gray-50 transition-colors"
-            type="button"
-          >
-            <img
-              alt="Facebook"
-              className="w-5 h-5"
-              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg"
-            />
-            <span className="text-sm font-medium text-[#111318]">Facebook</span>
-          </button>
+          </div>
         </div>
 
         {/* Footer Link */}
