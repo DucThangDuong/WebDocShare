@@ -19,8 +19,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     <>
       <div
         className={`fixed inset-0 z-30 bg-black/40 backdrop-blur-[2px] transition-opacity duration-300 ${isOpen
-            ? "opacity-100 visible"
-            : "opacity-0 invisible pointer-events-none"
+          ? "opacity-100 visible"
+          : "opacity-0 invisible pointer-events-none"
           }`}
         onClick={onClose}
       />
@@ -33,7 +33,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           <h2 className="text-xl font-bold px-3">Menu</h2>
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-gray-100 text-[#616f89]"
+            className="p-2 rounded-full hover:bg-gray-100 text-muted"
             title="Đóng menu"
           >
             <span className="material-symbols-outlined">close</span>
@@ -73,7 +73,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           </nav>
           <div className="h-px bg-[#f0f2f4] w-full shrink-0"></div>
           <div>
-            <p className="px-3 text-xs font-semibold text-[#616f89] uppercase tracking-wider mb-2">
+            <p className="px-3 text-xs font-semibold text-muted uppercase tracking-wider mb-2">
               Thư viện
             </p>
             <nav className="flex flex-col gap-1">

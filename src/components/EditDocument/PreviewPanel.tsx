@@ -1,6 +1,7 @@
 const Minio_url = import.meta.env.VITE_MinIO_URL;
 import React, { useRef } from "react";
 import type { DocumentInfor } from "../../interfaces/Types";
+import { formatFileSize } from "../../utils/formatUtils";
 
 interface PreviewPanelProps {
   document: DocumentInfor | null;
@@ -27,16 +28,6 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({
 
   const hasFile = !!document.fileUrl;
   const showFilePreview = (hasFile && !pendingDelete) || pendingNewFile;
-
-  const formatSize = (size: string | number) => {
-    const bytes = Number(size);
-    if (!bytes || isNaN(bytes)) return String(size);
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
-    const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("vi-VN");
@@ -88,7 +79,7 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({
         {/* File Details */}
         <div className="flex flex-col gap-3 border-t border-[#dbe6e6] dark:border-gray-700 pt-4">
           <div className="flex justify-between items-center text-sm">
-            <span className="text-[#618989]">Loại tệp:</span>
+            <span className="text-muted-alt">Loại tệp:</span>
             <span className="text-[#111818] dark:text-white font-medium flex items-center gap-1">
               <span className="material-symbols-outlined text-red-500 text-[18px]">
                 picture_as_pdf
@@ -97,19 +88,19 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({
             </span>
           </div>
           <div className="flex justify-between items-center text-sm">
-            <span className="text-[#618989]">Kích thước:</span>
+            <span className="text-muted-alt">Kích thước:</span>
             <span className="text-[#111818] dark:text-white font-medium">
-              {formatSize(document.sizeInBytes)}
+              {formatFileSize(Number(document.sizeInBytes) || 0)}
             </span>
           </div>
           <div className="flex justify-between items-center text-sm">
-            <span className="text-[#618989]">Ngày tải lên:</span>
+            <span className="text-muted-alt">Ngày tải lên:</span>
             <span className="text-[#111818] dark:text-white font-medium">
               {formatDate(document.createdAt)}
             </span>
           </div>
           <div className="flex justify-between items-center text-sm">
-            <span className="text-[#618989]">Số trang:</span>
+            <span className="text-muted-alt">Số trang:</span>
             <span className="text-[#111818] dark:text-white font-medium">
               {document.pageCount}
             </span>
@@ -159,7 +150,7 @@ const PreviewPanel: React.FC<PreviewPanelProps> = ({
                 Tệp mới đã chọn
               </div>
               <p className="text-xs text-gray-600 dark:text-gray-400 truncate mb-2">
-                {pendingNewFile.name} ({formatSize(pendingNewFile.size)})
+                {pendingNewFile.name} ({formatFileSize(pendingNewFile.size)})
               </p>
               <button
                 type="button"

@@ -79,6 +79,10 @@ const LoginPage: React.FC = () => {
                 onError={() => {
                   setError("Đăng nhập bằng Google thất bại.");
                 }}
+                size="large"
+                width="400"
+                text="signin_with"
+                shape="rectangular"
               />
             </div>
           </div>

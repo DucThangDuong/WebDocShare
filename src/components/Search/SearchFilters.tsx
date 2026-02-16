@@ -5,13 +5,13 @@ import type { Tag } from '../../interfaces/Types';
 interface SearchFiltersProps {
     selectedFilter?: number;
     onFilterSelect?: (filter: number) => void;
-    tags:Tag[];
+    tags: Tag[];
 }
 
-const SearchFilters: React.FC<SearchFiltersProps> = ({ selectedFilter, onFilterSelect,tags }) => {
+const SearchFilters: React.FC<SearchFiltersProps> = ({ selectedFilter, onFilterSelect, tags }) => {
     return (
         <div className="flex flex-wrap items-center gap-2">
-            <span className="text-sm font-medium text-[#616f89] dark:text-[#94a3b8] mr-2">Tags:</span>
+            <span className="text-sm font-medium text-muted dark:text-[#94a3b8] mr-2">Tags:</span>
             {tags.map((filter) => (
                 <button
                     key={filter.id}

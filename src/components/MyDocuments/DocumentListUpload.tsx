@@ -38,7 +38,7 @@ export default function DocumentListUpload({
       setTempEditData({ ...fileList[index].metaData });
     }
   };
-  const handleInputChange = (field: keyof FileDocument, value: string) => {
+  const handleInputChange = (field: keyof FileDocument, value: string | string[]) => {
     if (tempEditData) {
       setTempEditData({ ...tempEditData, [field]: value });
     }
@@ -68,7 +68,7 @@ export default function DocumentListUpload({
   return (
     fileList.length > 0 && (
       <div className="flex flex-col gap-3 animate-in slide-in-from-top-2 duration-300">
-        <h3 className="text-sm font-semibold text-[#111318] uppercase tracking-wider mb-1">
+        <h3 className="text-sm font-semibold text-body uppercase tracking-wider mb-1">
           Danh sách tệp ({fileList.length})
         </h3>
         {/* vòng lặp hiện các file đã up lên */}
@@ -97,12 +97,12 @@ export default function DocumentListUpload({
                 <div className="flex flex-col justify-center flex-1 min-w-0 gap-1">
                   {/* tên file */}
                   <div className="flex justify-between items-center">
-                    <p className="text-[#111318] text-sm font-medium line-clamp-1">
+                    <p className="text-body text-sm font-medium line-clamp-1">
                       {item.metaData.title || item.file.name}
                     </p>
                     <button
                       onClick={(e) => handleRemoveFile(e, index)}
-                      className="text-[#616f89] hover:text-red-500 p-1 rounded-full hover:bg-red-50 transition-colors z-20"
+                      className="text-muted hover:text-red-500 p-1 rounded-full hover:bg-red-50 transition-colors z-20"
                     >
                       <span className="material-symbols-outlined text-[20px]">
                         close
@@ -113,7 +113,7 @@ export default function DocumentListUpload({
                   <div className="flex flex-col gap-1 w-full mt-1">
                     <div className="flex items-center justify-between text-xs">
                       {/* Dung lượng file */}
-                      <span className="text-[#616f89] font-medium">
+                      <span className="text-muted font-medium">
                         {formatFileSize(item.file.size)}
                       </span>
                       {/* Trạng thái Upload */}
@@ -204,10 +204,10 @@ export default function DocumentListUpload({
                                 handleInputChange("status", "Public")
                               }
                             />
-                            <span className="w-5 h-5 rounded-full border border-[#dbdfe6] peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center mr-2 transition-all">
-                              <span className="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100"></span>
+                            <span className="radio-dot">
+                              <span className="radio-dot-inner"></span>
                             </span>
-                            <span className="text-[#111318] group-hover:text-primary transition-colors flex items-center gap-2">
+                            <span className="radio-label">
                               <span className="material-symbols-outlined text-[20px]">
                                 public
                               </span>
@@ -224,10 +224,10 @@ export default function DocumentListUpload({
                                 handleInputChange("status", "Private")
                               }
                             />
-                            <span className="w-5 h-5 rounded-full border border-[#dbdfe6] peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center mr-2 transition-all">
-                              <span className="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100"></span>
+                            <span className="radio-dot">
+                              <span className="radio-dot-inner"></span>
                             </span>
-                            <span className="text-[#111318] group-hover:text-primary transition-colors flex items-center gap-2">
+                            <span className="radio-label">
                               <span className="material-symbols-outlined text-[20px]">
                                 lock
                               </span>
@@ -245,7 +245,6 @@ export default function DocumentListUpload({
                       </label>
                       <div className="input min-h-[56px] flex flex-wrap gap-2 ">
                         {tempEditData.tags
-                          .split(",")
                           .filter((t: string) => t.trim())
                           .map((tag: string, tagIndex: number) => (
                             <span
@@ -256,11 +255,9 @@ export default function DocumentListUpload({
                               <button
                                 type="button"
                                 onClick={() => {
-                                  const tagsArr = tempEditData.tags
-                                    .split(",")
-                                    .filter((t: string) => t.trim());
-                                  tagsArr.splice(tagIndex, 1);
-                                  handleInputChange("tags", tagsArr.join(","));
+                                  const newTags = [...tempEditData.tags];
+                                  newTags.splice(tagIndex, 1);
+                                  handleInputChange("tags", newTags);
                                 }}
                                 className="ml-1.5 hover:text-red-500 flex items-center justify-center"
                               >
@@ -272,7 +269,7 @@ export default function DocumentListUpload({
                           ))}
 
                         <input
-                          className="flex-1 bg-transparent border-none focus:ring-0 text-[#111318] placeholder:text-[#9ca3af] min-w-[120px] outline-none"
+                          className="tag-input-inline"
                           placeholder="Thêm thẻ mới..."
                           type="text"
                           onKeyDown={(e) => {
@@ -280,10 +277,7 @@ export default function DocumentListUpload({
                               e.preventDefault();
                               const val = e.currentTarget.value.trim();
                               if (val) {
-                                const currentTags = tempEditData.tags
-                                  ? tempEditData.tags + "," + val
-                                  : val;
-                                handleInputChange("tags", currentTags);
+                                handleInputChange("tags", [...tempEditData.tags, val]);
                                 e.currentTarget.value = "";
                               }
                             }

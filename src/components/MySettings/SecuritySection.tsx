@@ -120,12 +120,12 @@ export const SecuritySection: React.FC = () => {
 
   return (
     <section
-      className="bg-white rounded-2xl shadow-sm border border-[#e5e7eb] overflow-hidden scroll-mt-24"
+      className="section-card scroll-mt-24"
       id="security"
     >
-      <div className="border-b border-[#f0f4f4] px-6 py-4">
+      <div className="section-header">
         <h2 className="text-lg font-bold text-[#111818]">Bảo mật</h2>
-        <p className="text-sm text-[#618989]">
+        <p className="text-sm text-muted-alt">
           Quản lý mật khẩu và bảo mật tài khoản.
         </p>
       </div>

@@ -42,4 +42,47 @@
   .tag-chip {
     @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border transition-all duration-200;
   }
+
+
+
+  /* Radio button custom dot */
+  .radio-dot {
+    @apply w-5 h-5 rounded-full border border-[#dbdfe6] peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center mr-2 transition-all;
+  }
+
+  .radio-dot-inner {
+    @apply w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100;
+  }
+
+  .radio-label {
+    @apply text-[#111318] group-hover:text-primary transition-colors flex items-center gap-2;
+  }
+
+  /* Section card (settings/profile) */
+  .section-card {
+    @apply bg-white rounded-2xl shadow-sm border border-[#e5e7eb] overflow-hidden;
+  }
+
+  /* Section header inside section-card */
+  .section-header {
+    @apply border-b border-[#f0f4f4] px-6 py-4;
+  }
+
+  /* Inline tag input field */
+  .tag-input-inline {
+    @apply flex-1 bg-transparent border-none focus:ring-0 text-[#111318] placeholder:text-[#9ca3af] min-w-[120px] outline-none;
+  }
+
+  /* Text color tokens */
+  .text-muted {
+    @apply text-[#616f89];
+  }
+
+  .text-muted-alt {
+    @apply text-[#618989];
+  }
+
+  .text-body {
+    @apply text-[#111318];
+  }
 }

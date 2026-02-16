@@ -1,5 +1,4 @@
-const Minio_url = import.meta.env.VITE_MinIO_URL;
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { isLoggedIn, logout } from "../../utils/auth";
 import { getMe } from "../../utils/auth";
@@ -11,11 +10,6 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   const { user, isLogin, setUser, setIsLogin } = useStore((state) => state);
-  const avatarSrc = useMemo(() => {
-    if (!user?.avatarurl) return null;
-    if(user.isGoogle==true) return user.avatarurl;
-    return `${Minio_url}/avatar-storage/${user.avatarurl}?v=${new Date().getTime()}`;
-  }, [user]);
   useEffect(() => {
     setIsLogin(isLoggedIn());
     const fetchProfile = async () => {
@@ -38,7 +32,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
         <div className="flex items-center gap-3 text-black min-w-fit md:min-w-[240px]">
           <button
             onClick={onMenuClick}
-            className="p-2 rounded-lg hover:bg-gray-100 text-[#616f89] transition-colors focus:outline-none"
+            className="p-2 rounded-lg hover:bg-gray-100 text-muted transition-colors focus:outline-none"
             title="Mở menu"
           >
             <span className="material-symbols-outlined text-[24px]">menu</span>
@@ -48,7 +42,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
         </div>
 
         <div className="input flex max-w-[400px]">
-          <div className="text-[#616f89] flex items-center justify-center pl-4 rounded-l-lg border-r-0">
+          <div className="text-muted flex items-center justify-center pl-4 rounded-l-lg border-r-0">
             <span className="material-symbols-outlined text-[20px]">
               search
             </span>
@@ -63,7 +57,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
           {isLogin && user ? (
             <div className="flex items-center gap-3">
               <button
-                className="flex items-center justify-center h-10 w-10 rounded-lg hover:bg-gray-100 text-[#616f89] transition-colors"
+                className="flex items-center justify-center h-10 w-10 rounded-lg hover:bg-gray-100 text-muted transition-colors"
                 title="Thông báo"
               >
                 <span className="material-symbols-outlined relative">
@@ -72,32 +66,28 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                 </span>
               </button>
               <div className="hidden md:flex flex-col items-end">
-                <span className="text-sm font-bold text-[#111318] leading-tight">
+                <span className="text-sm font-bold text-body leading-tight">
                   {user.fullname || "Người dùng"}
                 </span>
-                <span className="text-xs text-[#616f89]">{user.email}</span>
+                <span className="text-xs text-muted">{user.email}</span>
               </div>
 
               <Link
                 to={"/myprofile"}
                 className="w-10 h-10 rounded-lg overflow-hidden border border-[#dbdfe6] hover:ring-2 hover:ring-primary/20 transition-all"
               >
-                {user.avatarurl ? (
-                  <img
-                    src={avatarSrc || ""}
-                    alt="Avatar"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-[#f0f2f4] flex items-center justify-center text-[#616f89]">
-                    <span className="material-symbols-outlined">person</span>
-                  </div>
-                )}
+
+                <img
+                  src={`${user.avatarUrl}?t=${Date.now()}`}
+                  alt="Avatar"
+                  className="w-full h-full object-cover"
+                />
+
               </Link>
 
               <button
                 onClick={logout}
-                className="flex items-center justify-center h-10 w-10 rounded-lg hover:bg-red-50 text-[#616f89] hover:text-red-600 transition-colors"
+                className="flex items-center justify-center h-10 w-10 rounded-lg hover:bg-red-50 text-muted hover:text-red-600 transition-colors"
                 title="Đăng xuất"
               >
                 <span className="material-symbols-outlined">logout</span>
@@ -107,7 +97,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
             <>
               <Link
                 to="/login"
-                className="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-transparent hover:bg-gray-100 text-[#111318] text-sm font-bold leading-normal tracking-[0.015em] transition-colors"
+                className="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-transparent hover:bg-gray-100 text-body text-sm font-bold leading-normal tracking-[0.015em] transition-colors"
               >
                 <span className="truncate">Đăng nhập</span>
               </Link>

@@ -41,7 +41,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
         metaData: {
           title: file.name.replace(".pdf", ""),
           description: "",
-          tags: "",
+          tags: [],
           status: "Public",
         },
       }));
@@ -74,25 +74,21 @@ export const UploadModal: React.FC<UploadModalProps> = ({
         formData.append("File", item.file);
         formData.append("Title", item.metaData.title || item.file.name);
         formData.append("Description", item.metaData.description);
-        formData.append("Tags", item.metaData.tags.trim());
+        for (const tag of item.metaData.tags) {
+          formData.append("Tags", tag.trim());
+        }
         formData.append("Status", item.metaData.status);
         await apiClient.postForm("/document", formData);
-        const fetchFiles = apiClient.get<FileData[]>("/documents");
-        const fetchUserStoragefiles = apiClient.get<UserStorageFile>(
-          "/user/storageDoc",
-        );
-        Promise.all([fetchFiles, fetchUserStoragefiles])
-          .then(([filesData, userStorageFilesData]) => {
-            setFiles(filesData);
-            setUserStorageFiles(userStorageFilesData);
-          })
-          .catch((error) => {
-            console.error("Error fetching files or user storage files:", error);
-          });
-        setExpandedIndex(null);
-        setTempEditData(null);
-        setFileList([]);
       }
+      const [filesData, userStorageFilesData] = await Promise.all([
+        apiClient.get<FileData[]>("/documents"),
+        apiClient.get<UserStorageFile>("/user/storageDoc"),
+      ]);
+      setFiles(filesData);
+      setUserStorageFiles(userStorageFilesData);
+      setExpandedIndex(null);
+      setTempEditData(null);
+      setFileList([]);
       onClose();
     } catch (error) {
       console.error("Lỗi upload:", error);
@@ -110,12 +106,12 @@ export const UploadModal: React.FC<UploadModalProps> = ({
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#f0f2f4]">
-          <h2 className="text-[#111318] text-xl font-bold leading-tight">
+          <h2 className="text-body text-xl font-bold leading-tight">
             Tải lên tài liệu mới
           </h2>
           <button
             onClick={onClose}
-            className="p-2 text-[#616f89] hover:bg-gray-100 rounded-full transition-colors"
+            className="p-2 text-muted hover:bg-gray-100 rounded-full transition-colors"
           >
             <span className="material-symbols-outlined text-[24px]">close</span>
           </button>
@@ -123,7 +119,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
 
         {/* Body */}
         <div className="overflow-y-auto p-6 flex flex-col gap-6">
-          <p className="text-[#616f89] text-base font-normal -mt-2">
+          <p className="text-muted text-base font-normal -mt-2">
             Chỉ hỗ trợ định dạng PDF, kích thước tối đa 50MB.
           </p>
 
@@ -143,10 +139,10 @@ export const UploadModal: React.FC<UploadModalProps> = ({
               </span>
             </div>
             <div className="flex flex-col items-center gap-1 text-center">
-              <p className="text-[#111318] text-lg font-bold">
+              <p className="text-body text-lg font-bold">
                 Kéo thả nhiều tệp vào đây
               </p>
-              <p className="text-[#616f89] text-sm">
+              <p className="text-muted text-sm">
                 hoặc nhấn để chọn từ máy tính
               </p>
             </div>

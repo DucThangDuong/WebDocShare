@@ -82,8 +82,8 @@ const EditForm: React.FC<EditFormProps> = ({
                   checked={data.status === "Public"}
                   onChange={() => onChange("status", "Public")}
                 />
-                <span className="w-5 h-5 rounded-full border border-[#dbe6e6] peer-checked:border-[#13ecec] peer-checked:bg-[#13ecec] flex items-center justify-center mr-2 transition-all">
-                  <span className="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100"></span>
+                <span className="radio-dot">
+                  <span className="radio-dot-inner"></span>
                 </span>
                 <span className="text-[#111818] dark:text-gray-300 group-hover:text-[#13ecec] transition-colors flex items-center gap-2">
                   <span className="material-symbols-outlined text-[20px]">
@@ -100,8 +100,8 @@ const EditForm: React.FC<EditFormProps> = ({
                   checked={data.status === "Private"}
                   onChange={() => onChange("status", "Private")}
                 />
-                <span className="w-5 h-5 rounded-full border border-[#dbe6e6] peer-checked:border-[#13ecec] peer-checked:bg-[#13ecec] flex items-center justify-center mr-2 transition-all">
-                  <span className="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100"></span>
+                <span className="radio-dot">
+                  <span className="radio-dot-inner"></span>
                 </span>
                 <span className="text-[#111818] dark:text-gray-300 group-hover:text-[#13ecec] transition-colors flex items-center gap-2">
                   <span className="material-symbols-outlined text-[20px]">
@@ -139,7 +139,7 @@ const EditForm: React.FC<EditFormProps> = ({
             ))}
 
             <input
-              className="flex-1 bg-transparent border-none focus:ring-0 text-[#111318] placeholder:text-[#9ca3af] min-w-[120px] outline-none"
+              className="tag-input-inline"
               placeholder="Thêm thẻ mới..."
               type="text"
               value={tagInput}

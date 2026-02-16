@@ -1,19 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom"; // Dùng Link cho SPA mượt hơn
+import { Link } from "react-router-dom";
 import type { FileData, UserStorageFile } from "../../interfaces/Types";
 import { apiClient } from "../../utils/apiClient";
 import { useStore } from "../../zustand/store";
+import { formatFileSize } from "../../utils/formatUtils";
+
 interface FileTableProps {
   files: FileData[];
 }
-
-const formatFileSize = (bytes: number) => {
-  if (bytes === 0) return "0 Bytes";
-  const k = 1024;
-  const sizes = ["Bytes", "KB", "MB", "GB"];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-};
 export const FileTable: React.FC<FileTableProps> = ({ files }) => {
   const { setFiles, setUserStorageFiles } = useStore();
   const handlePatch = async (docId: string) => {
@@ -21,17 +15,12 @@ export const FileTable: React.FC<FileTableProps> = ({ files }) => {
       await apiClient.patch(`/document/${docId}/movetotrash`, {
         isDeleted: true,
       });
-      const fetchFiles = apiClient.get<FileData[]>("/documents?skip=0&take=10");
-      const fetchUserStoragefiles =
-        apiClient.get<UserStorageFile>("/user/documents");
-      Promise.all([fetchFiles, fetchUserStoragefiles])
-        .then(([filesData, userStorageFilesData]) => {
-          setFiles(filesData);
-          setUserStorageFiles(userStorageFilesData);
-        })
-        .catch((error) => {
-          console.error("Error fetching files or user storage files:", error);
-        });
+      const [filesData, userStorageFilesData] = await Promise.all([
+        apiClient.get<FileData[]>("/documents"),
+        apiClient.get<UserStorageFile>("/user/storageDoc"),
+      ]);
+      setFiles(filesData);
+      setUserStorageFiles(userStorageFilesData);
     } catch (error) {
       console.error("Lỗi xóa file:", error);
       alert("Không thể xóa tài liệu này.");
@@ -43,16 +32,16 @@ export const FileTable: React.FC<FileTableProps> = ({ files }) => {
         {/* Table Head */}
         <thead>
           <tr className="border-b border-[#dbdfe6] bg-gray-50">
-            <th className="py-3 px-6 text-xs font-semibold text-[#616f89] uppercase tracking-wider w-[40%]">
+            <th className="py-3 px-6 text-xs font-semibold text-muted uppercase tracking-wider w-[40%]">
               Tên tệp
             </th>
-            <th className="py-3 px-6 text-xs font-semibold text-[#616f89] uppercase tracking-wider hidden md:table-cell">
+            <th className="py-3 px-6 text-xs font-semibold text-muted uppercase tracking-wider hidden md:table-cell">
               Ngày tải lên
             </th>
-            <th className="py-3 px-6 text-xs font-semibold text-[#616f89] uppercase tracking-wider hidden sm:table-cell">
+            <th className="py-3 px-6 text-xs font-semibold text-muted uppercase tracking-wider hidden sm:table-cell">
               Kích thước
             </th>
-            <th className="py-3 px-6 text-xs font-semibold text-[#616f89] uppercase tracking-wider text-right">
+            <th className="py-3 px-6 text-xs font-semibold text-muted uppercase tracking-wider text-right">
               Hành động
             </th>
           </tr>
@@ -68,16 +57,16 @@ export const FileTable: React.FC<FileTableProps> = ({ files }) => {
               <td className="py-4 px-6">
                 <div className="flex items-center gap-4">
                   <div className="flex flex-col min-w-0">
-                    <span className="text-sm font-medium text-[#111318] truncate">
+                    <span className="text-sm font-medium text-body truncate">
                       {file.title}
                     </span>
                   </div>
                 </div>
               </td>
-              <td className="py-4 px-6 text-sm text-[#616f89] hidden md:table-cell">
+              <td className="py-4 px-6 text-sm text-muted hidden md:table-cell">
                 {file.createdAt ? file.createdAt.substring(0, 10) : "N/A"}
               </td>
-              <td className="py-4 px-6 text-sm text-[#616f89] hidden sm:table-cell">
+              <td className="py-4 px-6 text-sm text-muted hidden sm:table-cell">
                 {formatFileSize(Number.parseInt(file.sizeInBytes) || 0)}
               </td>
 
@@ -131,7 +120,7 @@ const ActionButton = ({
         ? "hover:text-green-600 hover:bg-green-100"
         : "hover:text-primary hover:bg-primary/10";
 
-  const baseClass = `p-2 text-[#616f89] ${colorClass} rounded-full transition-colors flex items-center justify-center`;
+  const baseClass = `p-2 text-muted ${colorClass} rounded-full transition-colors flex items-center justify-center`;
   if (url) {
     return (
       <Link to={url} className={baseClass} title={title}>

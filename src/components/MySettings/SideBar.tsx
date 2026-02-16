@@ -6,7 +6,7 @@ export const Sidebar: React.FC<{
 }> = ({ AccountItemActivate, setAccountItemActivate }) => {
   return (
     <aside className="w-full lg:w-72 flex-shrink-0">
-      <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#e5e7eb]">
+      <div className="section-card p-4">
         <nav className="flex flex-col gap-2">
           <NavItem
             icon="person"

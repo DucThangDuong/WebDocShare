@@ -14,7 +14,7 @@ export interface LayoutProps {
 export interface FileDocument {
   title: string;
   description: string;
-  tags: string;
+  tags: string[];
   status: string;
 }
 
@@ -35,13 +35,12 @@ export interface UserProfilePublic {
   username: string;
   fullname: string;
   email: string;
-  avatarurl?: string;
+  avatarUrl?: string;
 }
 export interface UserProfilePrivate extends UserProfilePublic {
   email: string;
   storagelimit: number;
   usedstorage: number;
-  isGoogle:boolean;
 }
 export interface UserLogin {
   email: string;

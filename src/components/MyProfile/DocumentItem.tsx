@@ -1,18 +1,12 @@
 import React from "react";
 import type { DocumentInfor } from "../../interfaces/Types";
+import { formatFileSize } from "../../utils/formatUtils";
 
 interface Props {
   doc: DocumentInfor;
 }
 
 export const DocumentItem: React.FC<Props> = ({ doc }) => {
-  const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
-    const sizes = ["Bytes", "KB", "MB", "GB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-  };
   return (
     <div className="group flex flex-col md:flex-row items-start md:items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-primary/30 hover:shadow-md transition-all bg-white">
       <div className="flex-grow min-w-0">

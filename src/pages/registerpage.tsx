@@ -19,25 +19,6 @@ const RegisterPage: React.FC = () => {
   const [error, setError] = useState<string | null | React.ReactNode>(null);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const handleGoogleExample = async (credential: string) => {
-    try {
-      setIsLoading(true);
-      const data = await apiClient.post<{ accessToken: string }>(
-        `${BASE_URL}/google-login`,
-        {
-          IdToken: credential,
-        },
-      );
-      localStorage.setItem("accessToken", data.accessToken);
-      navigate("/");
-    } catch (err) {
-      console.log(err);
-      setError("Đăng nhập bằng Google thất bại.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -232,30 +213,6 @@ const RegisterPage: React.FC = () => {
             )}
           </button>
         </form>
-
-        {/* Divider */}
-        <div className="relative flex py-6 items-center">
-          <div className="flex-grow border-t border-[#e5e7eb]"></div>
-          <span className="flex-shrink-0 mx-4 text-sm text-[#616f89]">
-            Hoặc đăng ký bằng
-          </span>
-          <div className="flex-grow border-t border-[#e5e7eb]"></div>
-        </div>
-
-        <div className="grid grid-cols-1 gap-4">
-          <div className="flex justify-center">
-            <GoogleLogin
-              onSuccess={(credentialResponse) => {
-                if (credentialResponse.credential) {
-                  handleGoogleExample(credentialResponse.credential);
-                }
-              }}
-              onError={() => {
-                setError("Đăng nhập bằng Google thất bại.");
-              }}
-            />
-          </div>
-        </div>
 
         {/* Footer Link */}
         <div className="mt-8 text-center">

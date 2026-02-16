@@ -1,4 +1,3 @@
-const Minio_url = import.meta.env.VITE_MinIO_URL;
 import React, { useState, useRef } from "react";
 import { useStore } from "../../zustand/store";
 import { apiClient } from "../../utils/apiClient";
@@ -12,7 +11,6 @@ export const AccountSection: React.FC = () => {
   const [Error, setError] = useState<string>("");
   const [Success, setSuccess] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
-
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -24,6 +22,8 @@ export const AccountSection: React.FC = () => {
   const triggerFileInput = () => {
     fileInputRef.current?.click();
   };
+  const Avatar =
+    avatarPreview ? avatarPreview : `${user?.avatarUrl}?t=${Date.now()}`;
   const handleSave = async () => {
     try {
       if (selectedFile) {
@@ -55,7 +55,7 @@ export const AccountSection: React.FC = () => {
           case 400:
             setError(
               error.message ||
-                "Dữ liệu nhập không hợp lệ. Vui lòng kiểm tra lại.",
+              "Dữ liệu nhập không hợp lệ. Vui lòng kiểm tra lại.",
             );
             break;
           case 409:
@@ -70,16 +70,11 @@ export const AccountSection: React.FC = () => {
       }
     }
   };
-  const displayAvatar = avatarPreview
-    ? avatarPreview
-    : user?.isGoogle
-      ? user.avatarurl
-      : `${Minio_url}/avatar-storage/${user?.avatarurl}?v=${new Date().getTime()}`;
   return (
-    <section className="bg-white rounded-2xl shadow-sm border border-[#e5e7eb] overflow-hidden">
-      <div className="border-b border-[#f0f4f4] px-6 py-4">
+    <section className="section-card">
+      <div className="section-header">
         <h2 className="text-lg font-bold text-[#111818]">Thông tin hồ sơ</h2>
-        <p className="text-sm text-[#618989]">
+        <p className="text-sm text-muted-alt">
           Cập nhật thông tin chi tiết và ảnh đại diện của bạn.
         </p>
       </div>
@@ -134,7 +129,7 @@ export const AccountSection: React.FC = () => {
           <div className="relative group mb-4">
             <div
               className="w-52 h-52 rounded-full bg-cover bg-center shadow-md ring-4 ring-white transition-all duration-300"
-              style={{ backgroundImage: ` url("${displayAvatar}")` }}
+              style={{ backgroundImage: ` url("${Avatar}")` }}
             ></div>
             <input
               type="file"
@@ -162,9 +157,8 @@ export const AccountSection: React.FC = () => {
         </button>
         {(Error || Success) && (
           <div
-            className={`mt-2 text-sm font-medium flex items-center gap-2 transition-all duration-500 ${
-              Error ? "text-red-600" : "text-green-600"
-            }`}
+            className={`mt-2 text-sm font-medium flex items-center gap-2 transition-all duration-500 ${Error ? "text-red-600" : "text-green-600"
+              }`}
           >
             <span className="material-symbols-outlined text-[20px]">
               {Error ? "error" : "check_circle"}

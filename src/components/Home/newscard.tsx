@@ -31,12 +31,12 @@ const NewsCard: React.FC<NewsCardProps> = ({ image, category, categoryColor, tim
           <span className={`${colorMap[categoryColor]} text-xs font-semibold px-2 py-0.5 rounded`}>
             {category}
           </span>
-          <span className="text-[#616f89] text-xs">{time}</span>
+          <span className="text-muted text-xs">{time}</span>
         </div>
-        <p className="text-[#111318] dark:text-white text-base font-bold leading-snug group-hover:text-primary transition-colors mb-1">
+        <p className="text-body dark:text-white text-base font-bold leading-snug group-hover:text-primary transition-colors mb-1">
           {title}
         </p>
-        <p className="text-[#616f89] text-sm font-normal leading-normal line-clamp-2">
+        <p className="text-muted text-sm font-normal leading-normal line-clamp-2">
           {description}
         </p>
       </div>

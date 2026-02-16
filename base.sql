@@ -14,16 +14,18 @@ CREATE TABLE Users (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     Username VARCHAR(50) NOT NULL UNIQUE,
     Email VARCHAR(100) NOT NULL UNIQUE,
-    PasswordHash VARCHAR(255) NOT NULL, 
+    PasswordHash VARCHAR(255) NULL, 
     GoogleId VARCHAR(255),
     FullName NVARCHAR(100),
     CreatedAt DATETIME NOT NULL DEFAULT GETDATE(),
     RefreshToken VARCHAR(256),
     RefreshTokenExpiryTime DATETIME,
     Role VARCHAR(50) DEFAULT 'User' CHECK(Role IN ('User','Admin')),
-    AvatarUrl VARCHAR(255) DEFAULT 'default-avatar.jpg',
-    IsActive BIT DEFAULT 1,
 
+    LoginProvider VARCHAR(20) NULL Check(LoginProvider In('Custom','Admin')),
+    CustomAvatar VARCHAR(255) DEFAULT 'default-avatar.jpg',
+    GoogleAvatar VARCHAR(255),
+    IsActive BIT DEFAULT 1,
 
     StorageLimit BIGINT NOT NULL DEFAULT 5368709120, 
     UsedStorage BIGINT NOT NULL DEFAULT 0
@@ -40,7 +42,7 @@ GO
 CREATE TABLE Tags (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     Name NVARCHAR(50) NOT NULL,
-    Slug VARCHAR(50) NOT NULL UNIQUE 
+    Slug VARCHAR(50) NOT NULL 
 );
 GO
 
