@@ -20,7 +20,7 @@ const PDFDetailView: React.FC = () => {
   useEffect(() => {
     if (docId) {
       apiClient
-        .get<DocumentInfor>(`document/detail/${docId}`)
+        .get<DocumentInfor>(`documents/${docId}`)
         .then((data: DocumentInfor) => {
           setdocInfor(data);
           setPdfUrl(data.fileUrl);

@@ -1,4 +1,3 @@
-const BASE_URL = import.meta.env.VITE_API_URL;
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
@@ -20,7 +19,7 @@ const LoginPage: React.FC = () => {
     try {
       setIsLoading(true);
       const data = await apiClient.post<{ accessToken: string }>(
-        `${BASE_URL}/google-login`,
+        `/auth/google`,
         {
           IdToken: credential,
         },
@@ -42,7 +41,7 @@ const LoginPage: React.FC = () => {
     const userlogin: UserLogin = { email, password };
     try {
       const data = await apiClient.post<{ accessToken: string }>(
-        `${BASE_URL}/login`,
+        `/auth/login`,
         userlogin
       );
       localStorage.setItem("accessToken", data.accessToken);

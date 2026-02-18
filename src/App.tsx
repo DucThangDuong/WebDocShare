@@ -45,17 +45,17 @@ function App() {
         const token = localStorage.getItem("accessToken");
         if (token) {
           const userData: UserProfilePrivate = await apiClient.get(
-            "/user/privateprofile",
+            "/user/me/profile",
           );
           setUser(userData);
           setIsLogin(true);
         } else {
           const data: { accessToken: string } =
-            await apiClient.post("/refresh-token");
+            await apiClient.post("/auth/refresh-token");
 
           localStorage.setItem("accessToken", data.accessToken);
           const userData: UserProfilePrivate = await apiClient.get(
-            "/user/privateprofile",
+            "/user/me/profile",
           );
           setUser(userData);
           setIsLogin(true);
@@ -87,15 +87,15 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
         </Route>
-        <Route path="/kham-pha" element={<div>Trang khám phá</div>} />
-        <Route path="/PDFfile/:docId" element={<ShowFile />} />
+        <Route path="/explore" element={<div>Trang khám phá</div>} />
+        <Route path="/documents/:docId" element={<ShowFile />} />
         <Route path="/search" element={<SearchPage />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="/files" element={<FilePage />} />
+          <Route path="/my-documents" element={<FilePage />} />
           <Route path="*" element={<Navigate to="/login" replace />} />
-          <Route path="/myprofile" element={<UserProfile />} />
+          <Route path="/profile" element={<UserProfile />} />
           <Route path="/account-settings" element={<AccountSettings />} />
-          <Route path="/edit-document/:docId" element={<EditDocumentPage />} />
+          <Route path="/documents/:docId/edit" element={<EditDocumentPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

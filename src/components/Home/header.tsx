@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { isLoggedIn, logout } from "../../utils/auth";
-import { getMe } from "../../utils/auth";
 import { useStore } from "../../zustand/store";
+import { apiClient } from "../../utils/apiClient";
+import type { UserProfilePrivate } from "../../interfaces/Types";
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -13,9 +14,10 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   useEffect(() => {
     setIsLogin(isLoggedIn());
     const fetchProfile = async () => {
-      if (isLogin) {
+      if (isLogin && user == null) {
         try {
-          const userData = await getMe();
+          const userData =
+            await apiClient.get<UserProfilePrivate>("/user/me/profile");
           setUser(userData);
         } catch (error) {
           console.error("Lỗi lấy thông tin user:", error);
@@ -24,7 +26,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
       }
     };
     fetchProfile();
-  }, [isLogin, setUser, setIsLogin]);
+  }, [isLogin, setUser, setIsLogin, user]);
 
   return (
     <header className="flex items-center whitespace-nowrap border-b border-solid border-[#dbdfe6] px-6 py-3 bg-white z-20 sticky top-0 h-16 shrink-0">
@@ -73,16 +75,14 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
               </div>
 
               <Link
-                to={"/myprofile"}
+                to={"/profile"}
                 className="w-10 h-10 rounded-lg overflow-hidden border border-[#dbdfe6] hover:ring-2 hover:ring-primary/20 transition-all"
               >
-
                 <img
-                  src={`${user.avatarUrl}?t=${Date.now()}`}
+                  src={`${user.avatarUrl}?t=${Date.now}`}
                   alt="Avatar"
                   className="w-full h-full object-cover"
                 />
-
               </Link>
 
               <button

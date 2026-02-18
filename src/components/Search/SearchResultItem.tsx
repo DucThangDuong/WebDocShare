@@ -1,17 +1,16 @@
 const Minio_url = import.meta.env.VITE_MinIO_URL;
 import React from "react";
-import type { DocumentInfor } from "../../interfaces/Types";
+import type { DocumentSummary } from "../../interfaces/Types";
 import { useNavigate } from "react-router-dom";
 
 interface SearchResultItemProps {
-  document: DocumentInfor;
+  document: DocumentSummary;
 }
 
 const SearchResultItem: React.FC<SearchResultItemProps> = ({ document }) => {
-  const navigate = useNavigate(); // 2. Khởi tạo điều hướng
-
+  const navigate = useNavigate();
   const handleItemClick = () => {
-    navigate(`/PDFfile/${document.id}`);
+    navigate(`/documents/${document.id}`);
   };
   return (
     <div
@@ -26,7 +25,6 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ document }) => {
           }}
           className="absolute inset-0 flex items-center justify-center bg-cover bg-center"
         >
-          <span className="material-symbols-outlined text-gray-400 text-3xl"></span>
         </div>
       </div>
 
@@ -37,20 +35,15 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ document }) => {
             <h2 className="text-base md:text-lg font-semibold text-primary group-hover:underline decoration-2 underline-offset-2 line-clamp-2">
               {document.title}
             </h2>
-            <div className="mt-1 flex items-center gap-2">
-              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-sky-100 text-sky-800">
-                {document.description}
-              </span>
-            </div>
           </div>
           {/* Rating Section */}
           <div
-            className={`flex flex-col items-center gap-1 ${document.isLiked ? "text-emerald-500" : "text-gray-400"}`}
+            className={`flex flex-col items-center gap-1 text-gray-400`}
           >
             <span className="material-symbols-outlined hover:text-primary transition-colors">
               thumb_up
             </span>
-            <span className="text-xs font-bold">{document.likeCount}</span>
+            <span className={`text-xs font-bold text-gray-400 `}>{document.likeCount}</span>
           </div>
         </div>
 

@@ -1,4 +1,3 @@
-const Minio_url = import.meta.env.VITE_MinIO_URL;
 import React, { useEffect, useRef, useState } from "react";
 import type { DocumentInfor } from "../../interfaces/Types";
 import { apiClient } from "../../utils/apiClient";
@@ -100,7 +99,7 @@ export const Detail: React.FC<{ docInfor: DocumentInfor | null }> = ({
               <img
                 alt="Avatar"
                 className="w-8 h-8 rounded-full border border-gray-200 object-cover"
-                src={`${Minio_url}/avatar-storage/${docInfor.avatarUrl}`}
+                src={`${docInfor.avatarUrl}`}
               />
               <span className="font-semibold text-gray-900">
                 {docInfor.fullName || "Người dùng"}

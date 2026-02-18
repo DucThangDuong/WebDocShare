@@ -15,7 +15,7 @@ const FilesPage: React.FC = () => {
   useEffect(() => {
     const fetchFiles = apiClient.get<FileData[]>("/documents?skip=0&take=10");
     const fetchUserStoragefiles =
-      apiClient.get<UserStorageFile>("/user/storageDoc");
+      apiClient.get<UserStorageFile>("/user/me/storage");
     Promise.all([fetchFiles, fetchUserStoragefiles])
       .then(([filesData, userStorageFilesData]) => {
         setFiles(filesData);

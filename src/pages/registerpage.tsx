@@ -1,7 +1,5 @@
-const BASE_URL = import.meta.env.VITE_API_URL;
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { GoogleLogin } from "@react-oauth/google";
 import RegisterLayout from "../layouts/RegisterLayout";
 import { apiClient } from "../utils/apiClient";
 import { InputField } from "../components/InputField";
@@ -33,7 +31,7 @@ const RegisterPage: React.FC = () => {
       password: password,
     };
     try {
-      await apiClient.postnodata("/register", userregister);
+      await apiClient.postnodata("/auth/register", userregister);
       setIsSuccess(true);
     } catch (err: unknown) {
       if (err instanceof ApiError) {

@@ -86,7 +86,7 @@ export const SecuritySection: React.FC = () => {
     setIsLoading(true);
 
     try {
-      await apiClient.patch("/user/update/password", {
+      await apiClient.patch("/user/me/password", {
         OldPassword: formData.currentPassword,
         NewPassword: formData.newPassword,
       });

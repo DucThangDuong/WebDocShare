@@ -23,24 +23,24 @@ export const AccountSection: React.FC = () => {
     fileInputRef.current?.click();
   };
   const Avatar =
-    avatarPreview ? avatarPreview : `${user?.avatarUrl}?t=${Date.now()}`;
+    avatarPreview ? avatarPreview : `${user?.avatarUrl}?t=${Date.now}`;
   const handleSave = async () => {
     try {
       if (selectedFile) {
         const formData = new FormData();
         formData.append("avatar", selectedFile);
-        await apiClient.patchFormdata("/user/update/avatar", formData);
+        await apiClient.patchFormdata("/user/me/avatar", formData);
       }
       if (newName !== user?.fullname) {
-        await apiClient.patch("/user/update/profile", { Fullname: newName });
+        await apiClient.patch("/user/me/profile", { Fullname: newName });
       }
       if (newUsername !== user?.username) {
-        await apiClient.patch("/user/update/username", {
+        await apiClient.patch("/user/me/username", {
           Username: newUsername,
         });
       }
       const newUser = await apiClient.get<UserProfilePrivate>(
-        "/user/privateprofile",
+        "/user/me/profile",
       );
       setUser(newUser);
       setNewName(user?.fullname || "");

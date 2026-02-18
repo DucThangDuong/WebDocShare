@@ -1,5 +1,4 @@
 import { apiClient } from "./apiClient";
-import type { UserProfilePrivate} from "../interfaces/Types";
 export const getToken = (): string | null => {
   return localStorage.getItem("accessToken");
 };
@@ -11,7 +10,7 @@ export const isLoggedIn = (): boolean => {
 
 export const logout = async () => {
   try {
-    await apiClient.post("/logout");
+    await apiClient.post("/auth/logout");
   } catch (error) {
     console.error("Lỗi khi gọi API logout:", error);
   } finally {
@@ -21,6 +20,3 @@ export const logout = async () => {
   }
 };
 
-export const getMe = () => {
-  return apiClient.get<UserProfilePrivate>("/user/privateprofile");
-};

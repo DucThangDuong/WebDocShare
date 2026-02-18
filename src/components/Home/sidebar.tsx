@@ -59,16 +59,16 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             <NavItem
               icon="category"
               label="Danh mục"
-              url="/danh-muc"
-              active={NavItemActivate === "/danh-muc"}
-              onClick={() => handleItemClick("/danh-muc")}
+              url="/categories"
+              active={NavItemActivate === "/categories"}
+              onClick={() => handleItemClick("/categories")}
             />
             <NavItem
               icon="favorite"
               label="Yêu thích"
-              url="/yeu-thich"
-              active={NavItemActivate === "/yeu-thich"}
-              onClick={() => handleItemClick("/yeu-thich")}
+              url="/favorites"
+              active={NavItemActivate === "/favorites"}
+              onClick={() => handleItemClick("/favorites")}
             />
           </nav>
           <div className="h-px bg-[#f0f2f4] w-full shrink-0"></div>
@@ -87,9 +87,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               <NavItem
                 icon="folder_open"
                 label="Tệp của tôi"
-                url="/files"
-                active={NavItemActivate === "/files"}
-                onClick={() => handleItemClick("/files")}
+                url="/my-documents"
+                active={NavItemActivate === "/my-documents"}
+                onClick={() => handleItemClick("/my-documents")}
               />
             </nav>
           </div>

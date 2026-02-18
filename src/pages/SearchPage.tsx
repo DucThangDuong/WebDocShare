@@ -1,20 +1,19 @@
-const BASE_URL = import.meta.env.VITE_API_URL;
 import React, { useState, useEffect } from "react";
 import DashboardLayout from "../layouts/HomeLayout";
 import SearchFilters from "../components/Search/SearchFilters";
 import SearchResultItem from "../components/Search/SearchResultItem";
 import SearchPagination from "../components/Search/SearchPagination";
 import { apiClient } from "../utils/apiClient";
-import type { DocumentInfor, Tag } from "../interfaces/Types";
+import type { DocumentSummary, Tag } from "../interfaces/Types";
 
 const SearchPage: React.FC = () => {
   const [selectedFilter, setSelectedFilter] = useState<number>(0);
   const [tags, setTags] = useState<Tag[]>([]);
-  const [documentTag, setDocumentTag] = useState<DocumentInfor[] | null>(null);
+  const [documentTag, setDocumentTag] = useState<DocumentSummary[] | null>(null);
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const response = await apiClient.get<Tag[]>(`${BASE_URL}/tags`);
+        const response = await apiClient.get<Tag[]>(`/tags`);
         setTags(response);
       } catch (error) {
         console.error("Error fetching documents:", error);
@@ -22,11 +21,10 @@ const SearchPage: React.FC = () => {
     };
     const fetchDocumenttag = async () => {
       try {
-        const response = await apiClient.get<DocumentInfor[]>(
-          `${BASE_URL}/tags/documents?take=10&skip=0 ${selectedFilter !== 0 ? `&tagId=${selectedFilter}` : ""}`,
+        const response = await apiClient.get<DocumentSummary[]>(
+          `/tags/documents?take=10&skip=0 ${selectedFilter !== 0 ? `&tagId=${selectedFilter}` : ""}`,
         );
         setDocumentTag(response);
-        console.log(response);
       } catch (error) {
         console.error("Error fetching documents:", error);
       }

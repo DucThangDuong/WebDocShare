@@ -52,7 +52,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
       formData.append("File", newFile.file);
       formData.append("SignalRConnectionID", signalRConnectionId || "");
       formData.append("Title", newFile.id);
-      apiClient.postForm("/document/check", formData).then(
+      apiClient.postForm("/documents/scan", formData).then(
         (response) => {
           if (response.status !== 200) {
             updateFileStatus(newFile.id, "error");
@@ -65,34 +65,63 @@ export const UploadModal: React.FC<UploadModalProps> = ({
     });
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
-  // tải tất cả file lên server
   const handleUploadFiles = async () => {
     if (fileList.length === 0) return;
-    try {
-      for (const item of fileList) {
-        const formData = new FormData();
-        formData.append("File", item.file);
-        formData.append("Title", item.metaData.title || item.file.name);
-        formData.append("Description", item.metaData.description);
-        for (const tag of item.metaData.tags) {
-          formData.append("Tags", tag.trim());
+
+    const successFileIds = new Set<string>();
+
+    await Promise.all(
+      fileList.map(async (item) => {
+        try {
+          // Cập nhật trạng thái đang upload
+          updateFileStatus(item.id, "uploading");
+
+          const formData = new FormData();
+          formData.append("File", item.file);
+          formData.append("Title", item.metaData.title || item.file.name);
+          formData.append("Description", item.metaData.description || "");
+          for (const tag of item.metaData.tags) {
+            formData.append("Tags", tag.trim());
+          }
+          formData.append("Status", item.metaData.status);
+
+          await apiClient.postForm("/documents", formData);
+          successFileIds.add(item.id);
+          updateFileStatus(item.id, "success");
+        } catch (error) {
+          console.error("Lỗi upload file:", item.metaData.title, error);
+          updateFileStatus(item.id, "error");
         }
-        formData.append("Status", item.metaData.status);
-        await apiClient.postForm("/document", formData);
-      }
+      })
+    );
+
+    // Refresh dữ liệu nền
+    try {
       const [filesData, userStorageFilesData] = await Promise.all([
         apiClient.get<FileData[]>("/documents"),
-        apiClient.get<UserStorageFile>("/user/storageDoc"),
+        apiClient.get<UserStorageFile>("/user/me/storage"),
       ]);
       setFiles(filesData);
       setUserStorageFiles(userStorageFilesData);
+    } catch (error) {
+      console.error("Lỗi làm mới dữ liệu:", error);
+    }
+
+    // Lọc danh sách: bỏ file thành công, giữ lại file lỗi
+    const remainingFiles = fileList
+      .filter((file) => !successFileIds.has(file.id))
+      .map((file) => ({
+        ...file,
+        uploadStatus: "error" as const,
+      }));
+
+    if (remainingFiles.length === 0) {
       setExpandedIndex(null);
       setTempEditData(null);
       setFileList([]);
       onClose();
-    } catch (error) {
-      console.error("Lỗi upload:", error);
-      alert("Có lỗi xảy ra khi tải lên.");
+    } else {
+      setFileList(remainingFiles);
     }
   };
 

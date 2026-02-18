@@ -1,10 +1,10 @@
 const Minio_url = import.meta.env.VITE_MinIO_URL;
 import React, { useRef } from "react";
-import type { DocumentInfor } from "../../interfaces/Types";
+import type { DocumentDetailEdit } from "../../interfaces/Types";
 import { formatFileSize } from "../../utils/formatUtils";
 
 interface PreviewPanelProps {
-  document: DocumentInfor | null;
+  document: DocumentDetailEdit | null;
   pendingDelete: boolean;
   pendingNewFile: File | null;
   onMarkDelete: () => void;

@@ -7,7 +7,7 @@ export const UserStats: React.FC = () => {
 
   React.useEffect(() => {
     const fetchStats = async () => {
-      const data = await apiClient.get<ResUserStatsDto>("/document/stats");
+      const data = await apiClient.get<ResUserStatsDto>("/documents/stats");
       setStats(data);
     };
     fetchStats();

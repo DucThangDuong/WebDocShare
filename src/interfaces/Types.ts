@@ -1,12 +1,5 @@
 import type { ReactNode } from "react";
 
-export interface FileData {
-  id: string;
-  title: string;
-  createdAt: string;
-  sizeInBytes: string;
-  type: "pdf" | "image" | "excel";
-}
 
 export interface LayoutProps {
   children: ReactNode;
@@ -69,6 +62,28 @@ export interface DocumentInfor {
   thumbnail: string | null;
   pageCount: number;
   tags: string[] | null;
+}
+export interface DocumentSummary {
+  id: string;
+  title: string;
+  createdAt: string;
+  thumbnail: string | null;
+  pageCount: number;
+  tags: string[] | null;
+  likeCount: number;
+}
+export interface DocumentDetailEdit {
+  id: string;
+  title: string;
+  createdAt: string;
+  thumbnail: string | null;
+  pageCount: number;
+  tags: string[] | null;
+  description: string;
+  sizeInBytes: string;
+  status: string;
+  fileUrl: string;
+  updatedAt: string;
 }
 export interface Tag {
   id: number;

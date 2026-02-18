@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import DashboardLayout from "../layouts/HomeLayout";
 import { apiClient } from "../utils/apiClient";
-import type { DocumentInfor } from "../interfaces/Types";
+import type { DocumentDetailEdit } from "../interfaces/Types";
 import EditForm from "../components/EditDocument/EditForm";
 import PreviewPanel from "../components/EditDocument/PreviewPanel";
 import { useStore } from "../zustand/store";
@@ -13,7 +13,7 @@ const EditDocumentPage: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [document, setDocument] = useState<DocumentInfor | null>(null);
+  const [document, setDocument] = useState<DocumentDetailEdit | null>(null);
 
   // File operation pending states
   const [pendingFileDelete, setPendingFileDelete] = useState(false);
@@ -31,8 +31,8 @@ const EditDocumentPage: React.FC = () => {
     const fetchDocument = async () => {
       try {
         setLoading(true);
-        const data = await apiClient.get<DocumentInfor>(
-          `/document/detail/${docId}`,
+        const data = await apiClient.get<DocumentDetailEdit>(
+          `/documents/${docId}/edit`,
         );
         setDocument(data);
         setFormData({
@@ -63,7 +63,7 @@ const EditDocumentPage: React.FC = () => {
     try {
       // 1. Handle pending file delete
       if (pendingFileDelete && document?.id) {
-        await apiClient.delete(`/document/${document.id}/fileUrl`, {});
+        await apiClient.delete(`/documents/${document.id}/file`, {});
       }
 
       // 2. Update document metadata
@@ -79,8 +79,8 @@ const EditDocumentPage: React.FC = () => {
           form.append(`Tags`, tag);
         });
       }
-      await apiClient.patchFormdata(`/document/${docId}`, form);
-      navigate("/files");
+      await apiClient.patchFormdata(`/documents/${docId}`, form);
+      navigate("/my-documents");
     } catch (err) {
       console.error("Error updating document:", err);
       alert("Có lỗi xảy ra khi lưu. Vui lòng thử lại.");
@@ -100,7 +100,6 @@ const EditDocumentPage: React.FC = () => {
   };
 
   const handleSelectNewFile = (file: File) => {
-    console.log("file", file);
     setPendingNewFile(file);
     setPendingFileDelete(false);
   };

@@ -23,7 +23,7 @@ const UserProfilePage: React.FC = () => {
     };
     setNavItemActivate("");
     fetchDocuments();
-  }, []);
+  }, [setNavItemActivate]);
   return (
     <HomeLayout>
       <div className="bg-background-light font-display text-text-main antialiased min-h-screen flex flex-col">

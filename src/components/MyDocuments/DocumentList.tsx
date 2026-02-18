@@ -1,23 +1,23 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import type { FileData, UserStorageFile } from "../../interfaces/Types";
+import type { DocumentDetailEdit, UserStorageFile } from "../../interfaces/Types";
 import { apiClient } from "../../utils/apiClient";
 import { useStore } from "../../zustand/store";
 import { formatFileSize } from "../../utils/formatUtils";
 
 interface FileTableProps {
-  files: FileData[];
+  files: DocumentDetailEdit[];
 }
 export const FileTable: React.FC<FileTableProps> = ({ files }) => {
   const { setFiles, setUserStorageFiles } = useStore();
   const handlePatch = async (docId: string) => {
     try {
-      await apiClient.patch(`/document/${docId}/movetotrash`, {
+      await apiClient.patch(`/documents/${docId}/trash`, {
         isDeleted: true,
       });
       const [filesData, userStorageFilesData] = await Promise.all([
-        apiClient.get<FileData[]>("/documents"),
-        apiClient.get<UserStorageFile>("/user/storageDoc"),
+        apiClient.get<DocumentDetailEdit[]>("/documents"),
+        apiClient.get<UserStorageFile>("/user/me/storage"),
       ]);
       setFiles(filesData);
       setUserStorageFiles(userStorageFilesData);
@@ -38,8 +38,11 @@ export const FileTable: React.FC<FileTableProps> = ({ files }) => {
             <th className="py-3 px-6 text-xs font-semibold text-muted uppercase tracking-wider hidden md:table-cell">
               Ngày tải lên
             </th>
+            <th className="py-3 px-6 text-xs font-semibold text-muted uppercase tracking-wider hidden md:table-cell">
+              Cập nhật lần cuối
+            </th>
             <th className="py-3 px-6 text-xs font-semibold text-muted uppercase tracking-wider hidden sm:table-cell">
-              Kích thước
+              Trạng thái
             </th>
             <th className="py-3 px-6 text-xs font-semibold text-muted uppercase tracking-wider text-right">
               Hành động
@@ -66,8 +69,11 @@ export const FileTable: React.FC<FileTableProps> = ({ files }) => {
               <td className="py-4 px-6 text-sm text-muted hidden md:table-cell">
                 {file.createdAt ? file.createdAt.substring(0, 10) : "N/A"}
               </td>
+              <td className="py-4 px-6 text-sm text-muted hidden md:table-cell">
+                {file.updatedAt ? file.updatedAt.substring(0, 10) : "N/A"}
+              </td>
               <td className="py-4 px-6 text-sm text-muted hidden sm:table-cell">
-                {formatFileSize(Number.parseInt(file.sizeInBytes) || 0)}
+                {file.status === "Public" ? "Công khai" : "Riêng tư"}
               </td>
 
               {/* Actions */}
@@ -76,7 +82,7 @@ export const FileTable: React.FC<FileTableProps> = ({ files }) => {
                   <ActionButton
                     icon="visibility"
                     title="Xem"
-                    url={`/PDFfile/${file.id}`}
+                    url={`/documents/${file.id}`}
                   />
                   <ActionButton
                     icon="delete"
@@ -88,7 +94,7 @@ export const FileTable: React.FC<FileTableProps> = ({ files }) => {
                     icon="more_vert"
                     title="Chỉnh sửa"
                     hoverColor="green"
-                    url={`/edit-document/${file.id}`}
+                    url={`/documents/${file.id}/edit`}
                   />
                 </div>
               </td>
