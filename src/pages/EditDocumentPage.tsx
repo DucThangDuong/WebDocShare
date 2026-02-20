@@ -6,6 +6,7 @@ import type { DocumentDetailEdit } from "../interfaces/Types";
 import EditForm from "../components/EditDocument/EditForm";
 import PreviewPanel from "../components/EditDocument/PreviewPanel";
 import { useStore } from "../zustand/store";
+import toast from "react-hot-toast";
 
 const EditDocumentPage: React.FC = () => {
   const { setNavItemActivate } = useStore();
@@ -15,11 +16,9 @@ const EditDocumentPage: React.FC = () => {
   const [saving, setSaving] = useState(false);
   const [document, setDocument] = useState<DocumentDetailEdit | null>(null);
 
-  // File operation pending states
   const [pendingFileDelete, setPendingFileDelete] = useState(false);
   const [pendingNewFile, setPendingNewFile] = useState<File | null>(null);
 
-  // Form State
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -61,12 +60,10 @@ const EditDocumentPage: React.FC = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
-      // 1. Handle pending file delete
       if (pendingFileDelete && document?.id) {
         await apiClient.delete(`/documents/${document.id}/file`, {});
       }
 
-      // 2. Update document metadata
       const form = new FormData();
       form.append("Title", formData.title);
       form.append("Description", formData.description);
@@ -80,16 +77,16 @@ const EditDocumentPage: React.FC = () => {
         });
       }
       await apiClient.patchFormdata(`/documents/${docId}`, form);
+      toast.success("Tài liệu đã được cập nhật thành công.");
       navigate("/my-documents");
     } catch (err) {
       console.error("Error updating document:", err);
-      alert("Có lỗi xảy ra khi lưu. Vui lòng thử lại.");
+      toast.error("Có lỗi xảy ra khi lưu. Vui lòng thử lại.");
     } finally {
       setSaving(false);
     }
   };
 
-  // File operation handlers
   const handleMarkDelete = () => {
     setPendingFileDelete(true);
     setPendingNewFile(null);

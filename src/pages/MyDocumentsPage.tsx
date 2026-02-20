@@ -3,9 +3,10 @@ import DashboardLayout from "../layouts/HomeLayout";
 import { StatsCard } from "../components/MyDocuments/StatsCard";
 import { FileTable } from "../components/MyDocuments/DocumentList";
 import { UploadModal } from "../components/MyDocuments/UploadModal";
-import type { FileData, UserStorageFile } from "../interfaces/Types";
+import type { DocumentDetailEdit, UserStorageFile } from "../interfaces/Types";
 import { apiClient } from "../utils/apiClient";
 import { useStore } from "../zustand/store";
+import { formatFileSize } from "../utils/formatUtils";
 
 const FilesPage: React.FC = () => {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
@@ -13,7 +14,7 @@ const FilesPage: React.FC = () => {
   const [totalUpload, settotalupload] = useState<number | null>(0);
 
   useEffect(() => {
-    const fetchFiles = apiClient.get<FileData[]>("/documents?skip=0&take=10");
+    const fetchFiles = apiClient.get<DocumentDetailEdit[]>("/documents?skip=0&take=10");
     const fetchUserStoragefiles =
       apiClient.get<UserStorageFile>("/user/me/storage");
     Promise.all([fetchFiles, fetchUserStoragefiles])
@@ -45,13 +46,6 @@ const FilesPage: React.FC = () => {
     }
   }, [files]);
 
-  const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
-    const sizes = ["Bytes", "KB", "MB", "GB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-  };
   return (
     <DashboardLayout>
       <div className="flex-1 overflow-y-auto bg-background-light p-6 md:p-10 scroll-smooth">
@@ -126,34 +120,10 @@ const FilesPage: React.FC = () => {
               <h3 className="font-bold text-lg text-[#111318]">
                 Danh sách tệp tin
               </h3>
-              {/* <div className="flex gap-2">
-                <button className="p-2 hover:bg-gray-100 rounded text-[#616f89]">
-                  <span className="material-symbols-outlined text-[20px]">
-                    view_list
-                  </span>
-                </button>
-                <button className="p-2 hover:bg-gray-100 rounded text-[#616f89]">
-                  <span className="material-symbols-outlined text-[20px]">
-                    grid_view
-                  </span>
-                </button>
-              </div> */}
             </div>
 
             <FileTable files={files} />
           </section>
-
-          {/* Recent Files Section */}
-          {/* <section className="flex flex-col gap-4">
-              <h2 className="text-[#111318] text-xl font-bold leading-tight">
-                Gần đây
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {recentFiles.map((file) => (
-                  <RecentFileCard key={file.id} file={file} />
-                ))}
-              </div>
-            </section> */}
         </div>
       </div>
       {/* html tải documennt lên */}

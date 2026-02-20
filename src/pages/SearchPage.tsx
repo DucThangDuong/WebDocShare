@@ -6,32 +6,54 @@ import SearchPagination from "../components/Search/SearchPagination";
 import { apiClient } from "../utils/apiClient";
 import type { DocumentSummary, Tag } from "../interfaces/Types";
 
+const ITEMS_PER_PAGE = 10;
+
 const SearchPage: React.FC = () => {
   const [selectedFilter, setSelectedFilter] = useState<number>(0);
   const [tags, setTags] = useState<Tag[]>([]);
   const [documentTag, setDocumentTag] = useState<DocumentSummary[] | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   useEffect(() => {
     const fetchTags = async () => {
       try {
         const response = await apiClient.get<Tag[]>(`/tags`);
         setTags(response);
       } catch (error) {
-        console.error("Error fetching documents:", error);
+        console.error("Error fetching tags:", error);
       }
     };
-    const fetchDocumenttag = async () => {
+    fetchTags();
+  }, []);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedFilter]);
+
+  useEffect(() => {
+    const fetchDocuments = async () => {
       try {
+        const skip = (currentPage - 1) * ITEMS_PER_PAGE;
+        const tagParam = selectedFilter !== 0 ? `&tagId=${selectedFilter}` : "";
         const response = await apiClient.get<DocumentSummary[]>(
-          `/tags/documents?take=10&skip=0 ${selectedFilter !== 0 ? `&tagId=${selectedFilter}` : ""}`,
+          `/tags/documents?take=${ITEMS_PER_PAGE}&skip=${skip}${tagParam}`,
         );
         setDocumentTag(response);
       } catch (error) {
         console.error("Error fetching documents:", error);
       }
     };
-    fetchDocumenttag();
-    fetchTags();
-  }, [setDocumentTag, setTags, selectedFilter, setSelectedFilter]);
+    fetchDocuments();
+  }, [selectedFilter, currentPage]);
+  const getTotalPages = (): number => {
+    if (selectedFilter === 0) {
+      const totalCount = tags.reduce((sum, tag) => sum + tag.count, 0);
+      return Math.max(1, Math.ceil(totalCount / ITEMS_PER_PAGE));
+    }
+    const selectedTag = tags.find((tag) => tag.id === selectedFilter);
+    if (!selectedTag) return 1;
+    return Math.max(1, Math.ceil(selectedTag.count / ITEMS_PER_PAGE));
+  };
+
   return (
     <DashboardLayout>
       <div className="max-w-5xl mx-auto w-full">
@@ -52,7 +74,11 @@ const SearchPage: React.FC = () => {
           ))}
         </div>
 
-        <SearchPagination />
+        <SearchPagination
+          currentPage={currentPage}
+          totalPages={getTotalPages()}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </DashboardLayout>
   );

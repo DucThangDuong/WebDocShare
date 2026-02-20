@@ -21,6 +21,7 @@ import UserProfile from "./pages/MyProfilePage";
 import AccountSettings from "./pages/AccountSettingPage";
 import "./App.css";
 import SearchPage from "./pages/SearchPage";
+import { Toaster } from "react-hot-toast";
 const ProtectedRoute = () => {
   const isAuth = isLoggedIn();
   if (!isAuth) {
@@ -81,6 +82,7 @@ function App() {
   }
   return (
     <BrowserRouter>
+      <Toaster position="top-right" />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route element={<GuestRoute />}>

@@ -8,6 +8,7 @@ import { Detail } from "../components/DocumentDetail/Detail";
 import { Header } from "../components/DocumentDetail/Header";
 import DashboardLayout from "../layouts/HomeLayout";
 import { useStore } from "../zustand/store";
+import toast from "react-hot-toast";
 
 const PDFDetailView: React.FC = () => {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
@@ -56,7 +57,7 @@ const PDFDetailView: React.FC = () => {
       window.URL.revokeObjectURL(blobUrl);
     } catch (error) {
       console.error("Lỗi tải file:", error);
-      alert("Có lỗi xảy ra khi tải tệp tin. Vui lòng thử lại.");
+      toast.error("Có lỗi xảy ra khi tải tệp tin. Vui lòng thử lại.");
     } finally {
       setIsDownloading(false);
     }

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import type { DocumentDetailEdit, UserStorageFile } from "../../interfaces/Types";
 import { apiClient } from "../../utils/apiClient";
 import { useStore } from "../../zustand/store";
-import { formatFileSize } from "../../utils/formatUtils";
+import toast from "react-hot-toast";
 
 interface FileTableProps {
   files: DocumentDetailEdit[];
@@ -21,9 +21,9 @@ export const FileTable: React.FC<FileTableProps> = ({ files }) => {
       ]);
       setFiles(filesData);
       setUserStorageFiles(userStorageFilesData);
+      toast.success("Tài liệu đã được xóa thành công.");
     } catch (error) {
-      console.error("Lỗi xóa file:", error);
-      alert("Không thể xóa tài liệu này.");
+      toast.error("Không thể xóa tài liệu này.Vui lòng thử lại sau.");
     }
   };
   return (

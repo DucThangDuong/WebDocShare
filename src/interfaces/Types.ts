@@ -89,6 +89,7 @@ export interface Tag {
   id: number;
   name: string;
   slug: string;
+  count: number;
 }
 export class ApiError extends Error {
   status: number;

@@ -25,27 +25,6 @@ export const DocumentItem: React.FC<Props> = ({ doc }) => {
           <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
         </div>
       </div>
-
-      <div className="flex items-center gap-2 w-full md:w-auto mt-2 md:mt-0 justify-end">
-        <span className="flex items-center gap-1 text-xs text-text-secondary mr-2">
-          <span className="material-symbols-outlined text-[16px]">
-            visibility
-          </span>
-          {doc.viewCount > 1000
-            ? `${(doc.viewCount / 1000).toFixed(1)}k`
-            : doc.viewCount}
-        </span>
-        <button className="p-2 hover:bg-gray-100 rounded-lg text-text-secondary transition-colors">
-          <span className="material-symbols-outlined text-[20px]">
-            download
-          </span>
-        </button>
-        <button className="p-2 hover:bg-gray-100 rounded-lg text-text-secondary transition-colors">
-          <span className="material-symbols-outlined text-[20px]">
-            more_vert
-          </span>
-        </button>
-      </div>
     </div>
   );
 };

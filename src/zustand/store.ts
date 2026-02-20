@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import type { UserProfilePrivate } from "../interfaces/Types";
-import type { FileData, FileItem, UserStorageFile } from "../interfaces/Types";
+import type { DocumentDetailEdit, FileItem, UserStorageFile } from "../interfaces/Types";
 
 interface StoreState {
   // trạng thái đăng nhập
@@ -13,8 +13,8 @@ interface StoreState {
   NavItemActivate: string;
   setNavItemActivate: (item: string) => void;
   // file của user
-  files: FileData[];
-  setFiles: (files: FileData[]) => void;
+  files: DocumentDetailEdit[];
+  setFiles: (files: DocumentDetailEdit[]) => void;
   // storage file của user
   userStorageFiles: UserStorageFile | null;
   setUserStorageFiles: (userStorageFiles: UserStorageFile) => void;

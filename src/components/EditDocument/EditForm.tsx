@@ -85,7 +85,7 @@ const EditForm: React.FC<EditFormProps> = ({
                 <span className="radio-dot">
                   <span className="radio-dot-inner"></span>
                 </span>
-                <span className="text-[#111818] dark:text-gray-300 group-hover:text-[#13ecec] transition-colors flex items-center gap-2">
+                <span className="text-[#111818]  group-hover:text-primary transition-colors flex items-center gap-2">
                   <span className="material-symbols-outlined text-[20px]">
                     public
                   </span>
@@ -103,7 +103,7 @@ const EditForm: React.FC<EditFormProps> = ({
                 <span className="radio-dot">
                   <span className="radio-dot-inner"></span>
                 </span>
-                <span className="text-[#111818] dark:text-gray-300 group-hover:text-[#13ecec] transition-colors flex items-center gap-2">
+                <span className="text-[#111818] group-hover:text-primary transition-colors flex items-center gap-2">
                   <span className="material-symbols-outlined text-[20px]">
                     lock
                   </span>

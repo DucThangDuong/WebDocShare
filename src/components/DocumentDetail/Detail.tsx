@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import type { DocumentInfor } from "../../interfaces/Types";
 import { apiClient } from "../../utils/apiClient";
+import { useStore } from "../../zustand/store";
+import toast from "react-hot-toast";
 
 export const Detail: React.FC<{ docInfor: DocumentInfor | null }> = ({
   docInfor,
@@ -21,7 +23,13 @@ export const Detail: React.FC<{ docInfor: DocumentInfor | null }> = ({
     }
   }, [docInfor]);
 
+  const { isLogin } = useStore();
   const handleVote = (action: boolean) => {
+    if (!isLogin) {
+      toast.error("Vui lòng đăng nhập để tham gia vào cuộc thảo luận");
+      return;
+    }
+
     let nextVoteState: boolean | null = voteState;
     let nextLikeCount = likeCount;
     let nextDislikeCount = dislikeCount;
