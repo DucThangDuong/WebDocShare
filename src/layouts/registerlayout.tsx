@@ -1,5 +1,5 @@
 import React from "react";
-import type { LayoutProps } from "../interfaces/Types";
+import type { LayoutProps } from "../interfaces/CommonTypes";
 const RegisterLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="bg-background-light  font-display text-black dark:text-white">

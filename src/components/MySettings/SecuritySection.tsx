@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { apiClient } from "../../utils/apiClient";
-import { ApiError } from "../../interfaces/Types";
+import { ApiError } from "../../interfaces/CommonTypes";
+import { useStore } from "../../zustand/store";
+import type { UserProfilePrivate } from "../../interfaces/UserTypes";
 
 interface InputFieldProps {
   icon: string;
@@ -36,6 +38,9 @@ const InputField = ({
 );
 
 export const SecuritySection: React.FC = () => {
+  const { user, setUser } = useStore();
+  const hasPassword = user?.hasPassword ?? true;
+
   const [EditPassWord, setEditPassWord] = useState<boolean>(false);
   const [formData, setFormData] = useState({
     currentPassword: "",
@@ -45,6 +50,7 @@ export const SecuritySection: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     field: string,
@@ -55,20 +61,29 @@ export const SecuritySection: React.FC = () => {
 
   const validateForm = (): boolean => {
     const { currentPassword, newPassword, confirmPassword } = formData;
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      setError("Vui lòng nhập đầy đủ thông tin.");
-      return false;
+
+    if (hasPassword) {
+      if (!currentPassword || !newPassword || !confirmPassword) {
+        setError("Vui lòng nhập đầy đủ thông tin.");
+        return false;
+      }
+      if (currentPassword === newPassword) {
+        setError("Mật khẩu mới không được trùng với mật khẩu hiện tại.");
+        return false;
+      }
+    } else {
+      if (!newPassword || !confirmPassword) {
+        setError("Vui lòng nhập đầy đủ thông tin.");
+        return false;
+      }
     }
-    if (currentPassword === newPassword) {
-      setError("Mật khẩu mới không được trùng với mật khẩu hiện tại.");
-      return false;
-    }
+
     if (newPassword !== confirmPassword) {
       setError("Mật khẩu xác nhận không khớp.");
       return false;
     }
     if (newPassword.length < 6) {
-      setError("Mật khẩu mới phải có ít nhất 6 ký tự.");
+      setError("Mật khẩu phải có ít nhất 6 ký tự.");
       return false;
     }
     const hasLetterAndNumber = /^(?=.*[a-zA-Z])(?=.*\d).+$/.test(newPassword);
@@ -79,18 +94,28 @@ export const SecuritySection: React.FC = () => {
     return true;
   };
 
-  const handleChangePassword = async () => {
+  const handleSubmitPassword = async () => {
     setError(null);
     setSuccess(null);
     if (!validateForm()) return;
     setIsLoading(true);
 
     try {
-      await apiClient.patch("/user/me/password", {
-        OldPassword: formData.currentPassword,
-        NewPassword: formData.newPassword,
-      });
-      setSuccess("Đổi mật khẩu thành công!");
+      if (hasPassword) {
+        await apiClient.patch("/user/me/password", {
+          OldPassword: formData.currentPassword,
+          NewPassword: formData.newPassword,
+        });
+        setSuccess("Đổi mật khẩu thành công!");
+      } else {
+        await apiClient.patch("/user/me/password", {
+          NewPassword: formData.newPassword,
+        });
+        setSuccess("Tạo mật khẩu thành công!");
+        const updatedUser = await apiClient.get<UserProfilePrivate>("/user/me/profile");
+        setUser(updatedUser);
+      }
+
       setFormData({
         currentPassword: "",
         newPassword: "",
@@ -104,7 +129,11 @@ export const SecuritySection: React.FC = () => {
       if (err instanceof ApiError) {
         setError(err.message);
       } else {
-        setError("Đổi mật khẩu thất bại. Vui lòng kiểm tra lại mật khẩu cũ.");
+        setError(
+          hasPassword
+            ? "Đổi mật khẩu thất bại. Vui lòng kiểm tra lại mật khẩu cũ."
+            : "Tạo mật khẩu thất bại. Vui lòng thử lại.",
+        );
       }
     } finally {
       setIsLoading(false);
@@ -147,24 +176,26 @@ export const SecuritySection: React.FC = () => {
               </div>
             )}
 
-            <InputField
-              label="Nhập mật khẩu hiện tại"
-              icon="vpn_key"
-              placeholder="••••••••"
-              value={formData.currentPassword}
-              onChange={(e) => handleChange(e, "currentPassword")}
-            />
+            {hasPassword && (
+              <InputField
+                label="Nhập mật khẩu hiện tại"
+                icon="vpn_key"
+                placeholder="••••••••"
+                value={formData.currentPassword}
+                onChange={(e) => handleChange(e, "currentPassword")}
+              />
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <InputField
-                label="Nhập mật khẩu mới"
+                label={hasPassword ? "Nhập mật khẩu mới" : "Tạo mật khẩu"}
                 icon="lock_reset"
                 placeholder="Mật khẩu mới"
                 value={formData.newPassword}
                 onChange={(e) => handleChange(e, "newPassword")}
               />
               <InputField
-                label="Xác nhận mật khẩu mới"
+                label="Xác nhận mật khẩu"
                 icon="check_circle"
                 placeholder="Xác nhận lại"
                 value={formData.confirmPassword}
@@ -204,7 +235,7 @@ export const SecuritySection: React.FC = () => {
 
           <div className="bg-[#fcfdfd] pt-4 flex">
             <button
-              onClick={handleChangePassword}
+              onClick={handleSubmitPassword}
               disabled={isLoading}
               className="btn-change mr-2 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg font-bold transition-colors disabled:opacity-50 flex items-center gap-2"
             >
@@ -213,7 +244,13 @@ export const SecuritySection: React.FC = () => {
                   progress_activity
                 </span>
               )}
-              <span>{isLoading ? "Đang xử lý..." : "Đổi mật khẩu"}</span>
+              <span>
+                {isLoading
+                  ? "Đang xử lý..."
+                  : hasPassword
+                    ? "Đổi mật khẩu"
+                    : "Tạo mật khẩu"}
+              </span>
             </button>
 
             <button
@@ -227,11 +264,36 @@ export const SecuritySection: React.FC = () => {
         </div>
       ) : (
         <div className="bg-[#fcfdfd] border-t border-[#f0f4f4] px-6 py-4 flex flex-col items-start gap-3">
-          <div className="font-bold text-sm text-[#111818]">Đổi mật khẩu</div>
-          <button onClick={() => setEditPassWord(true)} className="btn-edit ">
-            <span className="material-symbols-outlined ">edit</span>
-            Chỉnh sửa mật khẩu
-          </button>
+          {hasPassword ? (
+            <>
+              <div className="font-bold text-sm text-[#111818]">Đổi mật khẩu</div>
+              <button onClick={() => setEditPassWord(true)} className="btn-edit ">
+                <span className="material-symbols-outlined ">edit</span>
+                Chỉnh sửa mật khẩu
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-[20px] text-amber-500">
+                  warning
+                </span>
+                <div className="font-bold text-sm text-[#111818]">
+                  Bạn chưa có mật khẩu
+                </div>
+              </div>
+              <p className="text-sm text-muted-alt">
+                Tài khoản của bạn được tạo qua Google. Hãy tạo mật khẩu để có thể đăng nhập bằng email.
+              </p>
+              <button
+                onClick={() => setEditPassWord(true)}
+                className="btn-edit bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100"
+              >
+                <span className="material-symbols-outlined ">add</span>
+                Tạo mật khẩu
+              </button>
+            </>
+          )}
         </div>
       )}
     </section>

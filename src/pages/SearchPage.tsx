@@ -4,7 +4,7 @@ import SearchFilters from "../components/Search/SearchFilters";
 import SearchResultItem from "../components/Search/SearchResultItem";
 import SearchPagination from "../components/Search/SearchPagination";
 import { apiClient } from "../utils/apiClient";
-import type { DocumentSummary, Tag } from "../interfaces/Types";
+import type { DocumentSummary, Tag } from "../interfaces/DocumentTypes";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -68,7 +68,7 @@ const SearchPage: React.FC = () => {
           />
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-4 grid grid-cols-2 gap-4">
           {documentTag?.map((doc) => (
             <SearchResultItem key={doc.id} document={doc} />
           ))}

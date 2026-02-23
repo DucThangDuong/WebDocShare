@@ -2,9 +2,9 @@ import React, { useState, useRef } from "react";
 import type {
   FileDocument,
   FileItem,
-  FileData,
-  UserStorageFile,
-} from "../../interfaces/Types";
+  DocumentDetailEdit,
+} from "../../interfaces/DocumentTypes";
+import type { UserStorageFile } from "../../interfaces/UserTypes";
 import { apiClient } from "../../utils/apiClient";
 import { useStore } from "../../zustand/store";
 import DocumentListUpload from "./DocumentListUpload";
@@ -43,9 +43,12 @@ export const UploadModal: React.FC<UploadModalProps> = ({
           description: "",
           tags: [],
           status: "Public",
+          universityId: null,
+          universitySectionId: null,
         },
       }));
-    setFileList([...fileList, ...newFilesArray]);
+    const currentFileList = useStore.getState().fileList;
+    setFileList([...currentFileList, ...newFilesArray]);
 
     newFilesArray.forEach((newFile) => {
       const formData = new FormData();
@@ -67,13 +70,10 @@ export const UploadModal: React.FC<UploadModalProps> = ({
   };
   const handleUploadFiles = async () => {
     if (fileList.length === 0) return;
-
     const successFileIds = new Set<string>();
-
     await Promise.all(
       fileList.map(async (item) => {
         try {
-          // Cập nhật trạng thái đang upload
           updateFileStatus(item.id, "uploading");
 
           const formData = new FormData();
@@ -84,6 +84,12 @@ export const UploadModal: React.FC<UploadModalProps> = ({
             formData.append("Tags", tag.trim());
           }
           formData.append("Status", item.metaData.status);
+          if (item.metaData.universityId) {
+            formData.append("UniversityId", item.metaData.universityId.toString());
+          }
+          if (item.metaData.universitySectionId) {
+            formData.append("UniversitySectionId", item.metaData.universitySectionId.toString());
+          }
 
           await apiClient.postForm("/documents", formData);
           successFileIds.add(item.id);
@@ -95,10 +101,9 @@ export const UploadModal: React.FC<UploadModalProps> = ({
       })
     );
 
-    // Refresh dữ liệu nền
     try {
       const [filesData, userStorageFilesData] = await Promise.all([
-        apiClient.get<FileData[]>("/documents"),
+        apiClient.get<DocumentDetailEdit[]>("/documents?skip=0&take=10"),
         apiClient.get<UserStorageFile>("/user/me/storage"),
       ]);
       setFiles(filesData);
@@ -107,7 +112,6 @@ export const UploadModal: React.FC<UploadModalProps> = ({
       console.error("Lỗi làm mới dữ liệu:", error);
     }
 
-    // Lọc danh sách: bỏ file thành công, giữ lại file lỗi
     const remainingFiles = fileList
       .filter((file) => !successFileIds.has(file.id))
       .map((file) => ({

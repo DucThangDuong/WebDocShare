@@ -85,4 +85,58 @@
   .text-body {
     @apply text-[#111318];
   }
+
+  /* ===== Explore Page ===== */
+
+  /* Hero section */
+  .explore-hero {
+    @apply flex flex-col items-center gap-4 mb-10 text-center relative z-10 py-8;
+  }
+
+  .explore-hero__icon {
+    @apply w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-2;
+  }
+
+  /* Search bar */
+  .explore-search {
+    @apply relative flex items-center;
+  }
+
+  .explore-search__icon {
+    @apply absolute left-4 text-[#94a3b8] group-focus-within:text-primary transition-colors;
+  }
+
+  .explore-search__input {
+    @apply w-full h-14 pl-12 pr-12 rounded-xl border-2 border-[#e2e8f0] bg-white text-[#111318] placeholder:text-[#94a3b8] focus:outline-none focus:border-primary focus:ring-0 transition-all shadow-sm text-base;
+  }
+
+  /* University card */
+  .university-card {
+    @apply w-full flex items-center bg-white rounded-xl p-4 border border-[#e5e7eb] shadow-sm cursor-pointer gap-4 text-left transition-all duration-300;
+  }
+
+  .university-card:hover {
+    @apply shadow-lg shadow-primary/10 -translate-y-0.5 border-primary/30;
+  }
+
+  .university-card__logo {
+    @apply w-14 h-14 rounded-xl bg-[#f8fafc] shrink-0 flex items-center justify-center overflow-hidden border border-[#e2e8f0] group-hover:border-primary/30 transition-colors;
+  }
+}
+
+/* Explore page animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: fadeInUp 0.35s ease-out;
 }

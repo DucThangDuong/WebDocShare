@@ -1,6 +1,6 @@
 import React from "react";
 import { apiClient } from "../../utils/apiClient";
-import type { ResUserStatsDto } from "../../interfaces/Types";
+import type { ResUserStatsDto } from "../../interfaces/UserTypes";
 
 export const UserStats: React.FC = () => {
   const [stats, setStats] = React.useState<ResUserStatsDto | null>(null);

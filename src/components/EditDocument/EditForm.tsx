@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import UniversitySectionPicker from "../shared/UniversitySectionPicker";
 
 interface EditFormProps {
   data: {
@@ -6,8 +7,10 @@ interface EditFormProps {
     description: string;
     status: string;
     tags: string[] | null;
+    universityId: number | null;
+    universitySectionId: number | null;
   };
-  onChange: (field: string, value: string | string[]) => void;
+  onChange: (field: string, value: string | string[] | number | null) => void;
   onSave: () => void;
   onCancel: () => void;
   saving: boolean;
@@ -114,12 +117,22 @@ const EditForm: React.FC<EditFormProps> = ({
           </div>
         </div>
 
+        {/* University & Section Picker */}
+        <div className="mb-6">
+          <UniversitySectionPicker
+            universityId={data.universityId}
+            sectionId={data.universitySectionId}
+            onUniversityChange={(id) => onChange("universityId", id)}
+            onSectionChange={(id) => onChange("universitySectionId", id)}
+          />
+        </div>
+
         {/* Tags Input */}
         <div>
           <label className="label-text dark:text-gray-200">
             Thẻ (Tags)
           </label>
-          <div className="input min-h-[56px] flex flex-wrap gap-2 ">
+          <div className="input min-h-[56px] h-auto flex flex-wrap gap-2 items-center">
             {(data.tags || []).map((tag, index) => (
               <span
                 key={index}

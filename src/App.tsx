@@ -16,11 +16,13 @@ import { isLoggedIn } from "./utils/auth";
 import { useEffect, useState } from "react";
 import { useStore } from "./zustand/store";
 import { apiClient } from "./utils/apiClient";
-import type { UserProfilePrivate } from "./interfaces/Types";
+import type { UserProfilePrivate } from "./interfaces/UserTypes";
 import UserProfile from "./pages/MyProfilePage";
 import AccountSettings from "./pages/AccountSettingPage";
 import "./App.css";
 import SearchPage from "./pages/SearchPage";
+import ExplorePage from "./pages/ExplorePage";
+import UniversityDetailPage from "./pages/UniversityDetailPage";
 import { Toaster } from "react-hot-toast";
 const ProtectedRoute = () => {
   const isAuth = isLoggedIn();
@@ -89,9 +91,10 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
         </Route>
-        <Route path="/explore" element={<div>Trang khám phá</div>} />
         <Route path="/documents/:docId" element={<ShowFile />} />
         <Route path="/search" element={<SearchPage />} />
+        <Route path="/explore" element={<ExplorePage />} />
+        <Route path="/explore/universities/:universityId" element={<UniversityDetailPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/my-documents" element={<FilePage />} />
           <Route path="*" element={<Navigate to="/login" replace />} />

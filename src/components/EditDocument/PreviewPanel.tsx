@@ -1,6 +1,6 @@
 const Minio_url = import.meta.env.VITE_MinIO_URL;
 import React, { useRef } from "react";
-import type { DocumentDetailEdit } from "../../interfaces/Types";
+import type { DocumentDetailEdit } from "../../interfaces/DocumentTypes";
 import { formatFileSize } from "../../utils/formatUtils";
 
 interface PreviewPanelProps {

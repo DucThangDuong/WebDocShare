@@ -10,6 +10,25 @@ GO
 USE DocShare;
 GO
 
+CREATE TABLE Universities (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(200) NOT NULL,  
+    Code VARCHAR(50) NOT NULL UNIQUE,
+    IsActive BIT DEFAULT 1,
+);
+GO
+
+CREATE TABLE UniversitySections (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    UniversityId INT NOT NULL,
+    Name NVARCHAR(200) NOT NULL,
+    CONSTRAINT FK_Sections_Uni FOREIGN KEY (UniversityId) REFERENCES Universities(Id) ON DELETE CASCADE
+);
+GO
+
+CREATE INDEX IX_UniversitySections_UniversityId ON UniversitySections(UniversityId);
+GO
+
 CREATE TABLE Users (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     Username VARCHAR(50) NOT NULL UNIQUE,
@@ -26,9 +45,10 @@ CREATE TABLE Users (
     CustomAvatar VARCHAR(255) DEFAULT 'default-avatar.jpg',
     GoogleAvatar VARCHAR(255),
     IsActive BIT DEFAULT 1,
-
     StorageLimit BIGINT NOT NULL DEFAULT 5368709120, 
-    UsedStorage BIGINT NOT NULL DEFAULT 0
+    UsedStorage BIGINT NOT NULL DEFAULT 0,
+    UniversityId INT NULL, 
+    CONSTRAINT FK_Users_Universities FOREIGN KEY (UniversityId) REFERENCES Universities(Id) ON DELETE SET NULL,
 );
 GO
 
@@ -39,6 +59,7 @@ CREATE TABLE Categories (
     Description NVARCHAR(255)
 );
 GO
+
 CREATE TABLE Tags (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     Name NVARCHAR(50) NOT NULL,
@@ -58,6 +79,8 @@ CREATE TABLE Documents (
     
     UploaderId INT NOT NULL,
     CategoryId INT, 
+    UniversitySectionId INT NULL, 
+
     Status VARCHAR(20) DEFAULT 'Pending' CHECK (Status IN ('Pending', 'Public', 'Private', 'Rejected')), 
     
     IsDeleted TINYINT DEFAULT 0,
@@ -70,7 +93,8 @@ CREATE TABLE Documents (
     DislikeCount INT NOT NULL DEFAULT 0,
 
     CONSTRAINT FK_Docs_User FOREIGN KEY (UploaderId) REFERENCES Users(Id),
-    CONSTRAINT FK_Docs_Category FOREIGN KEY (CategoryId) REFERENCES Categories(Id) ON DELETE SET NULL
+    CONSTRAINT FK_Docs_Category FOREIGN KEY (CategoryId) REFERENCES Categories(Id) ON DELETE SET NULL,
+    CONSTRAINT FK_Docs_UniSection FOREIGN KEY (UniversitySectionId) REFERENCES UniversitySections(Id) ON DELETE SET NULL
 );
 GO
 
@@ -83,6 +107,7 @@ CREATE TABLE DocumentTags (
     CONSTRAINT FK_DocTags_Tag FOREIGN KEY (TagId) REFERENCES Tags(Id) ON DELETE CASCADE
 );
 GO
+
 CREATE TABLE DocumentVotes (
     UserId INT NOT NULL,
     DocumentId BIGINT NOT NULL,
@@ -94,6 +119,7 @@ CREATE TABLE DocumentVotes (
     CONSTRAINT FK_Votes_Doc FOREIGN KEY (DocumentId) REFERENCES Documents(Id) ON DELETE CASCADE
 );
 GO
+
 CREATE TABLE SavedDocuments (
     UserId INT NOT NULL,
     DocumentId BIGINT NOT NULL,
@@ -161,3 +187,50 @@ GO
 CREATE INDEX IX_Tags_Slug ON Tags(Slug);
 CREATE INDEX IX_Documents_IsDeleted ON Documents(IsDeleted); 
 CREATE INDEX IX_Documents_UploaderId ON Documents(UploaderId);
+
+Go
+INSERT INTO Universities (Name, Code, IsActive) VALUES
+(N'Đại học Công thương TP.HCM', 'HUIT', 1),
+(N'Đại học Bách khoa - ĐHQG TP.HCM', 'HCMUT', 1),
+(N'Đại học Khoa học Tự nhiên - ĐHQG TP.HCM', 'VNU-HCMUS', 1),
+(N'Đại học Khoa học Xã hội và Nhân văn - ĐHQG TP.HCM', 'VNU-HCMUSSH', 1),
+(N'Đại học Quốc tế - ĐHQG TP.HCM', 'VNU-HCMIU', 1),
+(N'Đại học Công nghệ Thông tin - ĐHQG TP.HCM', 'UIT', 1),
+(N'Đại học Kinh tế - Luật - ĐHQG TP.HCM', 'UEL', 1),
+(N'Đại học Kinh tế TP.HCM', 'UEH', 1),
+(N'Đại học Sư phạm Kỹ thuật TP.HCM', 'HCMUTE', 1),
+(N'Đại học Y Dược TP.HCM', 'UMP', 1),
+(N'Đại học Luật TP.HCM', 'ULAW', 1),
+(N'Đại học Công nghiệp TP.HCM', 'IUH', 1),
+(N'Đại học Nông Lâm TP.HCM', 'NLU', 1),
+(N'Đại học Giao thông Vận tải TP.HCM', 'UTH', 1),
+(N'Đại học Sư phạm TP.HCM', 'HCMUE', 1),
+(N'Đại học Ngân hàng TP.HCM', 'HUB', 1),
+(N'Đại học Tài chính - Marketing', 'UFM', 1),
+(N'Đại học Sài Gòn', 'SGU', 1),
+(N'Đại học Mở TP.HCM', 'OU', 1),
+(N'Đại học Tôn Đức Thắng', 'TDTU', 1),
+(N'Đại học Y khoa Phạm Ngọc Thạch', 'PNTU', 1),
+(N'Đại học Kiến trúc TP.HCM', 'UAH', 1),
+(N'Đại học Tài nguyên và Môi trường TP.HCM', 'HCMUNRE', 1),
+(N'Đại học Văn hóa TP.HCM', 'VHS', 1),
+(N'Đại học Thể dục Thể thao TP.HCM', 'USH', 1),
+(N'Đại học Mỹ thuật TP.HCM', 'HCMUFA', 1),
+(N'Nhạc viện TP.HCM', 'HCMCONS', 1),
+(N'Đại học Sân khấu - Điện ảnh TP.HCM', 'SKDAHCM', 1),
+(N'Học viện Cán bộ TP.HCM', 'HVCB', 1),
+
+(N'Đại học FPT', 'FPTU', 1),
+(N'Đại học RMIT Việt Nam', 'RMIT', 1),
+(N'Đại học Hoa Sen', 'HSU', 1),
+(N'Đại học Văn Lang', 'VLU', 1),
+(N'Đại học HUTECH', 'HUTECH', 1),
+(N'Đại học Ngoại ngữ - Tin học TP.HCM', 'HUFLIT', 1),
+(N'Đại học Nguyễn Tất Thành', 'NTTU', 1),
+(N'Đại học Kinh tế - Tài chính TP.HCM', 'UEF', 1),
+(N'Đại học Quốc tế Hồng Bàng', 'HIU', 1),
+(N'Đại học Gia Định', 'GDU', 1),
+(N'Đại học Văn Hiến', 'VHU', 1),
+(N'Đại học Quốc tế Sài Gòn', 'SIU', 1),
+(N'Đại học Quản lý và Công nghệ TP.HCM', 'UMT', 1),
+(N'Đại học Fulbright Việt Nam', 'FUV', 1)

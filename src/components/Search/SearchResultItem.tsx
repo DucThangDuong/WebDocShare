@@ -1,6 +1,6 @@
 const Minio_url = import.meta.env.VITE_MinIO_URL;
 import React from "react";
-import type { DocumentSummary } from "../../interfaces/Types";
+import type { DocumentSummary } from "../../interfaces/DocumentTypes";
 import { useNavigate } from "react-router-dom";
 
 interface SearchResultItemProps {
@@ -49,8 +49,8 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ document }) => {
 
         {/* Details Section */}
         <div className="mt-2 space-y-1 text-sm text-[#64748b]">
-          <p>
-            <span className="overflow-hidden font-medium text-[#334155]">
+          <p className="overflow-hidden">
+            <span className=" font-medium text-[#334155]">
               Danh mục:
             </span>{" "}
             {document.tags?.join(",")}

@@ -1,5 +1,5 @@
 import React from "react";
-import type { DocumentInfor } from "../../interfaces/Types";
+import type { DocumentInfor } from "../../interfaces/DocumentTypes";
 import { formatFileSize } from "../../utils/formatUtils";
 
 interface Props {

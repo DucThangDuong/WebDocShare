@@ -1,199 +1,553 @@
 <!DOCTYPE html>
-
-<html class="light" lang="vi">
+<html lang="vi">
 
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Biểu mẫu Đăng ký</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap"
-        rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-        rel="stylesheet" />
+    <title>Trường Đại học Sư phạm Kỹ thuật TP.HCM - UTE | DocShare</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet" />
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <script>
+    <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#135bec",
-                        "background-light": "#f6f6f8",
-                        "background-dark": "#101622",
+                        "primary": "#20dfdf",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112121",
+                        "text-main": "#111717",
+                        "text-secondary": "#648787",
                     },
                     fontFamily: {
-                        "display": ["Inter", "sans-serif"]
+                        "display": ["Lexend", "sans-serif"]
                     },
-                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px" },
                 },
             },
         }
     </script>
+    <style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
 </head>
 
 <body
-    class="bg-background-light dark:bg-background-dark text-[#111318] dark:text-white font-display overflow-x-hidden min-h-screen flex flex-col">
-    <!-- Top Navigation -->
-    <header class="w-full bg-white dark:bg-[#1a202c] border-b border-[#f0f2f4] dark:border-[#2d3748] sticky top-0 z-50">
-        <div class="max-w-[960px] mx-auto px-4 md:px-10 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <div class="text-primary size-8 flex items-center justify-center">
-                    <svg class="w-full h-full" fill="currentColor" viewbox="0 0 48 48"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M42.4379 44C42.4379 44 36.0744 33.9038 41.1692 24C46.8624 12.9336 42.2078 4 42.2078 4L7.01134 4C7.01134 4 11.6577 12.932 5.96912 23.9969C0.876273 33.9029 7.27094 44 7.27094 44L42.4379 44Z">
-                        </path>
-                    </svg>
+    class="bg-background-light dark:bg-background-dark font-display text-text-main antialiased min-h-screen flex flex-col">
+    <header class="sticky top-0 z-50 bg-white dark:bg-[#1a2e2e] border-b border-[#f0f4f4] dark:border-[#2a3e3e]">
+        <div class="px-4 md:px-10 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-8">
+                <div class="flex items-center gap-3 text-text-main dark:text-white">
+                    <div class="w-8 h-8 text-primary">
+                        <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path clip-rule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z"
+                                fill="currentColor" fill-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-bold tracking-tight hidden sm:block">DocShare</h2>
                 </div>
-                <h2 class="text-[#111318] dark:text-white text-xl font-bold tracking-tight">BrandLogo</h2>
+                <label class="hidden md:flex flex-col min-w-40 h-10 w-96">
+                    <div
+                        class="flex w-full items-stretch rounded-xl h-full bg-[#f0f4f4] dark:bg-[#2a3e3e] group focus-within:ring-2 focus-within:ring-primary/50 transition-all">
+                        <div class="text-text-secondary flex items-center justify-center pl-4 pr-2">
+                            <span class="material-symbols-outlined text-[20px]">search</span>
+                        </div>
+                        <input
+                            class="w-full bg-transparent border-none text-text-main dark:text-white placeholder:text-text-secondary focus:ring-0 text-sm"
+                            placeholder="Tìm kiếm tài liệu, trường học..." value="" />
+                    </div>
+                </label>
             </div>
-            <div class="hidden md:flex items-center gap-8">
-                <nav class="flex items-center gap-6">
-                    <a class="text-[#111318] dark:text-gray-200 text-sm font-medium hover:text-primary transition-colors"
+            <div class="flex items-center gap-6">
+                <nav class="hidden lg:flex items-center gap-8">
+                    <a class="text-text-main dark:text-white text-sm font-medium hover:text-primary transition-colors"
                         href="#">Trang chủ</a>
-                    <a class="text-[#111318] dark:text-gray-200 text-sm font-medium hover:text-primary transition-colors"
-                        href="#">Tính năng</a>
-                    <a class="text-[#111318] dark:text-gray-200 text-sm font-medium hover:text-primary transition-colors"
-                        href="#">Về chúng tôi</a>
+                    <a class="text-text-main dark:text-white text-sm font-medium hover:text-primary transition-colors"
+                        href="#">Đại học</a>
+                    <a class="text-text-main dark:text-white text-sm font-medium hover:text-primary transition-colors"
+                        href="#">Tài liệu</a>
+                    <a class="text-text-main dark:text-white text-sm font-medium hover:text-primary transition-colors"
+                        href="#">Cộng đồng</a>
                 </nav>
-                <button
-                    class="bg-primary hover:bg-blue-700 text-white text-sm font-bold px-5 py-2 rounded-lg transition-colors">
-                    Đăng nhập
-                </button>
+                <div class="flex gap-3">
+                    <button
+                        class="flex items-center justify-center rounded-xl h-10 px-5 bg-primary hover:bg-primary/90 transition-colors text-text-main text-sm font-bold shadow-sm shadow-primary/20">
+                        <span class="truncate">Đăng tải</span>
+                    </button>
+                    <button
+                        class="flex items-center justify-center rounded-xl h-10 px-5 bg-[#f0f4f4] dark:bg-[#2a3e3e] hover:bg-[#e0e8e8] dark:hover:bg-[#354a4a] transition-colors text-text-main dark:text-white text-sm font-bold">
+                        <span class="truncate">Đăng nhập</span>
+                    </button>
+                </div>
             </div>
-            <!-- Mobile Menu Icon -->
-            <button class="md:hidden text-[#111318] dark:text-white">
-                <span class="material-symbols-outlined">menu</span>
-            </button>
         </div>
     </header>
-    <!-- Main Content -->
-    <main class="flex-1 flex flex-col items-center justify-center p-4 py-10">
+    <main class="flex-1 w-full max-w-[1200px] mx-auto px-4 md:px-8 py-6">
+        <nav class="flex flex-wrap items-center gap-2 mb-6 text-sm">
+            <a class="text-text-secondary hover:text-primary transition-colors" href="#">Trang chủ</a>
+            <span class="text-text-secondary material-symbols-outlined text-[16px]">chevron_right</span>
+            <a class="text-text-secondary hover:text-primary transition-colors" href="#">Các trường đại học</a>
+            <span class="text-text-secondary material-symbols-outlined text-[16px]">chevron_right</span>
+            <span class="text-text-main dark:text-white font-medium">HCMUTE</span>
+        </nav>
         <div
-            class="w-full max-w-[520px] bg-white dark:bg-[#1a202c] rounded-xl shadow-sm border border-[#e5e7eb] dark:border-[#2d3748] p-6 md:p-8">
-            <!-- Heading -->
-            <div class="mb-8 text-center md:text-left">
-                <h1 class="text-[#111318] dark:text-white text-3xl font-black tracking-tight mb-2">Tạo tài khoản mới
-                </h1>
-                <p class="text-[#616f89] dark:text-gray-400 text-base">Nhập thông tin chi tiết của bạn để bắt đầu</p>
-            </div>
-            <!-- Form -->
-            <form class="flex flex-col gap-5">
-                <!-- Display Name -->
-                <div class="flex flex-col gap-2">
-                    <label class="text-[#111318] dark:text-gray-200 text-sm font-semibold" for="display-name">Tên hiển
-                        thị</label>
-                    <input
-                        class="w-full h-12 px-4 rounded-lg border border-[#dbdfe6] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-[#111318] dark:text-white placeholder:text-[#9ca3af] focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-                        id="display-name" placeholder="Nhập tên hiển thị của bạn" type="text" />
+            class="bg-white dark:bg-[#1a2e2e] rounded-2xl p-6 shadow-sm border border-[#eef2f2] dark:border-[#2a3e3e] mb-8">
+            <div class="flex flex-col md:flex-row gap-6 items-start md:items-center">
+                <div
+                    class="relative shrink-0 w-24 h-24 md:w-32 md:h-32 rounded-xl overflow-hidden bg-white border border-[#eef2f2] p-2 flex items-center justify-center">
+                    <img alt="Logo Trường Đại học Sư phạm Kỹ thuật TP.HCM"
+                        class="w-full h-full object-contain rounded-lg"
+                        data-alt="University Logo abstract geometric shape"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDq-v0lU9Up1Xn5YNSaTqNCRoTM25QHg0lfADp7ZA15GUvyIEXMIOVVDB7zRNxCPMljWkzp4h5Xln6KfMg0Tc3w_qQlsxlEhxxO0oJBKB0yBbhuYvhG9TCzodJ4mD_oXKWH4e5uyzP1ISDG4TdZjtOk6fiL_mfkGD66ZHugaJr1m8H868GyyLE_M1mZ2tSlnzHjMySbfwSNarp4O9YL_t_fEBd12TZWtgpYrW7KBhrdHyZkmWIzDLHylDXKtDa_muX5tD3q-iYEOBY" />
                 </div>
-                <!-- Email -->
-                <div class="flex flex-col gap-2">
-                    <label class="text-[#111318] dark:text-gray-200 text-sm font-semibold" for="email">Email</label>
-                    <input
-                        class="w-full h-12 px-4 rounded-lg border border-[#dbdfe6] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-[#111318] dark:text-white placeholder:text-[#9ca3af] focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-                        id="email" placeholder="vidu@email.com" type="email" />
-                </div>
-                <!-- Password -->
-                <div class="flex flex-col gap-2">
-                    <label class="text-[#111318] dark:text-gray-200 text-sm font-semibold" for="password">Mật
-                        khẩu</label>
-                    <div class="relative">
-                        <input
-                            class="w-full h-12 px-4 pr-10 rounded-lg border border-[#dbdfe6] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-[#111318] dark:text-white placeholder:text-[#9ca3af] focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-                            id="password" placeholder="Nhập mật khẩu" type="password" />
+                <div class="flex-1 min-w-0">
+                    <h1 class="text-2xl md:text-3xl font-bold text-text-main dark:text-white leading-tight mb-2">
+                        Trường Đại học Sư phạm Kỹ thuật TP.HCM - UTE
+                    </h1>
+                    <div class="flex flex-wrap gap-4 text-text-secondary text-sm md:text-base mb-4">
+                        <span class="flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[18px]">description</span> 12.5k tài liệu
+                        </span>
+                        <span class="w-1 h-1 rounded-full bg-text-secondary/50 self-center"></span>
+                        <span class="flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[18px]">school</span> 45 khoa
+                        </span>
+                        <span class="w-1 h-1 rounded-full bg-text-secondary/50 self-center"></span>
+                        <span class="flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[18px]">visibility</span> 150k lượt xem
+                        </span>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
                         <button
-                            class="absolute right-3 top-1/2 -translate-y-1/2 text-[#616f89] hover:text-primary dark:text-gray-400"
-                            type="button">
-                            <span class="material-symbols-outlined text-xl">visibility_off</span>
+                            class="h-10 px-6 rounded-xl bg-primary text-text-main font-bold text-sm hover:bg-primary/90 transition-colors shadow-sm shadow-primary/20 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[20px]">add</span>
+                            Theo dõi trường
+                        </button>
+                        <button
+                            class="h-10 px-6 rounded-xl bg-[#f0f4f4] dark:bg-[#2a3e3e] text-text-main dark:text-white font-bold text-sm hover:bg-[#e0e8e8] dark:hover:bg-[#354a4a] transition-colors flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[20px] text-text-secondary">share</span>
+                            Chia sẻ
                         </button>
                     </div>
                 </div>
-                <!-- Confirm Password -->
-                <div class="flex flex-col gap-2">
-                    <label class="text-[#111318] dark:text-gray-200 text-sm font-semibold" for="confirm-password">Xác
-                        nhận mật khẩu</label>
-                    <div class="relative">
-                        <input
-                            class="w-full h-12 px-4 pr-10 rounded-lg border border-[#dbdfe6] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-[#111318] dark:text-white placeholder:text-[#9ca3af] focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-                            id="confirm-password" placeholder="Nhập lại mật khẩu" type="password" />
-                        <button
-                            class="absolute right-3 top-1/2 -translate-y-1/2 text-[#616f89] hover:text-primary dark:text-gray-400"
-                            type="button">
-                            <span class="material-symbols-outlined text-xl">visibility_off</span>
-                        </button>
-                    </div>
-                </div>
-                <!-- Terms Checkbox -->
-                <div class="flex items-start gap-3 mt-2">
-                    <div class="flex items-center h-5">
-                        <input class="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" id="terms"
-                            type="checkbox" />
-                    </div>
-                    <label class="text-sm text-[#616f89] dark:text-gray-400" for="terms">
-                        Tôi đồng ý với <a class="text-primary hover:underline font-medium" href="#">Điều khoản dịch
-                            vụ</a> và <a class="text-primary hover:underline font-medium" href="#">Chính sách bảo
-                            mật</a>
-                    </label>
-                </div>
-                <!-- Submit Button -->
-                <button
-                    class="mt-4 w-full h-12 bg-primary hover:bg-blue-700 text-white text-base font-bold rounded-lg transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
-                    type="submit">
-                    <span>Đăng ký</span>
-                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                </button>
-            </form>
-            <!-- Divider -->
-            <div class="relative flex py-6 items-center">
-                <div class="flex-grow border-t border-[#e5e7eb] dark:border-[#4a5568]"></div>
-                <span class="flex-shrink-0 mx-4 text-sm text-[#616f89] dark:text-gray-500">Hoặc đăng ký bằng</span>
-                <div class="flex-grow border-t border-[#e5e7eb] dark:border-[#4a5568]"></div>
-            </div>
-            <!-- Social Login -->
-            <div class="grid grid-cols-2 gap-4">
-                <button
-                    class="flex items-center justify-center gap-2 h-10 px-4 rounded-lg border border-[#dbdfe6] dark:border-[#4a5568] hover:bg-gray-50 dark:hover:bg-[#2d3748] transition-colors bg-white dark:bg-[#1a202c]">
-                    <svg class="w-5 h-5" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M23.766 12.2764C23.766 11.4607 23.6999 10.6406 23.5588 9.83807H12.24V14.4591H18.7217C18.4528 15.9494 17.5885 17.2678 16.323 18.1056V21.1039H20.19C22.4608 19.0139 23.766 15.9274 23.766 12.2764Z"
-                            fill="#4285F4"></path>
-                        <path
-                            d="M12.2401 24.0008C15.4766 24.0008 18.2059 22.9382 20.1945 21.1039L16.3276 18.1055C15.2517 18.8375 13.8627 19.252 12.2445 19.252C9.11388 19.252 6.45946 17.1399 5.50705 14.3003H1.5166V17.3912C3.55371 21.4434 7.7029 24.0008 12.2401 24.0008Z"
-                            fill="#34A853"></path>
-                        <path
-                            d="M5.50253 14.3003C5.00236 12.8099 5.00236 11.1961 5.50253 9.70575V6.61481H1.51649C-0.18551 10.0056 -0.18551 14.0004 1.51649 17.3912L5.50253 14.3003Z"
-                            fill="#FBBC05"></path>
-                        <path
-                            d="M12.2401 4.74966C13.9509 4.7232 15.6044 5.36697 16.8434 6.54867L20.2695 3.12262C18.1001 1.0855 15.2208 -0.034466 12.2401 0.000808666C7.7029 0.000808666 3.55371 2.55822 1.5166 6.61481L5.50264 9.70575C6.45064 6.86173 9.10947 4.74966 12.2401 4.74966Z"
-                            fill="#EA4335"></path>
-                    </svg>
-                    <span class="text-sm font-medium text-[#111318] dark:text-white">Google</span>
-                </button>
-                <button
-                    class="flex items-center justify-center gap-2 h-10 px-4 rounded-lg border border-[#dbdfe6] dark:border-[#4a5568] hover:bg-gray-50 dark:hover:bg-[#2d3748] transition-colors bg-white dark:bg-[#1a202c]">
-                    <svg class="w-5 h-5 text-[#1877f2]" fill="currentColor" viewbox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z">
-                        </path>
-                    </svg>
-                    <span class="text-sm font-medium text-[#111318] dark:text-white">Facebook</span>
-                </button>
-            </div>
-            <!-- Footer Link -->
-            <div class="mt-8 text-center">
-                <p class="text-sm text-[#616f89] dark:text-gray-400">
-                    Bạn đã có tài khoản?
-                    <a class="text-primary font-bold hover:underline ml-1" href="#">Đăng nhập ngay</a>
-                </p>
             </div>
         </div>
+        <section class="mb-10">
+            <h2 class="text-lg font-bold text-text-main dark:text-white mb-4 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">folder_open</span>
+                Khoa &amp; Chuyên mục
+            </h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <a class="group flex flex-col items-center justify-center gap-3 p-5 bg-white dark:bg-[#1a2e2e] rounded-2xl border border-[#eef2f2] dark:border-[#2a3e3e] hover:border-primary hover:shadow-md hover:bg-primary/5 dark:hover:bg-[#2a3e3e] transition-all duration-200 cursor-pointer"
+                    href="#">
+                    <span
+                        class="material-symbols-outlined text-[48px] text-primary transition-transform group-hover:scale-110 duration-200"
+                        style="font-variation-settings: 'FILL' 1">folder</span>
+                    <p
+                        class="text-sm font-bold text-center text-text-main dark:text-white group-hover:text-primary transition-colors">
+                        Tất cả</p>
+                </a>
+                <a class="group flex flex-col items-center justify-center gap-3 p-5 bg-white dark:bg-[#1a2e2e] rounded-2xl border border-[#eef2f2] dark:border-[#2a3e3e] hover:border-blue-400 hover:shadow-md hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-all duration-200 cursor-pointer"
+                    href="#">
+                    <span
+                        class="material-symbols-outlined text-[48px] text-blue-400 transition-transform group-hover:scale-110 duration-200"
+                        style="font-variation-settings: 'FILL' 1">folder</span>
+                    <p
+                        class="text-sm font-bold text-center text-text-main dark:text-white group-hover:text-blue-500 transition-colors">
+                        Công nghệ thông tin</p>
+                </a>
+                <a class="group flex flex-col items-center justify-center gap-3 p-5 bg-white dark:bg-[#1a2e2e] rounded-2xl border border-[#eef2f2] dark:border-[#2a3e3e] hover:border-amber-400 hover:shadow-md hover:bg-amber-50 dark:hover:bg-amber-900/10 transition-all duration-200 cursor-pointer"
+                    href="#">
+                    <span
+                        class="material-symbols-outlined text-[48px] text-amber-400 transition-transform group-hover:scale-110 duration-200"
+                        style="font-variation-settings: 'FILL' 1">folder</span>
+                    <p
+                        class="text-sm font-bold text-center text-text-main dark:text-white group-hover:text-amber-500 transition-colors">
+                        Cơ khí</p>
+                </a>
+                <a class="group flex flex-col items-center justify-center gap-3 p-5 bg-white dark:bg-[#1a2e2e] rounded-2xl border border-[#eef2f2] dark:border-[#2a3e3e] hover:border-emerald-400 hover:shadow-md hover:bg-emerald-50 dark:hover:bg-emerald-900/10 transition-all duration-200 cursor-pointer"
+                    href="#">
+                    <span
+                        class="material-symbols-outlined text-[48px] text-emerald-400 transition-transform group-hover:scale-110 duration-200"
+                        style="font-variation-settings: 'FILL' 1">folder</span>
+                    <p
+                        class="text-sm font-bold text-center text-text-main dark:text-white group-hover:text-emerald-500 transition-colors">
+                        Kinh tế</p>
+                </a>
+                <a class="group flex flex-col items-center justify-center gap-3 p-5 bg-white dark:bg-[#1a2e2e] rounded-2xl border border-[#eef2f2] dark:border-[#2a3e3e] hover:border-purple-400 hover:shadow-md hover:bg-purple-50 dark:hover:bg-purple-900/10 transition-all duration-200 cursor-pointer"
+                    href="#">
+                    <span
+                        class="material-symbols-outlined text-[48px] text-purple-400 transition-transform group-hover:scale-110 duration-200"
+                        style="font-variation-settings: 'FILL' 1">folder</span>
+                    <p
+                        class="text-sm font-bold text-center text-text-main dark:text-white group-hover:text-purple-500 transition-colors">
+                        Điện - Điện tử</p>
+                </a>
+                <a class="group flex flex-col items-center justify-center gap-3 p-5 bg-white dark:bg-[#1a2e2e] rounded-2xl border border-[#eef2f2] dark:border-[#2a3e3e] hover:border-rose-400 hover:shadow-md hover:bg-rose-50 dark:hover:bg-rose-900/10 transition-all duration-200 cursor-pointer"
+                    href="#">
+                    <span
+                        class="material-symbols-outlined text-[48px] text-rose-400 transition-transform group-hover:scale-110 duration-200"
+                        style="font-variation-settings: 'FILL' 1">folder</span>
+                    <p
+                        class="text-sm font-bold text-center text-text-main dark:text-white group-hover:text-rose-500 transition-colors">
+                        Xây dựng</p>
+                </a>
+                <a class="group flex flex-col items-center justify-center gap-3 p-5 bg-white dark:bg-[#1a2e2e] rounded-2xl border border-[#eef2f2] dark:border-[#2a3e3e] hover:border-cyan-400 hover:shadow-md hover:bg-cyan-50 dark:hover:bg-cyan-900/10 transition-all duration-200 cursor-pointer"
+                    href="#">
+                    <span
+                        class="material-symbols-outlined text-[48px] text-cyan-400 transition-transform group-hover:scale-110 duration-200"
+                        style="font-variation-settings: 'FILL' 1">folder</span>
+                    <p
+                        class="text-sm font-bold text-center text-text-main dark:text-white group-hover:text-cyan-500 transition-colors">
+                        Ngoại ngữ</p>
+                </a>
+                <a class="group flex flex-col items-center justify-center gap-3 p-5 bg-white dark:bg-[#1a2e2e] rounded-2xl border border-[#eef2f2] dark:border-[#2a3e3e] border-dashed hover:border-text-secondary hover:shadow-md transition-all duration-200 cursor-pointer"
+                    href="#">
+                    <span
+                        class="material-symbols-outlined text-[48px] text-text-secondary/30 group-hover:text-text-secondary/60 transition-colors">add</span>
+                    <p
+                        class="text-sm font-medium text-center text-text-secondary group-hover:text-text-main dark:group-hover:text-white transition-colors">
+                        Xem thêm</p>
+                </a>
+            </div>
+        </section>
+        <section class="mb-12 mt-4">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold text-text-main dark:text-white flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">trending_up</span>
+                    Tài liệu phổ biến
+                </h2>
+                <a class="text-sm font-medium text-primary hover:text-primary/80 transition-colors" href="#">Xem tất
+                    cả</a>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div
+                    class="group bg-white dark:bg-[#1a2e2e] rounded-xl overflow-hidden shadow-sm hover:shadow-md border border-[#eef2f2] dark:border-[#2a3e3e] hover:border-primary/50 transition-all duration-300 flex flex-col h-full cursor-pointer">
+                    <div class="relative h-40 bg-gray-100 overflow-hidden">
+                        <img class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500"
+                            data-alt="Abstract document preview showing graphs"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhw9MMO4D5PoFOcO22Ul-ryPnGYcQCP8iy7TZ1QA423ooju0vUvB7VCoY8WIuiwMYcpYWJFFovvZqD_IKT5ky0ugPe32QdHkBmmPKGwnr0xIwK51EHeofwDz9sRWMFFOcQFbpvfaBPcQqzMwZspnBYPSmmxZJN2QU1sNJ-FlX9ZRKEOrupdO3LcI58U2YgvsAAdXAFrfPmNDpSAHFTu3zOKUmsKvBmOfRhUzrdR1z0yqLsAcu9yPpidVp55hTSCwDr2WU-f9-dX-4" />
+                        <div
+                            class="absolute top-3 right-3 bg-white/90 dark:bg-black/70 backdrop-blur-sm px-2 py-1 rounded-lg text-xs font-bold text-text-main dark:text-white shadow-sm flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[14px] text-red-500">picture_as_pdf</span> PDF
+                        </div>
+                    </div>
+                    <div class="p-4 flex flex-col flex-1">
+                        <h3
+                            class="text-base font-bold text-text-main dark:text-white line-clamp-2 mb-2 group-hover:text-primary transition-colors">
+                            Giáo trình Cơ sở dữ liệu nâng cao - Khoa CNTT 2023
+                        </h3>
+                        <div class="mt-auto flex items-center justify-between text-xs text-text-secondary">
+                            <div class="flex items-center gap-3">
+                                <span class="flex items-center gap-1"><span
+                                        class="material-symbols-outlined text-[14px]">visibility</span> 5.2k</span>
+                                <span class="flex items-center gap-1"><span
+                                        class="material-symbols-outlined text-[14px]">download</span> 1.2k</span>
+                            </div>
+                            <span>2 ngày trước</span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="group bg-white dark:bg-[#1a2e2e] rounded-xl overflow-hidden shadow-sm hover:shadow-md border border-[#eef2f2] dark:border-[#2a3e3e] hover:border-primary/50 transition-all duration-300 flex flex-col h-full cursor-pointer">
+                    <div class="relative h-40 bg-gray-100 overflow-hidden">
+                        <img class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500"
+                            data-alt="Notes on a desk document preview"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCesGzXv2d8HqWAJm1hRt-8KjNXGq2tyLFj4yqg-yEUcBbWNcXCJ-NZAF3B7SDSt9P2EV8pqS3EQgemdPJFjdDnEiF9TjJSTFPWaVmpmMa1aSe523OolWiRLsvyW3Z5uLwZDYcJLB9MoXhqSrKvDDCSTmg9lp_dpACIRtfVMbPqmvxB6C1He7OlKrZCdE3hs5hAfjrD_AUyaYHZqlQI2qQMCQAvYUnPJs63rBGbOrnCvTPi8rTo3lJZ0BONxAofB2K1zYCAHE0gpbk" />
+                        <div
+                            class="absolute top-3 right-3 bg-white/90 dark:bg-black/70 backdrop-blur-sm px-2 py-1 rounded-lg text-xs font-bold text-text-main dark:text-white shadow-sm flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[14px] text-blue-500">article</span> DOCX
+                        </div>
+                    </div>
+                    <div class="p-4 flex flex-col flex-1">
+                        <h3
+                            class="text-base font-bold text-text-main dark:text-white line-clamp-2 mb-2 group-hover:text-primary transition-colors">
+                            Đề cương ôn tập môn Kinh tế vĩ mô - Học kỳ 1
+                        </h3>
+                        <div class="mt-auto flex items-center justify-between text-xs text-text-secondary">
+                            <div class="flex items-center gap-3">
+                                <span class="flex items-center gap-1"><span
+                                        class="material-symbols-outlined text-[14px]">visibility</span> 3.1k</span>
+                                <span class="flex items-center gap-1"><span
+                                        class="material-symbols-outlined text-[14px]">download</span> 850</span>
+                            </div>
+                            <span>1 tuần trước</span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="group bg-white dark:bg-[#1a2e2e] rounded-xl overflow-hidden shadow-sm hover:shadow-md border border-[#eef2f2] dark:border-[#2a3e3e] hover:border-primary/50 transition-all duration-300 flex flex-col h-full cursor-pointer">
+                    <div class="relative h-40 bg-gray-100 overflow-hidden">
+                        <img class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500"
+                            data-alt="Laptop with charts on screen"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6-olx6atMcsNvH_ecLTmqNWJ8lqpISCd-_Au3aWobPk3LtKLg6HeaEY9csVJ1kvRmDacLl5BtlEU4xSveQWO3bQj4FHIee-kSTCIyq3nTJg1LheYpYV25GciQoZY5lxnvwJ4tnbi-sT32Y6Y24N6H94VlZCQY11yZQDwvNC8YcmpdDMrNSPxyMifIa4N57EbUtVTkm9blUdxOOGTdSzY5I6LyQTHsj52xnrzGlg2iKKbXVu_9eg5SjFFyv-EMk8iW9tMPj8zDHBU" />
+                        <div
+                            class="absolute top-3 right-3 bg-white/90 dark:bg-black/70 backdrop-blur-sm px-2 py-1 rounded-lg text-xs font-bold text-text-main dark:text-white shadow-sm flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[14px] text-orange-500">slideshow</span> PPTX
+                        </div>
+                    </div>
+                    <div class="p-4 flex flex-col flex-1">
+                        <h3
+                            class="text-base font-bold text-text-main dark:text-white line-clamp-2 mb-2 group-hover:text-primary transition-colors">
+                            Slide bài giảng: Nhập môn Trí tuệ nhân tạo (AI)
+                        </h3>
+                        <div class="mt-auto flex items-center justify-between text-xs text-text-secondary">
+                            <div class="flex items-center gap-3">
+                                <span class="flex items-center gap-1"><span
+                                        class="material-symbols-outlined text-[14px]">visibility</span> 8.9k</span>
+                                <span class="flex items-center gap-1"><span
+                                        class="material-symbols-outlined text-[14px]">download</span> 3.4k</span>
+                            </div>
+                            <span>3 tuần trước</span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="group bg-white dark:bg-[#1a2e2e] rounded-xl overflow-hidden shadow-sm hover:shadow-md border border-[#eef2f2] dark:border-[#2a3e3e] hover:border-primary/50 transition-all duration-300 flex flex-col h-full cursor-pointer">
+                    <div class="relative h-40 bg-gray-100 overflow-hidden">
+                        <img class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500"
+                            data-alt="Mechanical engineering blueprint drawing"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDu1GmQcfAOAGqGQpbVw-YhOEhBqlgGf8QHECY1UHbewDQb4hmAf6oapCsGcgxhT3rWcOPI7-YBzSBgpZYUsgjxoEu1EE72_AloSNwmypVrYqEu6aj_YGgsDDC2ZY14HZfLImnYP9anyCQ2mzAK98EpxEZLDel2HtYXuqRwvE5sTnqsCe2hFOEkoTyHEheaFibjBxL5kH0_0IPPh9pGqkYWkCkmZWCV4cGhuZEWxwWsYIQTLrRDBo8DSWsd68GCyJc0AZznb5c178Q" />
+                        <div
+                            class="absolute top-3 right-3 bg-white/90 dark:bg-black/70 backdrop-blur-sm px-2 py-1 rounded-lg text-xs font-bold text-text-main dark:text-white shadow-sm flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[14px] text-red-500">picture_as_pdf</span> PDF
+                        </div>
+                    </div>
+                    <div class="p-4 flex flex-col flex-1">
+                        <h3
+                            class="text-base font-bold text-text-main dark:text-white line-clamp-2 mb-2 group-hover:text-primary transition-colors">
+                            Bản vẽ kỹ thuật cơ khí đại cương - Final Exam
+                        </h3>
+                        <div class="mt-auto flex items-center justify-between text-xs text-text-secondary">
+                            <div class="flex items-center gap-3">
+                                <span class="flex items-center gap-1"><span
+                                        class="material-symbols-outlined text-[14px]">visibility</span> 2.8k</span>
+                                <span class="flex items-center gap-1"><span
+                                        class="material-symbols-outlined text-[14px]">download</span> 600</span>
+                            </div>
+                            <span>1 tháng trước</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="mb-12">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold text-text-main dark:text-white flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">schedule</span>
+                    Tài liệu gần đây
+                </h2>
+                <div class="flex items-center gap-2">
+                    <button
+                        class="flex items-center gap-1 text-sm font-medium text-text-secondary bg-white dark:bg-[#1a2e2e] border border-[#eef2f2] dark:border-[#2a3e3e] rounded-lg px-3 py-1.5 hover:border-primary/50 transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">filter_list</span> Lọc
+                    </button>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div
+                    class="group flex flex-col gap-3 p-4 bg-white dark:bg-[#1a2e2e] rounded-xl border border-[#eef2f2] dark:border-[#2a3e3e] hover:border-primary/50 shadow-sm hover:shadow-md transition-all cursor-pointer">
+                    <div class="flex items-start justify-between">
+                        <div class="bg-red-50 dark:bg-red-900/20 p-2 rounded-lg text-red-500">
+                            <span class="material-symbols-outlined text-[24px]">picture_as_pdf</span>
+                        </div>
+                        <button class="text-text-secondary hover:text-primary"><span
+                                class="material-symbols-outlined text-[20px]">bookmark</span></button>
+                    </div>
+                    <div>
+                        <h3
+                            class="text-base font-bold text-text-main dark:text-white line-clamp-2 group-hover:text-primary transition-colors">
+                            Tổng hợp từ vựng Tiếng Anh chuyên ngành CNTT</h3>
+                        <p class="text-xs text-text-secondary mt-1">Bởi: Nguyễn Văn A • Khoa Ngoại ngữ</p>
+                    </div>
+                    <div
+                        class="mt-auto pt-3 border-t border-[#f0f4f4] dark:border-[#2a3e3e] flex items-center justify-between text-xs text-text-secondary">
+                        <span>1 giờ trước</span>
+                        <div class="flex items-center gap-2">
+                            <span class="flex items-center gap-0.5"><span
+                                    class="material-symbols-outlined text-[14px]">visibility</span> 12</span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="group flex flex-col gap-3 p-4 bg-white dark:bg-[#1a2e2e] rounded-xl border border-[#eef2f2] dark:border-[#2a3e3e] hover:border-primary/50 shadow-sm hover:shadow-md transition-all cursor-pointer">
+                    <div class="flex items-start justify-between">
+                        <div class="bg-blue-50 dark:bg-blue-900/20 p-2 rounded-lg text-blue-500">
+                            <span class="material-symbols-outlined text-[24px]">article</span>
+                        </div>
+                        <button class="text-text-secondary hover:text-primary"><span
+                                class="material-symbols-outlined text-[20px]">bookmark</span></button>
+                    </div>
+                    <div>
+                        <h3
+                            class="text-base font-bold text-text-main dark:text-white line-clamp-2 group-hover:text-primary transition-colors">
+                            Báo cáo thực tập tốt nghiệp: Xây dựng hệ thống IoT</h3>
+                        <p class="text-xs text-text-secondary mt-1">Bởi: Trần Thị B • Khoa Điện - Điện tử</p>
+                    </div>
+                    <div
+                        class="mt-auto pt-3 border-t border-[#f0f4f4] dark:border-[#2a3e3e] flex items-center justify-between text-xs text-text-secondary">
+                        <span>3 giờ trước</span>
+                        <div class="flex items-center gap-2">
+                            <span class="flex items-center gap-0.5"><span
+                                    class="material-symbols-outlined text-[14px]">visibility</span> 45</span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="group flex flex-col gap-3 p-4 bg-white dark:bg-[#1a2e2e] rounded-xl border border-[#eef2f2] dark:border-[#2a3e3e] hover:border-primary/50 shadow-sm hover:shadow-md transition-all cursor-pointer">
+                    <div class="flex items-start justify-between">
+                        <div class="bg-green-50 dark:bg-green-900/20 p-2 rounded-lg text-green-500">
+                            <span class="material-symbols-outlined text-[24px]">description</span>
+                        </div>
+                        <button class="text-text-secondary hover:text-primary"><span
+                                class="material-symbols-outlined text-[20px]">bookmark</span></button>
+                    </div>
+                    <div>
+                        <h3
+                            class="text-base font-bold text-text-main dark:text-white line-clamp-2 group-hover:text-primary transition-colors">
+                            Bài tập nhóm: Nguyên lý kế toán</h3>
+                        <p class="text-xs text-text-secondary mt-1">Bởi: Lê Văn C • Khoa Kinh tế</p>
+                    </div>
+                    <div
+                        class="mt-auto pt-3 border-t border-[#f0f4f4] dark:border-[#2a3e3e] flex items-center justify-between text-xs text-text-secondary">
+                        <span>5 giờ trước</span>
+                        <div class="flex items-center gap-2">
+                            <span class="flex items-center gap-0.5"><span
+                                    class="material-symbols-outlined text-[14px]">visibility</span> 89</span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="group flex flex-col gap-3 p-4 bg-white dark:bg-[#1a2e2e] rounded-xl border border-[#eef2f2] dark:border-[#2a3e3e] hover:border-primary/50 shadow-sm hover:shadow-md transition-all cursor-pointer">
+                    <div class="flex items-start justify-between">
+                        <div class="bg-orange-50 dark:bg-orange-900/20 p-2 rounded-lg text-orange-500">
+                            <span class="material-symbols-outlined text-[24px]">slideshow</span>
+                        </div>
+                        <button class="text-text-secondary hover:text-primary"><span
+                                class="material-symbols-outlined text-[20px]">bookmark</span></button>
+                    </div>
+                    <div>
+                        <h3
+                            class="text-base font-bold text-text-main dark:text-white line-clamp-2 group-hover:text-primary transition-colors">
+                            Thuyết trình: Vật liệu xây dựng mới 2024</h3>
+                        <p class="text-xs text-text-secondary mt-1">Bởi: Phạm Minh D • Khoa Xây dựng</p>
+                    </div>
+                    <div
+                        class="mt-auto pt-3 border-t border-[#f0f4f4] dark:border-[#2a3e3e] flex items-center justify-between text-xs text-text-secondary">
+                        <span>1 ngày trước</span>
+                        <div class="flex items-center gap-2">
+                            <span class="flex items-center gap-0.5"><span
+                                    class="material-symbols-outlined text-[14px]">visibility</span> 132</span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="group flex flex-col gap-3 p-4 bg-white dark:bg-[#1a2e2e] rounded-xl border border-[#eef2f2] dark:border-[#2a3e3e] hover:border-primary/50 shadow-sm hover:shadow-md transition-all cursor-pointer">
+                    <div class="flex items-start justify-between">
+                        <div class="bg-red-50 dark:bg-red-900/20 p-2 rounded-lg text-red-500">
+                            <span class="material-symbols-outlined text-[24px]">picture_as_pdf</span>
+                        </div>
+                        <button class="text-text-secondary hover:text-primary"><span
+                                class="material-symbols-outlined text-[20px]">bookmark</span></button>
+                    </div>
+                    <div>
+                        <h3
+                            class="text-base font-bold text-text-main dark:text-white line-clamp-2 group-hover:text-primary transition-colors">
+                            Giáo trình Toán cao cấp A1</h3>
+                        <p class="text-xs text-text-secondary mt-1">Bởi: Admin • Khoa Cơ bản</p>
+                    </div>
+                    <div
+                        class="mt-auto pt-3 border-t border-[#f0f4f4] dark:border-[#2a3e3e] flex items-center justify-between text-xs text-text-secondary">
+                        <span>1 ngày trước</span>
+                        <div class="flex items-center gap-2">
+                            <span class="flex items-center gap-0.5"><span
+                                    class="material-symbols-outlined text-[14px]">visibility</span> 256</span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="group flex flex-col gap-3 p-4 bg-white dark:bg-[#1a2e2e] rounded-xl border border-[#eef2f2] dark:border-[#2a3e3e] hover:border-primary/50 shadow-sm hover:shadow-md transition-all cursor-pointer">
+                    <div class="flex items-start justify-between">
+                        <div class="bg-blue-50 dark:bg-blue-900/20 p-2 rounded-lg text-blue-500">
+                            <span class="material-symbols-outlined text-[24px]">article</span>
+                        </div>
+                        <button class="text-text-secondary hover:text-primary"><span
+                                class="material-symbols-outlined text-[20px]">bookmark</span></button>
+                    </div>
+                    <div>
+                        <h3
+                            class="text-base font-bold text-text-main dark:text-white line-clamp-2 group-hover:text-primary transition-colors">
+                            Đề thi mẫu môn Lập trình Python</h3>
+                        <p class="text-xs text-text-secondary mt-1">Bởi: Student123 • Khoa CNTT</p>
+                    </div>
+                    <div
+                        class="mt-auto pt-3 border-t border-[#f0f4f4] dark:border-[#2a3e3e] flex items-center justify-between text-xs text-text-secondary">
+                        <span>2 ngày trước</span>
+                        <div class="flex items-center gap-2">
+                            <span class="flex items-center gap-0.5"><span
+                                    class="material-symbols-outlined text-[14px]">visibility</span> 304</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-10 flex justify-center">
+                <button
+                    class="flex items-center justify-center rounded-xl h-10 px-6 border border-[#dce5e5] dark:border-[#2a3e3e] bg-white dark:bg-[#1a2e2e] text-text-main dark:text-white text-sm font-bold hover:bg-[#f0f4f4] dark:hover:bg-[#354a4a] transition-colors">
+                    Xem thêm tài liệu
+                </button>
+            </div>
+        </section>
     </main>
+    <footer class="bg-white dark:bg-[#1a2e2e] border-t border-[#f0f4f4] dark:border-[#2a3e3e] mt-auto">
+        <div class="max-w-[1200px] mx-auto px-4 md:px-8 py-10 flex flex-col md:flex-row justify-between gap-8">
+            <div class="flex flex-col gap-4">
+                <div class="flex items-center gap-3 text-text-main dark:text-white">
+                    <div class="w-6 h-6 text-primary">
+                        <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path clip-rule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z"
+                                fill="currentColor" fill-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-lg font-bold">DocShare</h2>
+                </div>
+                <p class="text-text-secondary text-sm max-w-xs">Nền tảng chia sẻ tài liệu học tập hàng đầu cho sinh viên
+                    các trường đại học.</p>
+            </div>
+            <div class="flex flex-wrap gap-12">
+                <div class="flex flex-col gap-3">
+                    <h4 class="font-bold text-text-main dark:text-white text-sm">Về chúng tôi</h4>
+                    <a class="text-text-secondary hover:text-primary text-sm" href="#">Giới thiệu</a>
+                    <a class="text-text-secondary hover:text-primary text-sm" href="#">Điều khoản</a>
+                    <a class="text-text-secondary hover:text-primary text-sm" href="#">Bảo mật</a>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <h4 class="font-bold text-text-main dark:text-white text-sm">Cộng đồng</h4>
+                    <a class="text-text-secondary hover:text-primary text-sm" href="#">Blog</a>
+                    <a class="text-text-secondary hover:text-primary text-sm" href="#">Discord</a>
+                    <a class="text-text-secondary hover:text-primary text-sm" href="#">Facebook</a>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <h4 class="font-bold text-text-main dark:text-white text-sm">Hỗ trợ</h4>
+                    <a class="text-text-secondary hover:text-primary text-sm" href="#">Trung tâm trợ giúp</a>
+                    <a class="text-text-secondary hover:text-primary text-sm" href="#">Liên hệ</a>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-[#f0f4f4] dark:border-[#2a3e3e] py-4 text-center">
+            <p class="text-xs text-text-secondary">© 2024 DocShare. All rights reserved.</p>
+        </div>
+    </footer>
+
 </body>
 
 </html>

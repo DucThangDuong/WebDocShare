@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Header from "../components/Home/Header";
 import Sidebar from "../components/Home/Sidebar";
-import type { LayoutProps } from "../interfaces/Types";
+import type { LayoutProps } from "../interfaces/CommonTypes";
 const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   return (

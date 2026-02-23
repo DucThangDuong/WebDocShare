@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import DashboardLayout from "../layouts/HomeLayout";
 import { apiClient } from "../utils/apiClient";
-import type { DocumentDetailEdit } from "../interfaces/Types";
+import type { DocumentDetailEdit } from "../interfaces/DocumentTypes";
 import EditForm from "../components/EditDocument/EditForm";
 import PreviewPanel from "../components/EditDocument/PreviewPanel";
 import { useStore } from "../zustand/store";
@@ -24,6 +24,8 @@ const EditDocumentPage: React.FC = () => {
     description: "",
     status: "Public",
     tags: null as string[] | null,
+    universityId: null as number | null,
+    universitySectionId: null as number | null,
   });
 
   useEffect(() => {
@@ -39,6 +41,8 @@ const EditDocumentPage: React.FC = () => {
           description: data.description || "",
           status: data.status,
           tags: data.tags,
+          universityId: data.universityId ?? null,
+          universitySectionId: data.universitySectionId ?? null,
         });
       } catch (err) {
         console.error("Error fetching document:", err);
@@ -53,7 +57,7 @@ const EditDocumentPage: React.FC = () => {
     setNavItemActivate("");
   }, [docId]);
 
-  const handleFieldChange = (field: string, value: string | string[] | null) => {
+  const handleFieldChange = (field: string, value: string | string[] | number | null) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -75,6 +79,12 @@ const EditDocumentPage: React.FC = () => {
         formData.tags.forEach((tag) => {
           form.append(`Tags`, tag);
         });
+      }
+      if (formData.universityId) {
+        form.append("UniversityId", formData.universityId.toString());
+      }
+      if (formData.universitySectionId) {
+        form.append("UniversitySectionId", formData.universitySectionId.toString());
       }
       await apiClient.patchFormdata(`/documents/${docId}`, form);
       toast.success("Tài liệu đã được cập nhật thành công.");

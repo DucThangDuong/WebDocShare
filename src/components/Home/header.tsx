@@ -1,32 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { isLoggedIn, logout } from "../../utils/auth";
+import { logout } from "../../utils/auth";
 import { useStore } from "../../zustand/store";
-import { apiClient } from "../../utils/apiClient";
-import type { UserProfilePrivate } from "../../interfaces/Types";
 
 interface HeaderProps {
   onMenuClick: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
-  const { user, isLogin, setUser, setIsLogin } = useStore((state) => state);
-  useEffect(() => {
-    setIsLogin(isLoggedIn());
-    const fetchProfile = async () => {
-      if (isLogin && user == null) {
-        try {
-          const userData =
-            await apiClient.get<UserProfilePrivate>("/user/me/profile");
-          setUser(userData);
-        } catch (error) {
-          console.error("Lỗi lấy thông tin user:", error);
-          logout();
-        }
-      }
-    };
-    fetchProfile();
-  }, [isLogin, setUser, setIsLogin, user]);
+  const { user, isLogin } = useStore((state) => state);
 
   return (
     <header className="flex items-center whitespace-nowrap border-b border-solid border-[#dbdfe6] px-6 py-3 bg-white z-20 sticky top-0 h-16 shrink-0">

@@ -1,7 +1,8 @@
 import React, { useState, useRef } from "react";
 import { useStore } from "../../zustand/store";
 import { apiClient } from "../../utils/apiClient";
-import { ApiError, type UserProfilePrivate } from "../../interfaces/Types";
+import { ApiError } from "../../interfaces/CommonTypes";
+import type { UserProfilePrivate } from "../../interfaces/UserTypes";
 export const AccountSection: React.FC = () => {
   const { user, setUser } = useStore();
   const [newName, setNewName] = useState<string>(user?.fullname || "");
@@ -43,7 +44,8 @@ export const AccountSection: React.FC = () => {
         "/user/me/profile",
       );
       setUser(newUser);
-      setNewName(user?.fullname || "");
+      setNewName(newUser.fullname || "");
+      setNewUsername(newUser.username || "");
       setAvatarPreview(null);
       setSelectedFile(null);
       setError("");

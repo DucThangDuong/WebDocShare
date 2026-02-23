@@ -3,9 +3,9 @@ import { useNavigate, Link } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import LoginLayout from "../layouts/LoginLayout";
 import { apiClient } from "../utils/apiClient";
-import { InputField } from "../components/InputField";
+import { InputField } from "../components/shared/InputField";
 import { useStore } from "../zustand/store";
-import type { UserLogin } from "../interfaces/Types";
+import type { UserLogin, UserProfilePrivate } from "../interfaces/UserTypes";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ const LoginPage: React.FC = () => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { NavItemActivate } = useStore();
+  const { NavItemActivate, setUser, setIsLogin } = useStore();
 
   const handleGoogleExample = async (credential: string) => {
     try {
@@ -25,9 +25,11 @@ const LoginPage: React.FC = () => {
         },
       );
       localStorage.setItem("accessToken", data.accessToken);
+      const userData = await apiClient.get<UserProfilePrivate>("/user/me/profile");
+      setUser(userData);
+      setIsLogin(true);
       navigate(NavItemActivate || "/");
     } catch (err) {
-      console.log(err);
       setError("Đăng nhập bằng Google thất bại.");
     } finally {
       setIsLoading(false);
@@ -45,6 +47,9 @@ const LoginPage: React.FC = () => {
         userlogin
       );
       localStorage.setItem("accessToken", data.accessToken);
+      const userData = await apiClient.get<UserProfilePrivate>("/user/me/profile");
+      setUser(userData);
+      setIsLogin(true);
       navigate(NavItemActivate || "/");
     } catch {
       setError("Đăng nhập thất bại. Vui lòng thử lại.");

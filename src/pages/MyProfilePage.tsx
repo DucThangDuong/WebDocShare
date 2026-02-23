@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ProfileSidebar } from "../components/MyProfile/Sidebar";
 import { UserStats } from "../components/MyProfile/UserStat";
 import HomeLayout from "../layouts/HomeLayout";
-import type { DocumentInfor } from "../interfaces/Types";
+import type { DocumentInfor } from "../interfaces/DocumentTypes";
 import { apiClient } from "../utils/apiClient";
 import { DocumentItem } from "../components/MyProfile/DocumentItem";
 import { useStore } from "../zustand/store";

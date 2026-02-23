@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import RegisterLayout from "../layouts/RegisterLayout";
 import { apiClient } from "../utils/apiClient";
-import { InputField } from "../components/InputField";
-import { ApiError, type UserRegister } from "../interfaces/Types";
+import { InputField } from "../components/shared/InputField";
+import { ApiError } from "../interfaces/CommonTypes";
+import type { UserRegister } from "../interfaces/UserTypes";
 
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import type { UserProfilePrivate } from "../interfaces/Types";
-import type { DocumentDetailEdit, FileItem, UserStorageFile } from "../interfaces/Types";
+import type { UserProfilePrivate, UserStorageFile } from "../interfaces/UserTypes";
+import type { DocumentDetailEdit, FileItem } from "../interfaces/DocumentTypes";
 
 interface StoreState {
   // trạng thái đăng nhập

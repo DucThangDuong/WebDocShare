@@ -50,18 +50,18 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               onClick={() => handleItemClick("/")}
             />
             <NavItem
-              icon="explore"
-              label="Khám phá"
+              icon="search"
+              label="Tìm kiếm"
               url="/search"
               active={NavItemActivate === "/search"}
               onClick={() => handleItemClick("/search")}
             />
             <NavItem
-              icon="category"
-              label="Danh mục"
-              url="/categories"
-              active={NavItemActivate === "/categories"}
-              onClick={() => handleItemClick("/categories")}
+              icon="explore"
+              label="Khám phá"
+              url="/explore"
+              active={NavItemActivate === "/explore"}
+              onClick={() => handleItemClick("/explore")}
             />
             <NavItem
               icon="favorite"

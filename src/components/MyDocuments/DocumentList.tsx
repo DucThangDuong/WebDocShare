@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import type { DocumentDetailEdit, UserStorageFile } from "../../interfaces/Types";
+import type { DocumentDetailEdit } from "../../interfaces/DocumentTypes";
+import type { UserStorageFile } from "../../interfaces/UserTypes";
 import { apiClient } from "../../utils/apiClient";
 import { useStore } from "../../zustand/store";
 import toast from "react-hot-toast";
@@ -16,7 +17,7 @@ export const FileTable: React.FC<FileTableProps> = ({ files }) => {
         isDeleted: true,
       });
       const [filesData, userStorageFilesData] = await Promise.all([
-        apiClient.get<DocumentDetailEdit[]>("/documents"),
+        apiClient.get<DocumentDetailEdit[]>("/documents?skip=0&take=10"),
         apiClient.get<UserStorageFile>("/user/me/storage"),
       ]);
       setFiles(filesData);

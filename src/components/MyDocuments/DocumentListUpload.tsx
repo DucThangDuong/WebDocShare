@@ -1,6 +1,8 @@
-import type { FileDocument } from "../../interfaces/Types";
+import { useRef } from "react";
+import type { FileDocument } from "../../interfaces/DocumentTypes";
 import { useStore } from "../../zustand/store";
 import { formatFileSize } from "../../utils/formatUtils";
+import UniversitySectionPicker from "../shared/UniversitySectionPicker";
 
 interface DocumentListUploadProps {
   expandedIndex: number | null;
@@ -34,23 +36,34 @@ export default function DocumentListUpload({
     if (expandedIndex === index) {
       handleCancelEdit();
     } else {
+      const currentFileList = useStore.getState().fileList;
+      const metaData = { ...currentFileList[index].metaData };
       setExpandedIndex(index);
-      setTempEditData({ ...fileList[index].metaData });
+      setTempEditData(metaData);
+      tempEditDataRef.current = metaData;
     }
   };
-  const handleInputChange = (field: keyof FileDocument, value: string | string[]) => {
-    if (tempEditData) {
-      setTempEditData({ ...tempEditData, [field]: value });
+  const tempEditDataRef = useRef(tempEditData);
+
+  const handleInputChange = (field: keyof FileDocument, value: string | string[] | number | null) => {
+    const current = tempEditDataRef.current;
+    if (current) {
+      const updated = { ...current, [field]: value };
+      setTempEditData(updated);
+      tempEditDataRef.current = updated;
     }
   };
 
   // Khi bấm LƯU
   const handleSaveEdit = () => {
     if (expandedIndex !== null && tempEditData) {
-      const newList = [...fileList];
-      newList[expandedIndex] = {
-        ...newList[expandedIndex],
-        metaData: tempEditData,
+      const idx = expandedIndex;
+      const dataToSave = { ...tempEditData };
+      const currentList = useStore.getState().fileList;
+      const newList = [...currentList];
+      newList[idx] = {
+        ...newList[idx],
+        metaData: dataToSave,
       };
       setFileList(newList);
       setExpandedIndex(null);
@@ -238,12 +251,25 @@ export default function DocumentListUpload({
                       </div>
                     </div>
 
+                    <div className="mb-6">
+                      <UniversitySectionPicker
+                        universityId={tempEditData.universityId}
+                        sectionId={tempEditData.universitySectionId}
+                        onUniversityChange={(id) =>
+                          handleInputChange("universityId", id)
+                        }
+                        onSectionChange={(id) =>
+                          handleInputChange("universitySectionId", id)
+                        }
+                      />
+                    </div>
+
                     {/* Tags Input */}
                     <div>
                       <label className="label-text">
                         Thẻ (Tags)
                       </label>
-                      <div className="input min-h-[56px] flex flex-wrap gap-2 ">
+                      <div className="input min-h-[56px] h-auto flex flex-wrap gap-2 items-center">
                         {tempEditData.tags
                           .filter((t: string) => t.trim())
                           .map((tag: string, tagIndex: number) => (

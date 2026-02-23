@@ -1,5 +1,5 @@
 import React from "react";
-import type { LayoutProps } from "../interfaces/Types";
+import type { LayoutProps } from "../interfaces/CommonTypes";
 
 const LoginLayout: React.FC<LayoutProps> = ({ children }) => {
   return (

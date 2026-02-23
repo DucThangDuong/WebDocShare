@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import type { DocumentInfor } from "../../interfaces/Types";
+import type { DocumentInfor } from "../../interfaces/DocumentTypes";
 import { apiClient } from "../../utils/apiClient";
 import { useStore } from "../../zustand/store";
 import toast from "react-hot-toast";

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Tag } from '../../interfaces/Types';
+import type { Tag } from '../../interfaces/DocumentTypes';
 
 
 interface SearchFiltersProps {
