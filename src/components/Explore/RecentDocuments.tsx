@@ -1,3 +1,4 @@
+const Minio_url = import.meta.env.VITE_MinIO_URL;
 import React, { useState, useEffect } from "react";
 import { apiClient } from "../../utils/apiClient";
 import type { DocumentSummary } from "../../interfaces/DocumentTypes";
@@ -76,16 +77,24 @@ const RecentDocuments: React.FC<RecentDocumentsProps> = ({
                                 key={doc.id}
                                 type="button"
                                 onClick={() => handleDocumentClick(doc.id)}
-                                className="group flex flex-col gap-3 p-4 bg-white rounded-xl border border-[#eef2f2] hover:border-primary/50 shadow-sm hover:shadow-md transition-all cursor-pointer text-left"
+                                className="group flex flex-col gap-3 bg-white rounded-xl border border-[#eef2f2] hover:border-primary/50 shadow-sm hover:shadow-md transition-all cursor-pointer text-left overflow-hidden"
                             >
-                                <div className="flex items-start justify-between">
-                                    <div className={`bg-red-50 p-2 rounded-lg text-red-500`}>
-                                        <span className="material-symbols-outlined text-[24px]">
-                                            picture_as_pdf
-                                        </span>
-                                    </div>
+                                <div className="w-full aspect-[4/3] bg-gray-100 overflow-hidden relative flex-shrink-0">
+                                    {doc.thumbnail ? (
+                                        <img
+                                            src={`${Minio_url}/thumb-storage/${doc.thumbnail}`}
+                                            alt={doc.title}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center bg-red-50">
+                                            <span className="material-symbols-outlined text-[48px] text-red-400">
+                                                picture_as_pdf
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
-                                <div>
+                                <div className="px-4">
                                     <h3 className="text-base font-bold text-[#111318] line-clamp-2 group-hover:text-primary transition-colors">
                                         {doc.title}
                                     </h3>
@@ -95,7 +104,7 @@ const RecentDocuments: React.FC<RecentDocumentsProps> = ({
                                         </p>
                                     )}
                                 </div>
-                                <div className="mt-auto pt-3 border-t border-[#f0f4f4] flex items-center justify-between text-xs text-[#648787]">
+                                <div className="mt-auto pt-3 mx-4 mb-4 border-t border-[#f0f4f4] flex items-center justify-between text-xs text-[#648787]">
                                     <span>
                                         {new Date(doc.createdAt).toLocaleDateString("vi-VN")}
                                     </span>

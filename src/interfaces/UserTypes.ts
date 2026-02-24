@@ -1,9 +1,13 @@
 export interface UserProfilePublic {
-    id: string;
+    id: number;
     username: string;
     fullname: string;
     email: string;
     avatarUrl?: string;
+    universityId?: number;
+    universityName?: string;
+    followerCount: number;
+    isFollowing: boolean;
 }
 
 export interface UserProfilePrivate extends UserProfilePublic {
@@ -11,6 +15,7 @@ export interface UserProfilePrivate extends UserProfilePublic {
     storagelimit: number;
     usedstorage: number;
     hasPassword: boolean;
+    followingCount: number;
 }
 
 export interface UserLogin {

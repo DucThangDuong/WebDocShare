@@ -23,6 +23,8 @@ import "./App.css";
 import SearchPage from "./pages/SearchPage";
 import ExplorePage from "./pages/ExplorePage";
 import UniversityDetailPage from "./pages/UniversityDetailPage";
+import SectionDetailPage from "./pages/SectionDetailPage";
+import UserPublicProfilePage from "./pages/UserPublicProfilePage";
 import { Toaster } from "react-hot-toast";
 const ProtectedRoute = () => {
   const isAuth = isLoggedIn();
@@ -92,9 +94,11 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
         </Route>
         <Route path="/documents/:docId" element={<ShowFile />} />
+        <Route path="/users/:userId" element={<UserPublicProfilePage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/explore" element={<ExplorePage />} />
         <Route path="/explore/universities/:universityId" element={<UniversityDetailPage />} />
+        <Route path="/explore/universities/:universityId/sections/:sectionId" element={<SectionDetailPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/my-documents" element={<FilePage />} />
           <Route path="*" element={<Navigate to="/login" replace />} />

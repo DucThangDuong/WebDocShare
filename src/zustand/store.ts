@@ -9,9 +9,6 @@ interface StoreState {
   // thông tin user
   user: UserProfilePrivate | null;
   setUser: (user: UserProfilePrivate | null) => void;
-  // item nav hiện tại được active
-  NavItemActivate: string;
-  setNavItemActivate: (item: string) => void;
   // file của user
   files: DocumentDetailEdit[];
   setFiles: (files: DocumentDetailEdit[]) => void;
@@ -35,8 +32,6 @@ export const useStore = create<StoreState>((set) => ({
   setIsLogin: (isLoginn) => set({ isLogin: isLoginn }),
   user: null,
   setUser: (user) => set({ user }),
-  NavItemActivate: "/",
-  setNavItemActivate: (item) => set({ NavItemActivate: item }),
   files: [],
   setFiles: (files) => set({ files }),
   userStorageFiles: null,

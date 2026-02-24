@@ -16,6 +16,7 @@ export interface FileItem {
 
 export interface DocumentInfor {
     id: string;
+    uploaderId: string;
     title: string;
     description: string;
     fileUrl: string;

@@ -5,11 +5,9 @@ import { apiClient } from "../utils/apiClient";
 import type { DocumentDetailEdit } from "../interfaces/DocumentTypes";
 import EditForm from "../components/EditDocument/EditForm";
 import PreviewPanel from "../components/EditDocument/PreviewPanel";
-import { useStore } from "../zustand/store";
 import toast from "react-hot-toast";
 
 const EditDocumentPage: React.FC = () => {
-  const { setNavItemActivate } = useStore();
   const { docId } = useParams<{ docId: string }>();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -54,7 +52,6 @@ const EditDocumentPage: React.FC = () => {
     if (docId) {
       fetchDocument();
     }
-    setNavItemActivate("");
   }, [docId]);
 
   const handleFieldChange = (field: string, value: string | string[] | number | null) => {

@@ -20,7 +20,6 @@ const UniversityDetailPage: React.FC = () => {
   const [loadingUniversity, setLoadingUniversity] = useState(true);
   const [loadingSections, setLoadingSections] = useState(true);
 
-  // Fetch university info
   useEffect(() => {
     if (!universityId) return;
 
@@ -47,7 +46,6 @@ const UniversityDetailPage: React.FC = () => {
     fetchUniversity();
   }, [universityId, navigate]);
 
-  // Fetch sections
   useEffect(() => {
     if (!universityId) return;
 
@@ -67,7 +65,6 @@ const UniversityDetailPage: React.FC = () => {
     };
     fetchSections();
   }, [universityId]);
-  // If still loading university info, show skeleton
   if (loadingUniversity) {
     return (
       <DashboardLayout>
@@ -106,7 +103,15 @@ const UniversityDetailPage: React.FC = () => {
       <div className="max-w-[1200px] mx-auto w-full">
         <UniversityHeader university={university} />
 
-        <SectionGrid sections={sections} loading={loadingSections} />
+        <SectionGrid
+          sections={sections}
+          loading={loadingSections}
+          onSectionClick={(section) =>
+            navigate(
+              `/explore/universities/${universityId}/sections/${section.id}`
+            )
+          }
+        />
 
         <DocumentsPopular universityId={university.id} />
 

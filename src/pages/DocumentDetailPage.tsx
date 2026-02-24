@@ -7,7 +7,6 @@ import { RelatedDoc } from "../components/DocumentDetail/RelatedDocument";
 import { Detail } from "../components/DocumentDetail/Detail";
 import { Header } from "../components/DocumentDetail/Header";
 import DashboardLayout from "../layouts/HomeLayout";
-import { useStore } from "../zustand/store";
 import toast from "react-hot-toast";
 
 const PDFDetailView: React.FC = () => {
@@ -15,7 +14,6 @@ const PDFDetailView: React.FC = () => {
   const [docInfor, setdocInfor] = useState<DocumentInfor | null>(null);
   const [isDownloading, setIsDownloading] = useState(false);
 
-  const { setNavItemActivate } = useStore();
   const { docId } = useParams<{ docId: string }>();
 
   useEffect(() => {
@@ -28,9 +26,7 @@ const PDFDetailView: React.FC = () => {
         })
         .catch((err) => console.error("Lỗi lấy infor doc:", err));
     }
-
-    setNavItemActivate("");
-  }, [docId, setNavItemActivate]);
+  }, [docId]);
 
   const handleDownload = async () => {
     try {

@@ -16,6 +16,28 @@ export const ProfileSidebar = () => {
             {user?.fullname}
           </h1>
         </div>
+
+        {/* Follower / Following counts */}
+        <div className="flex items-center justify-center gap-6 w-full py-4">
+          <div className="flex flex-col items-center">
+            <span className="text-xl font-bold text-text-main">
+              {user?.followerCount ?? 0}
+            </span>
+            <span className="text-xs text-text-secondary font-medium">
+              Người theo dõi
+            </span>
+          </div>
+          <div className="w-px h-8 bg-gray-200"></div>
+          <div className="flex flex-col items-center">
+            <span className="text-xl font-bold text-text-main">
+              {user?.followingCount ?? 0}
+            </span>
+            <span className="text-xs text-text-secondary font-medium">
+              Đang theo dõi
+            </span>
+          </div>
+        </div>
+
         <div className="w-full flex flex-col gap-4 pt-6 border-t border-gray-100">
           <ContactItem icon="mail" label="Email" value={user?.email} />
         </div>
@@ -24,6 +46,13 @@ export const ProfileSidebar = () => {
             icon="person"
             label="Người dùng"
             value={`@${user?.username}`}
+          />
+        </div>
+        <div className="w-full flex flex-col gap-4 pt-6 border-t border-gray-100">
+          <ContactItem
+            icon="school"
+            label="Trường"
+            value={`${user?.universityName ?? "Chưa tham gia"}`}
           />
         </div>
       </div>
@@ -54,3 +83,4 @@ const ContactItem = ({
     </div>
   </div>
 );
+

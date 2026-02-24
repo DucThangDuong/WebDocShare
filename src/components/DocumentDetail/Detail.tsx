@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { DocumentInfor } from "../../interfaces/DocumentTypes";
 import { apiClient } from "../../utils/apiClient";
 import { useStore } from "../../zustand/store";
@@ -7,6 +8,7 @@ import toast from "react-hot-toast";
 export const Detail: React.FC<{ docInfor: DocumentInfor | null }> = ({
   docInfor,
 }) => {
+  const navigate = useNavigate();
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [voteState, setVoteState] = useState<boolean | null>(null);
   const [likeCount, setLikeCount] = useState<number>(0);
@@ -69,7 +71,7 @@ export const Detail: React.FC<{ docInfor: DocumentInfor | null }> = ({
 
     debounceTimeout.current = setTimeout(async () => {
       try {
-        await apiClient.post(`useractivity/vote/${docInfor?.id}`, {
+        await apiClient.post(`user-activity/vote/${docInfor?.id}`, {
           isLike: nextVoteState,
         });
       } catch {
@@ -103,13 +105,20 @@ export const Detail: React.FC<{ docInfor: DocumentInfor | null }> = ({
         <div className="flex flex-col gap-2">
           <h2 className="text-2xl font-bold text-gray-900">{docInfor.title}</h2>
           <div className="flex items-center gap-4 text-sm text-gray-500">
-            <div className="flex items-center gap-2">
+            <div
+              className="flex items-center gap-2 cursor-pointer group/user hover:opacity-80 transition-opacity"
+              onClick={() => {
+                if (docInfor.uploaderId) {
+                  navigate(`/users/${docInfor.uploaderId}`);
+                }
+              }}
+            >
               <img
                 alt="Avatar"
-                className="w-8 h-8 rounded-full border border-gray-200 object-cover"
+                className="w-8 h-8 rounded-full border border-gray-200 object-cover group-hover/user:ring-2 group-hover/user:ring-primary/30 transition-all"
                 src={`${docInfor.avatarUrl}`}
               />
-              <span className="font-semibold text-gray-900">
+              <span className="font-semibold text-gray-900 group-hover/user:text-primary transition-colors">
                 {docInfor.fullName || "Người dùng"}
               </span>
             </div>

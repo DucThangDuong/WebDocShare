@@ -140,3 +140,13 @@
 .animate-in {
   animation: fadeInUp 0.35s ease-out;
 }
+
+/* Hide scrollbar while keeping scrollable */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

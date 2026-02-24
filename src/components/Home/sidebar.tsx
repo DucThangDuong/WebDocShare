@@ -1,19 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { useStore } from "../../zustand/store";
+import { Link, useLocation } from "react-router-dom";
 
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
-  const { NavItemActivate, setNavItemActivate } = useStore();
+const isActive = (pathname: string, url: string) => {
+  if (url === "/") return pathname === "/";
+  return pathname === url || pathname.startsWith(url + "/");
+};
 
-  const handleItemClick = (url: string) => {
-    setNavItemActivate(url);
-    onClose();
-  };
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+  const { pathname } = useLocation();
 
   return (
     <>
@@ -46,29 +45,29 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               icon="home"
               label="Trang chủ"
               url="/"
-              active={NavItemActivate === "/"}
-              onClick={() => handleItemClick("/")}
+              active={isActive(pathname, "/")}
+              onClick={onClose}
             />
             <NavItem
               icon="search"
               label="Tìm kiếm"
               url="/search"
-              active={NavItemActivate === "/search"}
-              onClick={() => handleItemClick("/search")}
+              active={isActive(pathname, "/search")}
+              onClick={onClose}
             />
             <NavItem
               icon="explore"
               label="Khám phá"
               url="/explore"
-              active={NavItemActivate === "/explore"}
-              onClick={() => handleItemClick("/explore")}
+              active={isActive(pathname, "/explore")}
+              onClick={onClose}
             />
             <NavItem
               icon="favorite"
               label="Yêu thích"
               url="/favorites"
-              active={NavItemActivate === "/favorites"}
-              onClick={() => handleItemClick("/favorites")}
+              active={isActive(pathname, "/favorites")}
+              onClick={onClose}
             />
           </nav>
           <div className="h-px bg-[#f0f2f4] w-full shrink-0"></div>
@@ -81,15 +80,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 icon="history"
                 label="Gần đây"
                 url="/history"
-                active={NavItemActivate === "/history"}
-                onClick={() => handleItemClick("/history")}
+                active={isActive(pathname, "/history")}
+                onClick={onClose}
               />
               <NavItem
                 icon="folder_open"
                 label="Tệp của tôi"
                 url="/my-documents"
-                active={NavItemActivate === "/my-documents"}
-                onClick={() => handleItemClick("/my-documents")}
+                active={isActive(pathname, "/my-documents")}
+                onClick={onClose}
               />
             </nav>
           </div>
@@ -100,15 +99,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             icon="settings"
             label="Cài đặt"
             url="/account-settings"
-            active={NavItemActivate === "/account-settings"}
-            onClick={() => handleItemClick("/account-settings")}
+            active={isActive(pathname, "/account-settings")}
+            onClick={onClose}
           />
           <NavItem
             icon="help"
             label="Trợ giúp"
             url="/help"
-            active={NavItemActivate === "/help"}
-            onClick={() => handleItemClick("/help")}
+            active={isActive(pathname, "/help")}
+            onClick={onClose}
           />
         </div>
       </aside>

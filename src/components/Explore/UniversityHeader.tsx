@@ -13,15 +13,6 @@ const UniversityHeader: React.FC<UniversityHeaderProps> = ({ university }) => {
       <nav className="flex flex-wrap items-center gap-2 mb-6 text-sm">
         <Link
           className="text-[#648787] hover:text-primary transition-colors"
-          to="/"
-        >
-          Trang chủ
-        </Link>
-        <span className="text-[#648787] material-symbols-outlined text-[16px]">
-          chevron_right
-        </span>
-        <Link
-          className="text-[#648787] hover:text-primary transition-colors"
           to="/explore"
         >
           Các trường đại học

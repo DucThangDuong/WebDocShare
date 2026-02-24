@@ -41,16 +41,32 @@ CREATE TABLE Users (
     RefreshTokenExpiryTime DATETIME,
     Role VARCHAR(50) DEFAULT 'User' CHECK(Role IN ('User','Admin')),
 
-    LoginProvider VARCHAR(20) NULL Check(LoginProvider In('Custom','Admin')),
+    LoginProvider VARCHAR(20) NULL Check(LoginProvider In('Custom','Google')),
     CustomAvatar VARCHAR(255) DEFAULT 'default-avatar.jpg',
     GoogleAvatar VARCHAR(255),
     IsActive BIT DEFAULT 1,
     StorageLimit BIGINT NOT NULL DEFAULT 5368709120, 
+    
     UsedStorage BIGINT NOT NULL DEFAULT 0,
     UniversityId INT NULL, 
+
+    FollowerCount INT DEFAULT 0, 
+    FollowingCount INT DEFAULT 0,
     CONSTRAINT FK_Users_Universities FOREIGN KEY (UniversityId) REFERENCES Universities(Id) ON DELETE SET NULL,
 );
 GO
+CREATE TABLE UserFollows (
+    FollowerId INT NOT NULL, 
+    FollowedId INT NOT NULL, 
+    CreatedAt DATETIME DEFAULT GETDATE(),
+
+    PRIMARY KEY (FollowerId, FollowedId),
+    CONSTRAINT CHK_NotFollowingSelf CHECK (FollowerId <> FollowedId),
+    CONSTRAINT FK_Follows_Follower FOREIGN KEY (FollowerId) REFERENCES Users(Id) ON DELETE NO ACTION,
+    CONSTRAINT FK_Follows_Followed FOREIGN KEY (FollowedId) REFERENCES Users(Id) ON DELETE CASCADE
+);
+GO
+
 
 CREATE TABLE Categories (
     Id INT IDENTITY(1,1) PRIMARY KEY,
@@ -184,9 +200,44 @@ BEGIN
     INNER JOIN @AffectedDocs ad ON d.Id = ad.DocId;
 END;
 GO
+
+CREATE TRIGGER trg_UpdateFollowerFollowingCounts
+ON UserFollows
+AFTER INSERT, DELETE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Khi có người nhấn Follow (INSERT)
+    IF EXISTS (SELECT 1 FROM INSERTED)
+    BEGIN
+        -- Tăng FollowingCount cho người đi follow
+        UPDATE u SET u.FollowingCount = u.FollowingCount + 1
+        FROM Users u INNER JOIN INSERTED i ON u.Id = i.FollowerId;
+
+        -- Tăng FollowerCount cho người được follow
+        UPDATE u SET u.FollowerCount = u.FollowerCount + 1
+        FROM Users u INNER JOIN INSERTED i ON u.Id = i.FollowedId;
+    END
+
+    -- Khi có người nhấn Unfollow (DELETE)
+    IF EXISTS (SELECT 1 FROM DELETED)
+    BEGIN
+        -- Giảm FollowingCount cho người bỏ follow
+        UPDATE u SET u.FollowingCount = u.FollowingCount - 1
+        FROM Users u INNER JOIN DELETED d ON u.Id = d.FollowerId;
+
+        -- Giảm FollowerCount cho người bị bỏ follow
+        UPDATE u SET u.FollowerCount = u.FollowerCount - 1
+        FROM Users u INNER JOIN DELETED d ON u.Id = d.FollowedId;
+    END
+END;
+GO
 CREATE INDEX IX_Tags_Slug ON Tags(Slug);
 CREATE INDEX IX_Documents_IsDeleted ON Documents(IsDeleted); 
 CREATE INDEX IX_Documents_UploaderId ON Documents(UploaderId);
+CREATE INDEX IX_UserFollows_FollowerId ON UserFollows(FollowerId);
+CREATE INDEX IX_UserFollows_FollowedId ON UserFollows(FollowedId);
 
 Go
 INSERT INTO Universities (Name, Code, IsActive) VALUES
