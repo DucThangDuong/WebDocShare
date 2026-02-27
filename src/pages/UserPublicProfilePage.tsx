@@ -192,10 +192,10 @@ const UserPublicProfilePage: React.FC = () => {
                                         <span className="material-symbols-outlined text-[18px]">person</span>
                                     </div>
                                     <div className="flex flex-col items-start">
-                                        <span className="text-xs text-gray-400 uppercase font-bold tracking-wider">
+                                        <span className="text-xs text-text-main uppercase font-bold tracking-wider">
                                             Tên người dùng
                                         </span>
-                                        <span className="text-gray-900 font-medium truncate max-w-[180px]">
+                                        <span className="text-text-main font-medium overflow-hidden truncate max-w-[180px]">
                                             @{userFind.username}
                                         </span>
                                     </div>
@@ -204,13 +204,13 @@ const UserPublicProfilePage: React.FC = () => {
                             <div className="w-full flex flex-col gap-4 pt-6">
                                 <div className="flex items-center gap-3 text-sm">
                                     <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400">
-                                        <span className="material-symbols-outlined text-[18px]">school</span>
+                                        <span className="material-symbols-outlined text-[18px] min-w-[40px]">school</span>
                                     </div>
                                     <div className="flex flex-col items-start">
-                                        <span className="text-xs text-gray-400 uppercase font-bold tracking-wider">
+                                        <span className="text-xs text-text-main uppercase font-bold tracking-wider">
                                             Trường học
                                         </span>
-                                        <span className="text-gray-900 font-medium truncate max-w-[180px]">
+                                        <span className="text-text-main font-medium truncate max-w-[180px]">
                                             {userFind.universityName ?? "Chưa tham gia"}
                                         </span>
                                     </div>

@@ -5,3 +5,13 @@ export const formatFileSize = (bytes: number) => {
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
 };
+
+export const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return dateString;
+  return new Intl.DateTimeFormat("vi-VN", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(date);
+};

@@ -62,13 +62,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               active={isActive(pathname, "/explore")}
               onClick={onClose}
             />
-            <NavItem
-              icon="favorite"
-              label="Yêu thích"
-              url="/favorites"
-              active={isActive(pathname, "/favorites")}
-              onClick={onClose}
-            />
           </nav>
           <div className="h-px bg-[#f0f2f4] w-full shrink-0"></div>
           <div>
@@ -76,13 +69,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               Thư viện
             </p>
             <nav className="flex flex-col gap-1">
-              <NavItem
-                icon="history"
-                label="Gần đây"
-                url="/history"
-                active={isActive(pathname, "/history")}
-                onClick={onClose}
-              />
               <NavItem
                 icon="folder_open"
                 label="Tệp của tôi"
@@ -100,13 +86,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             label="Cài đặt"
             url="/account-settings"
             active={isActive(pathname, "/account-settings")}
-            onClick={onClose}
-          />
-          <NavItem
-            icon="help"
-            label="Trợ giúp"
-            url="/help"
-            active={isActive(pathname, "/help")}
             onClick={onClose}
           />
         </div>

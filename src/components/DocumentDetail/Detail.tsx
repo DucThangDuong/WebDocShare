@@ -13,13 +13,15 @@ export const Detail: React.FC<{ docInfor: DocumentInfor | null }> = ({
   const [voteState, setVoteState] = useState<boolean | null>(null);
   const [likeCount, setLikeCount] = useState<number>(0);
   const [dislikeCount, setDislikeCount] = useState<number>(0);
-
+  const [isSaved, setIsSaved] = useState<boolean>(false);
+  const { user } = useStore();
   useEffect(() => {
     if (docInfor) {
       const updateState = () => {
         setVoteState(docInfor.isLiked ?? null);
         setLikeCount(docInfor.likeCount ?? 0);
         setDislikeCount(docInfor.dislikeCount ?? 0);
+        setIsSaved(docInfor.isSaved ?? false);
       };
       updateState();
     }
@@ -80,6 +82,23 @@ export const Detail: React.FC<{ docInfor: DocumentInfor | null }> = ({
         setDislikeCount(dislikeCount);
       }
     }, 1000);
+  };
+
+  const handleSave = async () => {
+    if (!isLogin) {
+      toast.error("Vui lòng đăng nhập để lưu tài liệu");
+      return;
+    }
+    const nextSaved = !isSaved;
+    setIsSaved(nextSaved);
+
+    try {
+      await apiClient.post(`user-activity/save/${docInfor?.id}`);
+      toast.success(nextSaved ? "Đã lưu tài liệu" : "Đã bỏ lưu tài liệu");
+    } catch {
+      setIsSaved(isSaved);
+      toast.error("Có lỗi xảy ra, vui lòng thử lại");
+    }
   };
 
   useEffect(() => {
@@ -172,10 +191,28 @@ export const Detail: React.FC<{ docInfor: DocumentInfor | null }> = ({
               </span>
             </button>
           </div>
+          {docInfor.uploaderId !== user?.id && (
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleSave}
+                className={`p-2.5 rounded-full transition-colors ${isSaved
+                  ? "bg-primary/10 text-primary"
+                  : "hover:bg-gray-100 text-gray-500"
+                  }`}
+                title={isSaved ? "Bỏ lưu" : "Lưu tài liệu"}
+              >
+                <span
+                  className={`material-symbols-outlined text-[22px] ${isSaved ? "fill" : ""}`}
+                >
+                  bookmark
+                </span>
+              </button>
 
-          <button className="p-2.5 rounded-full hover:bg-gray-100 text-gray-500">
-            <span className="material-symbols-outlined text-[22px]">share</span>
-          </button>
+              <button className="p-2.5 rounded-full hover:bg-gray-100 text-gray-500">
+                <span className="material-symbols-outlined text-[22px]">share</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
       <div className="flex flex-wrap gap-2 mt-4">
