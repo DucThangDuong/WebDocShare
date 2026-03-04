@@ -48,3 +48,6 @@ export interface ResUserStatsDto {
     savedCount: number;
     totalLikesReceived: number;
 }
+export interface ResResetPassDto {
+    resetToken: string;
+}

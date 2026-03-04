@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import LoginLayout from "../layouts/LoginLayout";
 import { apiClient } from "../utils/apiClient";
@@ -8,12 +8,11 @@ import { useStore } from "../zustand/store";
 import type { UserLogin, UserProfilePrivate } from "../interfaces/UserTypes";
 
 const LoginPage: React.FC = () => {
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { NavItemActivate, setUser, setIsLogin } = useStore();
+  const { setUser, setIsLogin } = useStore();
 
   const handleGoogleExample = async (credential: string) => {
     try {
@@ -28,7 +27,6 @@ const LoginPage: React.FC = () => {
       const userData = await apiClient.get<UserProfilePrivate>("/user/me/profile");
       setUser(userData);
       setIsLogin(true);
-      navigate(NavItemActivate || "/");
     } catch (err) {
       setError("Đăng nhập bằng Google thất bại.");
     } finally {
@@ -50,7 +48,6 @@ const LoginPage: React.FC = () => {
       const userData = await apiClient.get<UserProfilePrivate>("/user/me/profile");
       setUser(userData);
       setIsLogin(true);
-      navigate(NavItemActivate || "/");
     } catch {
       setError("Đăng nhập thất bại. Vui lòng thử lại.");
     } finally {
@@ -136,12 +133,12 @@ const LoginPage: React.FC = () => {
                   Nhớ tôi
                 </span>
               </label>
-              <a
+              <Link
                 className="text-sm font-medium text-primary hover:underline"
-                href="#"
+                to="/forgot-password"
               >
                 Quên mật khẩu?
-              </a>
+              </Link>
             </div>
 
             <button
